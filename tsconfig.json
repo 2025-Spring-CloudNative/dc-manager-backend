@@ -1,0 +1,43 @@
+{
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "skipLibCheck": true, // node modules you don't control won't error
+        "target": "es2022",
+        "allowJs": true, // allow js import, sometimes useful
+        "resolveJsonModule": true, // allow json import, sometimes useful
+        "moduleDetection": "force", // treat every file as module instead of global script
+
+        /* strict */
+        "strict": true,
+        "noUncheckedIndexedAccess": true, // extra strict
+
+        /* If transpiling with TypeScript tsc: */
+        "isolatedModules": true,
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "rootDir": "src",
+        "outDir": "build", // specify the name yourself
+        // "sourceMap": true,
+
+        /* AND if you're building for a library: */
+        // "declaration": true,
+
+        /* AND if you're building for a library in a monorepo: */
+        // "composite": true,
+        // "declarationMap": true,
+
+        /* If NOT transpiling with TypeScript: */
+        // "moduleResolution": "Bundler",
+        // "module": "ESNext",
+        // "noEmit": true,
+
+        // choose one from below
+        /* If your code runs in the DOM: */
+        // "lib": ["es2022", "dom", "dom.iterable"],
+        /* If your code doesn't run in the DOM: */
+        "lib": ["es2022"]
+    },
+    /* only include src folder */
+    "include": ["src"],
+    "exclude": ["infrastructure"]
+}
