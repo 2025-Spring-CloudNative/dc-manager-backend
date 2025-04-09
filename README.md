@@ -26,6 +26,8 @@ npm --version
 npm i
 ```
 
+-   under the root folder, remember to create a `.env` file containing `DATABASE_URL`
+
 ## Run Local Server
 
 ```shell
