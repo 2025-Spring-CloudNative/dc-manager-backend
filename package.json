@@ -1,9 +1,26 @@
 {
-  "dependencies": {
-    "express": "^5.1.0",
-    "typescript": "^5.8.3"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.1"
-  }
+    "name": "dc-manager-backend",
+    "version": "1.0.0",
+    "description": "backend for tsmc datacenter management system",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "local:build": "tsc -w",
+        "local:run": "nodemon build/server.js",
+        "local": "concurrently npm:local:*",
+        "build": "tsc"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^5.1.0",
+        "typescript": "^5.8.3"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.1",
+        "concurrently": "^9.1.2",
+        "dotenv": "^16.4.7",
+        "nodemon": "^3.1.9"
+    }
 }
