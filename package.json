@@ -7,8 +7,10 @@
         "test": "jest",
         "local:build": "tsc -w",
         "local:run": "nodemon build/server.js",
-        "local": "concurrently npm:local:*",
-        "build": "tsc"
+        "local": "tsc && concurrently npm:local:*",
+        "build": "tsc",
+        "db:generate": "npx drizzle-kit generate",
+        "db:migrate": "npx drizzle-kit migrate"
     },
     "keywords": [],
     "author": "",
