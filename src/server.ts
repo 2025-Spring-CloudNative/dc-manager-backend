@@ -1,16 +1,20 @@
-import express from "express"
-import dotenv from "dotenv"
 import path from "path"
-import { db } from "./persistence/drizzle"
-
+import dotenv from "dotenv"
 dotenv.config({ path: path.resolve(__dirname, "../.env") })
+
+import express from "express"
+import { db } from "./persistence/drizzle"
+import dataCenterRoute from "./presentation/server/routes/dataCenter.route"
+
+const PORT = process.env.PORT || 4000
 
 const server = express()
 server.use(express.json())
 
-const PORT = process.env.PORT || 4000
+// TODO: use swagger-autogen, swagger-ui-express in routes
+server.use("/data-center", dataCenterRoute)
 
-server.use("/hello", (req, res) => {
+server.get("/hello", (req, res) => {
     console.log(process.env.DATABASE_URL, db)
     res.status(200).json("Hello from server!")
 })
