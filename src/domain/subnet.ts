@@ -7,7 +7,7 @@ export interface ISubnet {
     updatedAt?: Date | null
 }
 
-export class SubnetEntity {
+export class SubnetEntity implements ISubnet {
     id?: number
     cidr: string
     netmask: string
