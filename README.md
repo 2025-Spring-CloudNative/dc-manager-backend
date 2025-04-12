@@ -42,9 +42,19 @@ npm i
     DATABASE_URL=postgres://postgres:mypassword@localhost:5432/postgres
     ```
 
+*   generate sql file and metadata in `./migration` folder
+    ```shell
+    npm run db:generate
+    ```
+
 *   run migration for initializing example db **(only need to do it once)**
     ```shell
     npm run db:migrate
+    ```
+
+*   visualize db using drizzle-studio
+    ```shell
+    npm run db:studio
     ```
 
 ## Run Local Server

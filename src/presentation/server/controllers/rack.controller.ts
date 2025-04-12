@@ -1,0 +1,28 @@
+import { Request, Response } from "express"
+import { RackDrizzleRepository } from "../../../persistence/drizzle/rack.persistence"
+import * as rackService from "../../../application/services/rack.service"
+
+export async function getRacks(req: Request, res: Response) {
+    const rackRepo = new RackDrizzleRepository()
+
+    try {
+        const racks = await rackService.getRacks(rackRepo)
+        res.status(200).json(racks)
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function createRack(req: Request, res: Response) {
+    const rackRepo = new RackDrizzleRepository()
+
+    try {
+        const createdRackId = await rackService.createRack(
+            rackRepo,
+            req.body
+        )
+        res.status(200).json({ id: createdRackId })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
