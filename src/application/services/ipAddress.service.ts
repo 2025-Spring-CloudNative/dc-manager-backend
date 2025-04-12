@@ -2,9 +2,9 @@ import { IIPAddress } from "../../domain/ipAddress"
 import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
 
 export async function getIPAddresses(ipAddressRepo: IIPAddressRepository) {
-    const IPAddresses = await ipAddressRepo.getIPAddresses()
+    const ipAddresses = await ipAddressRepo.getIPAddresses()
 
-    return IPAddresses
+    return ipAddresses
 }
 
 export async function createIPAddress(
