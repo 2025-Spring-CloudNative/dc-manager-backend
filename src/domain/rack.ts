@@ -4,7 +4,7 @@ export interface IRack {
     height: number
     tag: string
     createdAt: Date
-    updatedAt: Date
+    updatedAt?: Date | null
     roomId: number   
 }
 
@@ -14,7 +14,7 @@ export class RackEntity implements IRack {
     height: number
     tag: string
     createdAt: Date
-    updatedAt: Date
+    updatedAt?: Date | null
     roomId: number
 
     constructor(rack: IRack) {

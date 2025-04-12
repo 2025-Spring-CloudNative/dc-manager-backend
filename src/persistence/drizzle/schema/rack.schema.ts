@@ -9,7 +9,7 @@ export const rackTable = pgTable("rack", {
     height: integer().notNull(),
     tag: varchar({ length: 255 }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at"),
     roomId: integer("room_id").notNull().references(() => roomTable.id)
 })
 

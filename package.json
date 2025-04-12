@@ -17,12 +17,14 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "cors": "^2.8.5",
         "drizzle-orm": "^0.41.0",
         "express": "^5.1.0",
         "pg": "^8.14.1",
         "typescript": "^5.8.3"
     },
     "devDependencies": {
+        "@types/cors": "^2.8.17",
         "@types/express": "^5.0.1",
         "@types/jest": "^29.5.14",
         "@types/pg": "^8.11.11",
