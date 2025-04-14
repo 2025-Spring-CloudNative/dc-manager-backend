@@ -31,6 +31,7 @@ CREATE TABLE "machine" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"unit" integer NOT NULL,
+	"mac_address" varchar(17) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"rack_id" integer NOT NULL,
 	"status" varchar(255) NOT NULL,

@@ -1,5 +1,5 @@
 {
-  "id": "91ace761-cc48-4766-819a-b0df4b07e3bf",
+  "id": "7b9fa306-c4bf-4545-bf61-4df7ac1170aa",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -225,6 +225,12 @@
         "unit": {
           "name": "unit",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mac_address": {
+          "name": "mac_address",
+          "type": "varchar(17)",
           "primaryKey": false,
           "notNull": true
         },
