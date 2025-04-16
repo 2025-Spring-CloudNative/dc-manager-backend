@@ -8,11 +8,11 @@ export const ipAddressTable = pgTable("ip_address", {
     address: varchar({ length: 15 }).notNull(),
     status: varchar({ length: 255 }).notNull(),
     poolId: integer("pool_id").notNull().references(() => ipPoolTable.id),
+    machineId: integer("machine_id").notNull().references(() => machineTable.id),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at"),
     allocatedAt: timestamp("allocated_at"),
-    releasedAt: timestamp("released_at"),
-    machineId: integer("machine_id").notNull().references(() => machineTable.id)
+    releasedAt: timestamp("released_at")
 })
 
 export const ipAddressRelations = relations(ipAddressTable, ({ one }) => ({

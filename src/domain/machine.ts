@@ -6,7 +6,6 @@ export interface IMachine {
     createdAt: Date
     rackId: number
     status: string
-    serviceId: number
 }
 
 export class MachineEntity implements IMachine {
@@ -17,7 +16,6 @@ export class MachineEntity implements IMachine {
     createdAt: Date
     rackId: number
     status: string
-    serviceId: number
 
     constructor(machine: IMachine) {
         this.id = machine.id
@@ -27,6 +25,5 @@ export class MachineEntity implements IMachine {
         this.createdAt = machine.createdAt
         this.rackId = machine.rackId
         this.status = machine.status
-        this.serviceId = machine.serviceId
     }
 }

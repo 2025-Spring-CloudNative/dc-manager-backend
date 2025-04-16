@@ -6,6 +6,7 @@ export interface IRack {
     createdAt: Date
     updatedAt?: Date | null
     roomId: number   
+    serviceId: number
 }
 
 export class RackEntity implements IRack {
@@ -16,6 +17,7 @@ export class RackEntity implements IRack {
     createdAt: Date
     updatedAt?: Date | null
     roomId: number
+    serviceId: number
 
     constructor(rack: IRack) {
         this.id = rack.id
@@ -25,5 +27,6 @@ export class RackEntity implements IRack {
         this.createdAt = rack.createdAt
         this.updatedAt = rack.updatedAt
         this.roomId = rack.roomId
+        this.serviceId = rack.serviceId
     }
 }

@@ -1,5 +1,5 @@
 {
-  "id": "7b9fa306-c4bf-4545-bf61-4df7ac1170aa",
+  "id": "b3a57449-46fd-4b30-b7a8-b9f023cc23de",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -25,10 +25,30 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
+        },
+        "subnet_id": {
+          "name": "subnet_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "data_center_subnet_id_subnet_id_fk": {
+          "name": "data_center_subnet_id_subnet_id_fk",
+          "tableFrom": "data_center",
+          "tableTo": "subnet",
+          "columnsFrom": [
+            "subnet_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -63,6 +83,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "machine_id": {
+          "name": "machine_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -87,12 +113,6 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
-        },
-        "machine_id": {
-          "name": "machine_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {},
@@ -252,12 +272,6 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
-        },
-        "service_id": {
-          "name": "service_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {},
@@ -268,19 +282,6 @@
           "tableTo": "rack",
           "columnsFrom": [
             "rack_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "machine_service_id_service_id_fk": {
-          "name": "machine_service_id_service_id_fk",
-          "tableFrom": "machine",
-          "tableTo": "service",
-          "columnsFrom": [
-            "service_id"
           ],
           "columnsTo": [
             "id"
@@ -341,6 +342,12 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "service_id": {
+          "name": "service_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -351,6 +358,19 @@
           "tableTo": "room",
           "columnsFrom": [
             "room_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "rack_service_id_service_id_fk": {
+          "name": "rack_service_id_service_id_fk",
+          "tableFrom": "rack",
+          "tableTo": "service",
+          "columnsFrom": [
+            "service_id"
           ],
           "columnsTo": [
             "id"
@@ -431,10 +451,30 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
+        },
+        "pool_id": {
+          "name": "pool_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "service_pool_id_ip_pool_id_fk": {
+          "name": "service_pool_id_ip_pool_id_fk",
+          "tableFrom": "service",
+          "tableTo": "ip_pool",
+          "columnsFrom": [
+            "pool_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
