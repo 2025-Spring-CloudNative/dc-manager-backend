@@ -3,7 +3,7 @@ export interface IMachine {
     name: string
     unit: number
     macAddress: string
-    createdAt: Date
+    createdAt?: Date
     rackId: number
     status: string
 }
@@ -13,7 +13,7 @@ export class MachineEntity implements IMachine {
     name: string
     unit: number
     macAddress: string
-    createdAt: Date
+    createdAt?: Date
     rackId: number
     status: string
 
