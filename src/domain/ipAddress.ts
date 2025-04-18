@@ -3,7 +3,7 @@ export interface IIPAddress {
     address: string
     status: string
     poolId: number
-    createdAt: Date
+    createdAt?: Date
     updatedAt?: Date | null
     allocatedAt?: Date | null
     releasedAt?: Date | null
@@ -16,11 +16,10 @@ export class IPAddressEntity implements IIPAddress {
     status: string
     poolId: number
     machineId: number
-    createdAt: Date
+    createdAt?: Date
     updatedAt?: Date | null
     allocatedAt?: Date | null
     releasedAt?: Date | null
-  
 
     constructor(ipAddress: IIPAddress) {
         this.id = ipAddress.id

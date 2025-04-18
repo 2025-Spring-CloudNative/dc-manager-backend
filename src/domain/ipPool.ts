@@ -5,7 +5,7 @@ export interface IIPPool {
     startIp: string
     endIp: string
     subnetId: number
-    createdAt: Date
+    createdAt?: Date
     updatedAt?: Date | null
 }
 
@@ -16,9 +16,9 @@ export class IPPoolEntity implements IIPPool {
     startIp: string
     endIp: string
     subnetId: number
-    createdAt: Date
+    createdAt?: Date
     updatedAt?: Date | null
-    
+
     constructor(ipPool: IIPPool) {
         this.id = ipPool.id
         this.name = ipPool.name

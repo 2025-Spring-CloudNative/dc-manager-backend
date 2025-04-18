@@ -3,7 +3,7 @@ export interface ISubnet {
     cidr: string
     netmask: string
     gateway: string
-    createdAt: Date
+    createdAt?: Date
     updatedAt?: Date | null
 }
 
@@ -12,7 +12,7 @@ export class SubnetEntity implements ISubnet {
     cidr: string
     netmask: string
     gateway: string
-    createdAt: Date
+    createdAt?: Date
     updatedAt?: Date | null
 
     constructor(subnet: ISubnet) {
