@@ -14,6 +14,8 @@ import subnetRoute from "./presentation/server/routes/subnet.route"
 import ipPoolRoute from "./presentation/server/routes/ipPool.route"
 import ipAddressRoute from "./presentation/server/routes/ipAddress.route"
 
+import swaggerUi from "swagger-ui-express";
+import swaggerFile from "../docs/swagger/swagger-output.json"; // 編譯後會在根目錄
 
 const PORT = process.env.PORT || 4000
 
@@ -40,11 +42,14 @@ server.use("/subnet", subnetRoute)
 server.use("/ip-pool", ipPoolRoute)
 server.use("/ip-address", ipAddressRoute)
 
+server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-server.get("/hello", (req, res) => {
+
+server.get("/", (req, res) => {
     console.log(process.env.DATABASE_URL, db)
     res.status(200).json("Hello from server!")
 })
+
 
 server.listen(PORT, () => {
     console.log(`🚀 Server running at http://localhost:${PORT}`)

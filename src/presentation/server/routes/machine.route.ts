@@ -3,7 +3,145 @@ const router = express.Router()
 
 import * as machineController from "../controllers/machine.controller"
 
-router.get("/", machineController.getMachines)
-router.post("/", machineController.createMachine)
+router.get("/", 
+    /*
+        #swagger.tags = ['Machine']
+        #swagger.summary = 'getMachines'
+        #swagger.responses[200] = {
+          description: 'An array of DataCenter objects',
+          schema: [{ $ref: '#/definitions/Machine' }]
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */  
+    machineController.getMachines)
 
+router.get("/:id",
+    /*
+        #swagger.tags = ['Machine']
+        #swagger.summary = 'getMachineById'
+        #swagger.responses[200] = {
+            description: '成功取得機器',
+            schema: {
+                id: "number",
+                name: "string",
+                unit: "number",
+                macAddress: "string",
+                rackId: "number",
+                status: "string",
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    machineController.getMachineById)
+
+router.post("/", 
+    /*
+        #swagger.tags = ['Machine']
+        #swagger.summary = 'createMachine'
+        #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            name: { type: "string", example: "Server-01" },
+                            unit: { type: "number", example: 1 },
+                            macAddress: { type: "string", example: "00:1A:2B:3C:4D:5E" },
+                            rackId: { type: "number", example: 1 },
+                            status: { type: "string", example: "active" },
+                        },
+                        required: ["name", "rackId", "ipAddressId"]
+                    }
+                }
+            }
+        }
+        #swagger.responses[200] = {
+            description: '成功創建機器',
+            schema: {
+                id: "number",
+                name: "string",
+                unit: "number",
+                macAddress: "string",
+                rackId: "number",
+                status: "string",
+                createdAt: "string",
+                updatedAt: "string"
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    machineController.createMachine)
+
+router.patch("/:id",
+    /*
+        #swagger.tags = ['Machine']
+        #swagger.summary = 'updateMachine'
+        #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            name: { type: "string", example: "Server-01" },
+                            unit: { type: "number", example: 1 },
+                            macAddress: { type: "string", example: "00:1A:2B:3C:4D:5E" },
+                            rackId: { type: "number", example: 1 },
+                            status: { type: "string", example: "active" },
+                        },
+                        required: ["name", "unit", "macAddress", "rackId", "status"]
+                    }
+                }
+            }
+        }
+        #swagger.responses[200] = {
+            description: '成功更新機器',
+            schema: {
+                id: "number",
+                name: "string",
+                unit: "number",
+                macAddress: "string",
+                rackId: "number",
+                status: "string",
+                createdAt: "string",
+                updatedAt: "string"
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    machineController.updateMachine)
+router.delete("/:id",
+    /*
+        #swagger.tags = ['Machine']
+        #swagger.summary = 'deleteMachine'
+        #swagger.responses[200] = {
+            description: '成功刪除機器',
+            schema: {
+                id: "number",
+                name: "string",
+                rackId: "number",
+                createdAt: "string",
+                updatedAt: "string"
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    machineController.deleteMachine) 
+    
 export default router
