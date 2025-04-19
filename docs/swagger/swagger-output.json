@@ -1,0 +1,666 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "TSMC Data Center Management System",
+    "description": "API Documentation",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000/"
+    }
+  ],
+  "paths": {
+    "/hello": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/data-center/": {
+      "get": {
+        "tags": [
+          "data-center"
+        ],
+        "summary": "Retrieve all data centers",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "An array of DataCenter objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataCenter"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataCenter"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "data-center"
+        ],
+        "summary": "create a data center",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "id of the created data center",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "description": "Data center object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataCenterInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/room/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/rack/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/machine/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/service/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/subnet/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/ip-pool/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/ip-address/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DataCenter": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Main DC"
+          },
+          "location": {
+            "type": "string",
+            "example": "Taipei"
+          },
+          "subnetId": {
+            "type": "number",
+            "example": 123
+          }
+        },
+        "xml": {
+          "name": "DataCenter"
+        }
+      },
+      "DataCenterInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Main DC"
+          },
+          "location": {
+            "type": "string",
+            "example": "Taipei"
+          },
+          "subnetId": {
+            "type": "number",
+            "example": 123
+          }
+        },
+        "xml": {
+          "name": "DataCenterInput"
+        }
+      },
+      "Subnet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "cidr": {
+            "type": "string",
+            "example": "192.168.1.0/24"
+          },
+          "dataCenterId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "Subnet"
+        }
+      },
+      "SubnetInput": {
+        "type": "object",
+        "properties": {
+          "cidr": {
+            "type": "string",
+            "example": "192.168.1.0/24"
+          },
+          "dataCenterId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "SubnetInput"
+        }
+      },
+      "Machine": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Server-01"
+          },
+          "rackId": {
+            "type": "number",
+            "example": 1
+          },
+          "ipAddressId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "Machine"
+        }
+      },
+      "MachineInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Server-01"
+          },
+          "rackId": {
+            "type": "number",
+            "example": 1
+          },
+          "ipAddressId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "MachineInput"
+        }
+      },
+      "Rack": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Rack-01"
+          },
+          "roomId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "Rack"
+        }
+      },
+      "RackInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Rack-01"
+          },
+          "roomId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "RackInput"
+        }
+      },
+      "Room": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Room-01"
+          },
+          "location": {
+            "type": "string",
+            "example": "Building A"
+          }
+        },
+        "xml": {
+          "name": "Room"
+        }
+      },
+      "RoomInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Room-01"
+          },
+          "location": {
+            "type": "string",
+            "example": "Building A"
+          }
+        },
+        "xml": {
+          "name": "RoomInput"
+        }
+      },
+      "Service": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Web Server"
+          },
+          "machineId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "Service"
+        }
+      },
+      "ServiceInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Web Server"
+          },
+          "machineId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "ServiceInput"
+        }
+      },
+      "IpAddress": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "address": {
+            "type": "string",
+            "example": "192.168.1.10"
+          },
+          "subnetId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "IpAddress"
+        }
+      },
+      "IpAddressInput": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "example": "192.168.1.10"
+          },
+          "subnetId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "IpAddressInput"
+        }
+      },
+      "IpPool": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "rangeStart": {
+            "type": "string",
+            "example": "192.168.1.1"
+          },
+          "rangeEnd": {
+            "type": "string",
+            "example": "192.168.1.254"
+          },
+          "subnetId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "IpPool"
+        }
+      },
+      "IpPoolInput": {
+        "type": "object",
+        "properties": {
+          "rangeStart": {
+            "type": "string",
+            "example": "192.168.1.1"
+          },
+          "rangeEnd": {
+            "type": "string",
+            "example": "192.168.1.254"
+          },
+          "subnetId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "IpPoolInput"
+        }
+      }
+    }
+  }
+}
