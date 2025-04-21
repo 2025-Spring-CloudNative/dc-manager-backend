@@ -13,6 +13,21 @@ export async function getMachines(req: Request, res: Response) {
     }
 }
 
+export async function getMachineById(req: Request, res: Response) {
+    const machineRepo = new MachineDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        const machine = await machineService.getMachineById(
+            machineRepo,
+            id
+        )
+        res.status(200).json(machine)
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export async function createMachine(req: Request, res: Response) {
     const machineRepo = new MachineDrizzleRepository()
 
@@ -22,6 +37,37 @@ export async function createMachine(req: Request, res: Response) {
             req.body
         )
         res.status(200).json({ id: createdMachineId })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function updateMachine(req: Request, res: Response) {
+    const machineRepo = new MachineDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        const updatedMachine = await machineService.updateMachine(
+            machineRepo,
+            id,
+            req.body
+        )
+        res.status(200).json(updatedMachine)
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function deleteMachine(req: Request, res: Response) {
+    const machineRepo = new MachineDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        await machineService.deleteMachine(
+            machineRepo,
+            id
+        )
+        res.status(200).json({ message: "Machine deleted successfully" })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

@@ -68,3 +68,14 @@ npm run local
 ```shell
 npm run build
 ```
+
+
+
+## swagger
+
+```shell
+npm install swagger-autogen swagger-ui-express  
+npm install --save-dev @types/swagger-ui-express
+npm run doc:generate
+npm run local
+```

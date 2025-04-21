@@ -19,6 +19,7 @@ import ipAddressRoute from "./presentation/server/routes/ipAddress.route"
 
 const PORT = process.env.PORT || 4000
 
+
 const server = express()
 
 // Add a list of allowed origins.
@@ -37,10 +38,11 @@ const swaggerUiOptions = {
     swaggerOptions: { supportedSubmitMethods: [] }
 }
 server.use(
-    "/doc",
+    "/docs",
     swaggerUi.serve,
     swaggerUi.setup(swaggerFile, swaggerUiOptions)
 )
+// server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // TODO: use swagger-autogen, swagger-ui-express in routes
 server.use("/data-center", dataCenterRoute)
@@ -52,10 +54,15 @@ server.use("/subnet", subnetRoute)
 server.use("/ip-pool", ipPoolRoute)
 server.use("/ip-address", ipAddressRoute)
 
-server.get("/hello", (req, res) => {
+
+
+
+
+server.get("/", (req, res) => {
     console.log(process.env.DATABASE_URL, db)
     res.status(200).json("Hello from server!")
 })
+
 
 server.listen(PORT, () => {
     console.log(`🚀 Server running at http://localhost:${PORT}`)
