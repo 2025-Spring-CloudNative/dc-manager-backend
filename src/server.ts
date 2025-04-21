@@ -19,6 +19,7 @@ import swaggerFile from "../docs/swagger/swagger-output.json"; // 編譯後會�
 
 const PORT = process.env.PORT || 4000
 
+
 const server = express()
 
 // Add a list of allowed origins.
@@ -42,7 +43,17 @@ server.use("/subnet", subnetRoute)
 server.use("/ip-pool", ipPoolRoute)
 server.use("/ip-address", ipAddressRoute)
 
-server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+// disable try it out button
+const swaggerUiOptions = {
+  swaggerOptions: { supportedSubmitMethods: [] }
+}
+server.use(
+  "/docs`",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerFile, swaggerUiOptions)
+)
+
+// server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 
 server.get("/", (req, res) => {
