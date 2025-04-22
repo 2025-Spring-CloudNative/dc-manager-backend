@@ -1,13 +1,13 @@
-import * as serviceService from "../../src/application/services/service.service"
-import { IServiceRepository } from "../../src/persistence/repositories/service.repository"
-import { IService } from "../../src/domain/service"
+import * as serviceService from "../../../src/application/services/service.service"
+import { IServiceRepository } from "../../../src/persistence/repositories/service.repository"
+import { IService } from "../../../src/domain/service"
 
 const mockServiceRepo: jest.Mocked<IServiceRepository> = {
     getServices: jest.fn(),
     getServiceById: jest.fn(),
     createService: jest.fn(),
     updateService: jest.fn(),
-    deleteService: jest.fn(),
+    deleteService: jest.fn()
 }
 
 beforeEach(() => {
@@ -18,7 +18,7 @@ describe("serviceService - getServices", () => {
     it("should fetch and return all services", async () => {
         const services: IService[] = [
             { id: 1, name: "ServiceA", poolId: 100 },
-            { id: 2, name: "ServiceB", poolId: 200 },
+            { id: 2, name: "ServiceB", poolId: 200 }
         ]
         mockServiceRepo.getServices.mockResolvedValue(services)
 
@@ -66,7 +66,7 @@ describe("serviceService - updateService", () => {
         const updatedSvc: IService = {
             id: 1,
             name: "UpdatedService",
-            poolId: 100,
+            poolId: 100
         }
         mockServiceRepo.updateService.mockResolvedValue(updatedSvc)
 

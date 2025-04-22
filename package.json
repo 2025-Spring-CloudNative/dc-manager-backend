@@ -21,6 +21,7 @@
         "cors": "^2.8.5",
         "drizzle-orm": "^0.41.0",
         "express": "^5.1.0",
+        "ipaddr.js": "^2.2.0",
         "pg": "^8.14.1",
         "typescript": "^5.8.3"
     },

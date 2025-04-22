@@ -1,13 +1,13 @@
-import * as subnetService from "../../src/application/services/subnet.service"
-import { ISubnetRepository } from "../../src/persistence/repositories/subnet.repository"
-import { ISubnet } from "../../src/domain/subnet"
+import * as subnetService from "../../../src/application/services/subnet.service"
+import { ISubnetRepository } from "../../../src/persistence/repositories/subnet.repository"
+import { ISubnet } from "../../../src/domain/subnet"
 
 const mockSubnetRepo: jest.Mocked<ISubnetRepository> = {
     getSubnets: jest.fn(),
     getSubnetById: jest.fn(),
     createSubnet: jest.fn(),
     updateSubnet: jest.fn(),
-    deleteSubnet: jest.fn(),
+    deleteSubnet: jest.fn()
 }
 
 beforeEach(() => {
@@ -23,7 +23,7 @@ describe("subnetService - getSubnets", () => {
                 netmask: "255.255.255.0",
                 gateway: "192.168.0.1",
                 createdAt: new Date("2025-04-18T00:00:00Z"),
-                updatedAt: null,
+                updatedAt: new Date("2025-04-18T02:00:00Z")
             },
             {
                 id: 2,
@@ -31,8 +31,8 @@ describe("subnetService - getSubnets", () => {
                 netmask: "255.255.0.0",
                 gateway: "10.0.0.1",
                 createdAt: new Date("2025-04-18T01:00:00Z"),
-                updatedAt: new Date("2025-04-18T02:00:00Z"),
-            },
+                updatedAt: new Date("2025-04-18T02:00:00Z")
+            }
         ]
         mockSubnetRepo.getSubnets.mockResolvedValue(subnets)
 
@@ -51,7 +51,7 @@ describe("subnetService - getSubnetById", () => {
             netmask: "255.255.255.0",
             gateway: "192.168.0.1",
             createdAt: new Date("2025-04-18T00:00:00Z"),
-            updatedAt: null,
+            updatedAt: new Date("2025-04-18T00:00:00Z")
         }
         mockSubnetRepo.getSubnetById.mockResolvedValue(subnet)
 
@@ -70,7 +70,7 @@ describe("subnetService - createSubnet", () => {
         const newSubnet: ISubnet = {
             cidr: "172.16.0.0/12",
             netmask: "255.240.0.0",
-            gateway: "172.16.0.1",
+            gateway: "172.16.0.1"
         }
         const createdId = 3
         mockSubnetRepo.createSubnet.mockResolvedValue(createdId)
@@ -94,7 +94,7 @@ describe("subnetService - updateSubnet", () => {
             netmask: "255.255.255.0",
             gateway: "192.168.0.254",
             createdAt: new Date("2025-04-18T00:00:00Z"),
-            updatedAt: new Date("2025-04-18T03:00:00Z"),
+            updatedAt: new Date("2025-04-18T03:00:00Z")
         }
         mockSubnetRepo.updateSubnet.mockResolvedValue(updatedSubnet)
 

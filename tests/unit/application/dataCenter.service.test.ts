@@ -1,5 +1,5 @@
-import * as dataCenterService from "../../src/application/services/dataCenter.service"
-import { IDataCenterRepository } from "../../src/persistence/repositories/dataCenter.repository"
+import * as dataCenterService from "../../../src/application/services/dataCenter.service"
+import { IDataCenterRepository } from "../../../src/persistence/repositories/dataCenter.repository"
 
 const mockDataCenterRepo: jest.Mocked<IDataCenterRepository> = {
     getDataCenters: jest.fn(),
@@ -21,8 +21,9 @@ describe("dataCenterService - getDataCenters", () => {
         ]
         mockDataCenterRepo.getDataCenters.mockResolvedValue(dataCenters)
 
-        const result =
-            await dataCenterService.getDataCenters(mockDataCenterRepo)
+        const result = await dataCenterService.getDataCenters(
+            mockDataCenterRepo
+        )
 
         expect(mockDataCenterRepo.getDataCenters).toHaveBeenCalled()
         expect(result).toEqual(dataCenters)

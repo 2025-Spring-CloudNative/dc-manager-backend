@@ -1,13 +1,13 @@
-import * as roomService from "../../src/application/services/room.service"
-import { IRoomRepository } from "../../src/persistence/repositories/room.repository"
-import { IRoom } from "../../src/domain/room"
+import * as roomService from "../../../src/application/services/room.service"
+import { IRoomRepository } from "../../../src/persistence/repositories/room.repository"
+import { IRoom } from "../../../src/domain/room"
 
 const mockRoomRepo: jest.Mocked<IRoomRepository> = {
     getRooms: jest.fn(),
     getRoomById: jest.fn(),
     createRoom: jest.fn(),
     updateRoom: jest.fn(),
-    deleteRoom: jest.fn(),
+    deleteRoom: jest.fn()
 }
 
 beforeEach(() => {
@@ -18,7 +18,7 @@ describe("roomService - getRooms", () => {
     it("should fetch and return all rooms", async () => {
         const rooms: IRoom[] = [
             { id: 1, name: "RoomA", unit: 10, dataCenterId: 1 },
-            { id: 2, name: "RoomB", unit: 20, dataCenterId: 1 },
+            { id: 2, name: "RoomB", unit: 20, dataCenterId: 1 }
         ]
         mockRoomRepo.getRooms.mockResolvedValue(rooms)
 
@@ -61,7 +61,7 @@ describe("roomService - updateRoom", () => {
             id: 1,
             name: "RoomA",
             unit: 15,
-            dataCenterId: 1,
+            dataCenterId: 1
         }
         mockRoomRepo.updateRoom.mockResolvedValue(updatedRoom)
 

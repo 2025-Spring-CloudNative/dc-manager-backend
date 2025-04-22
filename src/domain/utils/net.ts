@@ -44,7 +44,3 @@ export class NetUtils {
         return num_ones === prefixLength
     }
 }
-
-if (require.main === module) {
-    console.log(NetUtils.isValidIPv4Netmask("255.0.255.0"))
-}
