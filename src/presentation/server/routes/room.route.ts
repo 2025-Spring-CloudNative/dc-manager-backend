@@ -3,7 +3,8 @@ const router = express.Router()
 
 import * as roomController from "../controllers/room.controller"
 
-router.get("/",
+router.get(
+    "/",
     /*
         #swagger.tags = ['Room']
         #swagger.summary = 'getRooms'
@@ -15,10 +16,12 @@ router.get("/",
             description: 'Internal Server Error',
             schema: { message: 'string' }
         }  
-    */ 
-    roomController.getRooms)
+    */
+    roomController.getRooms
+)
 
-router.get("/:id",
+router.get(
+    "/:id",
     /*
         #swagger.tags = ['Room']
         #swagger.summary = 'getRoomById'
@@ -36,9 +39,11 @@ router.get("/:id",
             schema: { message: 'string' }
         } 
     */
-    roomController.getRoomById)
+    roomController.getRoomById
+)
 
-router.post("/", 
+router.post(
+    "/",
     /*
         #swagger.tags = ['Room']
         #swagger.summary = 'createRoom'
@@ -62,10 +67,13 @@ router.post("/",
         #swagger.responses[500] = {
             description: 'Internal Server Error',
             schema: { message: 'string' }
+        }   
     */
-    roomController.createRoom)
+    roomController.createRoom
+)
 
-router.patch("/",
+router.patch(
+    "/",
     /*
         #swagger.tags = ['Room']
         #swagger.summary = 'updateRoom'
@@ -92,9 +100,11 @@ router.patch("/",
             schema: { message: 'string' }
         }
     */
-    roomController.updateRoom)
+    roomController.updateRoom
+)
 
-router.delete("/:id",
+router.delete(
+    "/:id",
     /*
         #swagger.tags = ['Room']
         #swagger.summary = 'deleteRoom'
@@ -107,6 +117,7 @@ router.delete("/:id",
             schema: { message: 'string' }
         }
     */
-    roomController.deleteRoom)
+    roomController.deleteRoom
+)
 
 export default router

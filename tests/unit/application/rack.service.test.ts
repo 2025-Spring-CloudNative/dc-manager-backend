@@ -1,13 +1,13 @@
-import * as rackService from "../../src/application/services/rack.service"
-import { IRackRepository } from "../../src/persistence/repositories/rack.repository"
-import { IRack } from "../../src/domain/rack"
+import * as rackService from "../../../src/application/services/rack.service"
+import { IRackRepository } from "../../../src/persistence/repositories/rack.repository"
+import { IRack } from "../../../src/domain/rack"
 
 const mockRackRepo: jest.Mocked<IRackRepository> = {
     getRacks: jest.fn(),
     getRackById: jest.fn(),
     createRack: jest.fn(),
     updateRack: jest.fn(),
-    deleteRack: jest.fn(),
+    deleteRack: jest.fn()
 }
 
 beforeEach(() => {
@@ -25,7 +25,7 @@ describe("rackService - getRacks", () => {
                 createdAt: new Date("2025-04-18T00:00:00Z"),
                 updatedAt: null,
                 roomId: 100,
-                serviceId: 200,
+                serviceId: 200
             },
             {
                 id: 2,
@@ -35,8 +35,8 @@ describe("rackService - getRacks", () => {
                 createdAt: new Date("2025-04-18T01:00:00Z"),
                 updatedAt: new Date("2025-04-18T02:00:00Z"),
                 roomId: 101,
-                serviceId: 201,
-            },
+                serviceId: 201
+            }
         ]
         mockRackRepo.getRacks.mockResolvedValue(racks)
 
@@ -57,7 +57,7 @@ describe("rackService - getRackById", () => {
             createdAt: new Date("2025-04-18T00:00:00Z"),
             updatedAt: null,
             roomId: 100,
-            serviceId: 200,
+            serviceId: 200
         }
         mockRackRepo.getRackById.mockResolvedValue(rack)
 
@@ -75,7 +75,7 @@ describe("rackService - createRack", () => {
             height: 40,
             tag: "NR",
             roomId: 102,
-            serviceId: 202,
+            serviceId: 202
         }
         const createdId = 3
         mockRackRepo.createRack.mockResolvedValue(createdId)
@@ -98,7 +98,7 @@ describe("rackService - updateRack", () => {
             createdAt: new Date("2025-04-18T00:00:00Z"),
             updatedAt: new Date("2025-04-18T04:00:00Z"),
             roomId: 100,
-            serviceId: 200,
+            serviceId: 200
         }
         mockRackRepo.updateRack.mockResolvedValue(updatedRack)
 

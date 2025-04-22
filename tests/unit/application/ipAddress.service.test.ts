@@ -1,6 +1,6 @@
-import * as ipAddressService from "../../src/application/services/ipAddress.service"
-import { IIPAddressRepository } from "../../src/persistence/repositories/ipAddress.repository"
-import { IIPAddress } from "../../src/domain/ipAddress"
+import * as ipAddressService from "../../../src/application/services/ipAddress.service"
+import { IIPAddressRepository } from "../../../src/persistence/repositories/ipAddress.repository"
+import { IIPAddress } from "../../../src/domain/ipAddress"
 
 const mockIpAddressRepo: jest.Mocked<IIPAddressRepository> = {
     getIPAddresses: jest.fn(),

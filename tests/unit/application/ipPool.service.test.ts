@@ -1,13 +1,13 @@
-import * as ipPoolService from "../../src/application/services/ipPool.service"
-import { IIPPoolRepository } from "../../src/persistence/repositories/ipPool.repository"
-import { IIPPool } from "../../src/domain/ipPool"
+import * as ipPoolService from "../../../src/application/services/ipPool.service"
+import { IIPPoolRepository } from "../../../src/persistence/repositories/ipPool.repository"
+import { IIPPool } from "../../../src/domain/ipPool"
 
 const mockIpPoolRepo: jest.Mocked<IIPPoolRepository> = {
     getIPPools: jest.fn(),
     getIPPoolById: jest.fn(),
     createIPPool: jest.fn(),
     updateIPPool: jest.fn(),
-    deleteIPPool: jest.fn(),
+    deleteIPPool: jest.fn()
 }
 
 beforeEach(() => {
@@ -25,7 +25,7 @@ describe("ipPoolService - getIPPools", () => {
                 endIp: "192.168.0.200",
                 subnetId: 1,
                 createdAt: new Date("2025-04-18T00:00:00Z"),
-                updatedAt: null,
+                updatedAt: null
             },
             {
                 id: 2,
@@ -35,8 +35,8 @@ describe("ipPoolService - getIPPools", () => {
                 endIp: "10.0.0.50",
                 subnetId: 2,
                 createdAt: new Date("2025-04-18T01:00:00Z"),
-                updatedAt: new Date("2025-04-18T02:00:00Z"),
-            },
+                updatedAt: new Date("2025-04-18T02:00:00Z")
+            }
         ]
         mockIpPoolRepo.getIPPools.mockResolvedValue(ipPools)
 
@@ -57,7 +57,7 @@ describe("ipPoolService - getIPPoolById", () => {
             endIp: "192.168.0.200",
             subnetId: 1,
             createdAt: new Date("2025-04-18T00:00:00Z"),
-            updatedAt: null,
+            updatedAt: null
         }
         mockIpPoolRepo.getIPPoolById.mockResolvedValue(ipPool)
 
@@ -78,7 +78,7 @@ describe("ipPoolService - createIPPool", () => {
             type: "static",
             startIp: "172.16.0.1",
             endIp: "172.16.0.254",
-            subnetId: 3,
+            subnetId: 3
         }
         const createdId = 3
         mockIpPoolRepo.createIPPool.mockResolvedValue(createdId)
@@ -101,7 +101,7 @@ describe("ipPoolService - updateIPPool", () => {
             endIp: "192.168.0.200",
             subnetId: 1,
             createdAt: new Date("2025-04-18T00:00:00Z"),
-            updatedAt: new Date("2025-04-18T03:00:00Z"),
+            updatedAt: new Date("2025-04-18T03:00:00Z")
         }
         mockIpPoolRepo.updateIPPool.mockResolvedValue(updatedPool)
 

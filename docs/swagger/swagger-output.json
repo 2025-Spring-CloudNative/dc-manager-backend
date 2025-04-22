@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/hello": {
+    "/": {
       "get": {
         "description": "",
         "responses": {
@@ -24,9 +24,9 @@
     "/data-center/": {
       "get": {
         "tags": [
-          "data-center"
+          "DataCenter"
         ],
-        "summary": "Retrieve all data centers",
+        "summary": "getDataCenters",
         "description": "",
         "responses": {
           "200": {
@@ -53,6 +53,15 @@
                     "name": "main"
                   }
                 }
+              }
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DataCenter"
+              },
+              "xml": {
+                "name": "main"
               }
             }
           },
@@ -87,15 +96,27 @@
                   }
                 }
               }
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "string"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           }
         }
       },
       "post": {
         "tags": [
-          "data-center"
+          "DataCenter"
         ],
-        "summary": "create a data center",
+        "summary": "createDataCenter",
         "description": "",
         "responses": {
           "200": {
@@ -167,11 +188,371 @@
         },
         "requestBody": {
           "required": true,
-          "description": "Data center object",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DataCenterInput"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Main DC"
+                  },
+                  "location": {
+                    "type": "string",
+                    "example": "Taipei"
+                  },
+                  "subnetId": {
+                    "type": "number",
+                    "example": "1"
+                  }
+                },
+                "required": [
+                  "name",
+                  "location",
+                  "subnetId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data-center/{id}": {
+      "get": {
+        "tags": [
+          "DataCenter"
+        ],
+        "summary": "getDataCenterById",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of DataCenter objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataCenter"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataCenter"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data center not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Data center not found"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Data center not found"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "DataCenter"
+        ],
+        "summary": "updateDataCenter",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "update Subnet successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "location": {
+                      "type": "string"
+                    },
+                    "subnetId": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "台北資料中心"
+                  },
+                  "location": {
+                    "type": "string",
+                    "example": "台北市"
+                  },
+                  "subnetId": {
+                    "type": "number",
+                    "example": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "location",
+                  "subnetId"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DataCenter"
+        ],
+        "summary": "deleteDataCenter",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data center deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Data center deleted successfully"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Data center deleted successfully"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data center not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Data center not found"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Data center not found"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
               }
             }
           }
@@ -180,78 +561,1586 @@
     },
     "/room/": {
       "get": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "getRooms",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "An array of DataCenter objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Room"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Room"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "createRoom",
         "description": "",
         "responses": {
           "200": {
             "description": "OK"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "A 區機房"
+                  },
+                  "unit": {
+                    "type": "number",
+                    "example": 3
+                  },
+                  "dataCenterId": {
+                    "type": "number",
+                    "example": 1
+                  }
+                },
+                "required": [
+                  "name",
+                  "unit",
+                  "dataCenterId"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "updateRoom",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "A 區機房"
+                  },
+                  "unit": {
+                    "type": "number",
+                    "example": 3
+                  },
+                  "dataCenterId": {
+                    "type": "number",
+                    "example": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "unit",
+                  "dataCenterId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/room/{id}": {
+      "get": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "getRoomById",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功取得子網路",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "dataCenterId": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "dataCenterId": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "deleteRoom",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/rack/": {
       "get": {
+        "tags": [
+          "Rack"
+        ],
+        "summary": "getRacks",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "An array of DataCenter objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Rack"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Rack"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
+        "tags": [
+          "Rack"
+        ],
+        "summary": "createRack",
         "description": "",
         "responses": {
           "200": {
             "description": "OK"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "A 區機櫃"
+                  },
+                  "height": {
+                    "type": "number",
+                    "example": 42
+                  },
+                  "tag": {
+                    "type": "string",
+                    "example": "Storage"
+                  },
+                  "roomId": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "serviceId": {
+                    "type": "number",
+                    "example": 2
+                  }
+                },
+                "required": [
+                  "name",
+                  "height",
+                  "tag",
+                  "roomId"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Rack"
+        ],
+        "summary": "updateRack",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "A 區機櫃"
+                  },
+                  "height": {
+                    "type": "number",
+                    "example": 42
+                  },
+                  "tag": {
+                    "type": "string",
+                    "example": "Storage"
+                  },
+                  "roomId": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "serviceId": {
+                    "type": "number",
+                    "example": 2
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "height",
+                  "tag",
+                  "roomId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rack/{id}": {
+      "get": {
+        "tags": [
+          "Rack"
+        ],
+        "summary": "getRackById",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功取得機櫃",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "height": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "tag": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "roomId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "serviceId": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "height": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "tag": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "roomId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "serviceId": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Rack"
+        ],
+        "summary": "deleteRack",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/machine/": {
       "get": {
+        "tags": [
+          "Machine"
+        ],
+        "summary": "getMachines",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "An array of DataCenter objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Machine"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Machine"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
+        "tags": [
+          "Machine"
+        ],
+        "summary": "createMachine",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "成功創建機器",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "macAddress": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "rackId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "macAddress": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "rackId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Server-01"
+                  },
+                  "unit": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "macAddress": {
+                    "type": "string",
+                    "example": "00:1A:2B:3C:4D:5E"
+                  },
+                  "rackId": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "active"
+                  }
+                },
+                "required": [
+                  "name",
+                  "rackId",
+                  "ipAddressId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/machine/{id}": {
+      "get": {
+        "tags": [
+          "Machine"
+        ],
+        "summary": "getMachineById",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功取得機器",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "macAddress": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "rackId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "macAddress": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "rackId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Machine"
+        ],
+        "summary": "updateMachine",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功更新機器",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "macAddress": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "rackId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "macAddress": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "rackId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Server-01"
+                  },
+                  "unit": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "macAddress": {
+                    "type": "string",
+                    "example": "00:1A:2B:3C:4D:5E"
+                  },
+                  "rackId": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "active"
+                  }
+                },
+                "required": [
+                  "name",
+                  "unit",
+                  "macAddress",
+                  "rackId",
+                  "status"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Machine"
+        ],
+        "summary": "deleteMachine",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功刪除機器",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "rackId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "rackId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/service/": {
       "get": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "getServices",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "An array of DataCenter objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Service"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Service"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "createService",
         "description": "",
         "responses": {
           "200": {
@@ -260,34 +2149,782 @@
           "500": {
             "description": "Internal Server Error"
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Web Server"
+                  },
+                  "poolId": {
+                    "type": "number",
+                    "example": 100
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "poolId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/service/{id}": {
+      "get": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "getServiceById",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功取得服務",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "machineId": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "machineId": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
         }
       },
-      "post": {
+      "patch": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "updateService",
         "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Web Server"
+                  },
+                  "machineId": {
+                    "type": "number",
+                    "example": 1
+                  }
+                },
+                "required": [
+                  "name",
+                  "machineId"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "deleteService",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功刪除服務",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/subnet/": {
       "get": {
+        "tags": [
+          "Subnet"
+        ],
+        "summary": "getSubnets",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "An array of DataCenter objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Subnet"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Subnet"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
+        "tags": [
+          "Subnet"
+        ],
+        "summary": "Create a new subnet",
         "description": "",
+        "responses": {
+          "200": {
+            "description": "Subnet created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cidr": {
+                    "type": "string",
+                    "example": "192.168.1.0/24"
+                  },
+                  "netmask": {
+                    "type": "string",
+                    "example": "255.255.255.0"
+                  },
+                  "gateway": {
+                    "type": "string",
+                    "example": "192.168.1.1"
+                  }
+                },
+                "required": [
+                  "cidr",
+                  "netmask",
+                  "gateway"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subnet/{id}": {
+      "get": {
+        "tags": [
+          "Subnet"
+        ],
+        "summary": "getSubnetById",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功取得子網路",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "cidr": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "netmask": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "gateway": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "cidr": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "netmask": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "gateway": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Subnet"
+        ],
+        "summary": "updateSubnet",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "update Subnet successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "cidr": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "netmask": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "gateway": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "cidr": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "netmask": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "gateway": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Subnet not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Subnet not found"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Subnet not found"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cidr": {
+                    "type": "string",
+                    "example": "192.168.1.0/24"
+                  },
+                  "netmask": {
+                    "type": "string",
+                    "example": "255.255.255.0"
+                  },
+                  "gateway": {
+                    "type": "string",
+                    "example": "192.168.1.1"
+                  }
+                },
+                "required": [
+                  "cidr",
+                  "netmask",
+                  "gateway"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Subnet"
+        ],
+        "summary": "deleteSubnet",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -300,48 +2937,1342 @@
     },
     "/ip-pool/": {
       "get": {
+        "tags": [
+          "IP Pool"
+        ],
+        "summary": "getIPPools",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "An array of DataCenter objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IPPool"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IPPool"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
+        "tags": [
+          "IP Pool"
+        ],
+        "summary": "createIPPool",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "IP Pool created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "startIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "endIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "subnetId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "startIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "endIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "subnetId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Main IP Pool"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "static"
+                  },
+                  "startIp": {
+                    "type": "string",
+                    "example": "192.168.0.100"
+                  },
+                  "endIp": {
+                    "type": "string",
+                    "example": "192.168.0.200"
+                  },
+                  "subnetId": {
+                    "type": "number",
+                    "example": 1
+                  }
+                },
+                "required": [
+                  "name",
+                  "type",
+                  "startIp",
+                  "endIp",
+                  "subnetId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-pool/{id}": {
+      "get": {
+        "tags": [
+          "IP Pool"
+        ],
+        "summary": "getIPPoolById",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功取得 IP Pool",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "subnetId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "startIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "endIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "gateway": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "netmask": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "dns": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "subnetId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "startIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "endIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "gateway": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "netmask": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "dns": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "IP Pool"
+        ],
+        "summary": "updateIPPool",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "IP Pool updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "startIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "endIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "subnetId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "startIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "endIp": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "subnetId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Main IP Pool"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "dynamic"
+                  },
+                  "startIp": {
+                    "type": "string",
+                    "example": "10.0.0.10"
+                  },
+                  "endIP": {
+                    "type": "string",
+                    "example": "10.0.0.50"
+                  },
+                  "subnetId": {
+                    "type": "number",
+                    "example": 1
+                  }
+                },
+                "required": [
+                  "name",
+                  "type",
+                  "startIp",
+                  "endIp",
+                  "subnetId"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "IP Pool"
+        ],
+        "summary": "deleteIPPool",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "IP Pool deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "IP Pool deleted successfully"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "IP Pool deleted successfully"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/ip-address/": {
       "get": {
+        "tags": [
+          "IP Address"
+        ],
+        "summary": "getIPAddresses",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "An array of DataCenter objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IPAddress"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IPAddress"
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
+        "tags": [
+          "IP Address"
+        ],
+        "summary": "createIPAddress",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "成功創建 IP 地址",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "poolId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "machineId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "allocatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "releasedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "poolId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "machineId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "allocatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "releasedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "192.168.0.10"
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "allocated"
+                  },
+                  "poolId": {
+                    "type": "number",
+                    "example": 100
+                  },
+                  "machineId": {
+                    "type": "number",
+                    "example": 200
+                  }
+                },
+                "required": [
+                  "id",
+                  "address",
+                  "status",
+                  "poolId",
+                  "machineId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ip-address/{id}": {
+      "get": {
+        "tags": [
+          "IP Address"
+        ],
+        "summary": "getIPAddressById",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功取得 IP 地址",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "poolId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "machineId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "allocatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "releasedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "poolId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "machineId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "allocatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "releasedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "IP Address"
+        ],
+        "summary": "updateIPAddress",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功更新 IP 地址",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "poolId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "machineId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "allocatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "releasedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "poolId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "machineId": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "allocatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "releasedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "192.168.0.11"
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "allocated"
+                  },
+                  "poolId": {
+                    "type": "number",
+                    "example": 101
+                  },
+                  "machineId": {
+                    "type": "number",
+                    "example": 201
+                  }
+                },
+                "required": [
+                  "id",
+                  "address",
+                  "status",
+                  "poolId",
+                  "machineId"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "IP Address"
+        ],
+        "summary": "deleteIPAddress",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功刪除 IP 地址",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       }

@@ -1,13 +1,13 @@
-import * as machineService from "../../src/application/services/machine.service"
-import { IMachineRepository } from "../../src/persistence/repositories/machine.repository"
-import { IMachine } from "../../src/domain/machine"
+import * as machineService from "../../../src/application/services/machine.service"
+import { IMachineRepository } from "../../../src/persistence/repositories/machine.repository"
+import { IMachine } from "../../../src/domain/machine"
 
 const mockMachineRepo: jest.Mocked<IMachineRepository> = {
     getMachines: jest.fn(),
     getMachineById: jest.fn(),
     createMachine: jest.fn(),
     updateMachine: jest.fn(),
-    deleteMachine: jest.fn(),
+    deleteMachine: jest.fn()
 }
 
 beforeEach(() => {
@@ -24,7 +24,7 @@ describe("machineService - getMachines", () => {
                 macAddress: "AA:BB:CC:DD:EE:FF",
                 createdAt: new Date("2025-04-18T00:00:00Z"),
                 rackId: 10,
-                status: "online",
+                status: "online"
             },
             {
                 id: 2,
@@ -33,8 +33,8 @@ describe("machineService - getMachines", () => {
                 macAddress: "11:22:33:44:55:66",
                 createdAt: new Date("2025-04-18T01:00:00Z"),
                 rackId: 20,
-                status: "offline",
-            },
+                status: "offline"
+            }
         ]
         mockMachineRepo.getMachines.mockResolvedValue(machines)
 
@@ -54,7 +54,7 @@ describe("machineService - getMachineById", () => {
             macAddress: "AA:BB:CC:DD:EE:FF",
             createdAt: new Date("2025-04-18T00:00:00Z"),
             rackId: 10,
-            status: "online",
+            status: "online"
         }
         mockMachineRepo.getMachineById.mockResolvedValue(machine)
 
@@ -75,7 +75,7 @@ describe("machineService - createMachine", () => {
             unit: 103,
             macAddress: "FF:EE:DD:CC:BB:AA",
             rackId: 30,
-            status: "online",
+            status: "online"
         }
         const createdId = 1
         mockMachineRepo.createMachine.mockResolvedValue(createdId)
@@ -100,7 +100,7 @@ describe("machineService - updateMachine", () => {
             macAddress: "AA:BB:CC:DD:EE:FF",
             createdAt: new Date("2025-04-18T00:00:00Z"),
             rackId: 10,
-            status: "maintenance",
+            status: "maintenance"
         }
         mockMachineRepo.updateMachine.mockResolvedValue(updatedMachine)
 
