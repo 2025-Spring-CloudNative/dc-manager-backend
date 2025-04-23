@@ -5,6 +5,7 @@ import { pgTable, serial, integer, varchar, timestamp } from "drizzle-orm/pg-cor
 export const machineTable = pgTable("machine", {
     id: serial().primaryKey().notNull(),
     name: varchar({ length: 255 }).notNull(),
+    startUnit: integer("start_unit").notNull(),
     unit: integer().notNull(),
     macAddress: varchar("mac_address", { length: 17 }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
