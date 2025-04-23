@@ -20,7 +20,7 @@ const schemas = {
     ...serviceSchema,
     ...ipAddressSchema
 }
-console.log(schemas)
+
 // TODO: use singleton for this db instance / connection pool throughout the project
 export const db = drizzle<typeof schemas>({
     connection: process.env.DATABASE_URL!,

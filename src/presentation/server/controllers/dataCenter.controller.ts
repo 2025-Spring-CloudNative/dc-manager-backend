@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { DataCenterDrizzleRepository } from "../../../persistence/drizzle/dataCenter.persistence"
 import * as dataCenterService from "../../../application/services/dataCenter.service"
+import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
 
 export async function getDataCenters(req: Request, res: Response) {
     /* 
@@ -69,11 +70,13 @@ export async function createDataCenter(req: Request, res: Response) {
         }
     */
     const dataCenterRepo = new DataCenterDrizzleRepository()
+    const subnetRepo = new SubnetDrizzleRepository()
     console.log("dataCenterRepo", dataCenterRepo)
     console.log("req.body", req.body)
     try {
         const createdDataCenterId = await dataCenterService.createDataCenter(
             dataCenterRepo,
+            subnetRepo,
             req.body
         )
         res.status(200).json({ id: createdDataCenterId })

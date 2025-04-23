@@ -2,8 +2,7 @@ import { eq } from "drizzle-orm"
 import { IDataCenter } from "../../domain/dataCenter"
 import { IDataCenterRepository } from "../repositories/dataCenter.repository"
 import { db } from "./index"
-import { dataCenterTable, dataCenterRelations } from "./schema/dataCenter.schema"
-import { subnetTable } from "./schema/subnet.schema"
+import { dataCenterTable } from "./schema/dataCenter.schema"
 
 export class DataCenterDrizzleRepository implements IDataCenterRepository {
     async getDataCenters() {
@@ -30,6 +29,17 @@ export class DataCenterDrizzleRepository implements IDataCenterRepository {
             .where(eq(dataCenterTable.id, id))
     
         return dataCenter as IDataCenter
+    }
+
+    async getDataCenterByIdWithSubnet(id: number) {
+        const dataCenterWithSubnet = await db.query.dataCenterTable.findFirst({
+            with: {
+              subnet: true,
+            },
+            where: eq(dataCenterTable.id, id)
+        })
+        
+        return dataCenterWithSubnet?.id as number
     }
 
     async createDataCenter(dataCenter: IDataCenter) {
