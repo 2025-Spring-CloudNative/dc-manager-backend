@@ -8,6 +8,12 @@ export async function getDataCenters(dataCenterRepo: IDataCenterRepository) {
     return dataCenters
 }
 
+export async function getDataCentersWithSubnet(dataCenterRepo: IDataCenterRepository) {
+    const dataCentersWithSubnet = await dataCenterRepo.getDataCentersWithSubnet()
+
+    return dataCentersWithSubnet
+}
+
 export async function getDataCenterById(
     dataCenterRepo: IDataCenterRepository,
     id: number

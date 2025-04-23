@@ -2,7 +2,8 @@ import { eq } from "drizzle-orm"
 import { IDataCenter } from "../../domain/dataCenter"
 import { IDataCenterRepository } from "../repositories/dataCenter.repository"
 import { db } from "./index"
-import { dataCenterTable } from "./schema/dataCenter.schema"
+import { dataCenterTable, dataCenterRelations } from "./schema/dataCenter.schema"
+import { subnetTable } from "./schema/subnet.schema"
 
 export class DataCenterDrizzleRepository implements IDataCenterRepository {
     async getDataCenters() {
@@ -11,6 +12,15 @@ export class DataCenterDrizzleRepository implements IDataCenterRepository {
             .from(dataCenterTable)
 
         return dataCenters
+    }
+
+    async getDataCentersWithSubnet() {
+        const dataCentersWithSubnet = await db.query.dataCenterTable.findMany({
+            with: {
+                subnet: true
+            }
+        })
+        return dataCentersWithSubnet
     }
 
     async getDataCenterById(id: number) {
