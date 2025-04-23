@@ -1,5 +1,4 @@
-import { DataCenterEntity, IDataCenter } from "../../domain/dataCenter"
-import { ISubnet, SubnetEntity } from "../../domain/subnet"
+import { IDataCenter, DataCenterEntity } from "../../domain/dataCenter"
 import { IDataCenterRepository } from "../../persistence/repositories/dataCenter.repository"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
 
@@ -28,7 +27,7 @@ export async function getDataCenterByIdWithSubnet(
     dataCenterRepo: IDataCenterRepository,
     id: number
 ) {
-    
+
 }
 
 export async function createDataCenter(

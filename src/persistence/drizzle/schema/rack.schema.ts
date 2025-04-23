@@ -12,7 +12,7 @@ export const rackTable = pgTable("rack", {
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at"),
     roomId: integer("room_id").notNull().references(() => roomTable.id),
-    serviceId: integer("service_id").notNull().references(() => serviceTable.id)
+    serviceId: integer("service_id").references(() => serviceTable.id)
 })
 
 export const rackRelations = relations(rackTable, ({ one, many }) => ({

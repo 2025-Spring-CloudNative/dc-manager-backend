@@ -1,4 +1,4 @@
-import { IRoom } from "../../domain/room"
+import { IRoom, RoomEntity } from "../../domain/room"
 import { IRoomRepository } from "../../persistence/repositories/room.repository"
 
 export async function getRooms(roomRepo: IRoomRepository) {
@@ -20,7 +20,8 @@ export async function createRoom(
     roomRepo: IRoomRepository,
     room: IRoom
 ) {
-    const createdRoomId = await roomRepo.createRoom(room)
+    const roomEntity = new RoomEntity(room)
+    const createdRoomId = await roomRepo.createRoom(roomEntity)
 
     return createdRoomId
 }
