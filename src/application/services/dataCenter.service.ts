@@ -27,7 +27,9 @@ export async function getDataCenterByIdWithSubnet(
     dataCenterRepo: IDataCenterRepository,
     id: number
 ) {
+    const dataCenterWithSubnet = await dataCenterRepo.getDataCenterByIdWithSubnet(id)
 
+    return dataCenterWithSubnet
 }
 
 export async function createDataCenter(

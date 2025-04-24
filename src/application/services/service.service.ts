@@ -64,7 +64,7 @@ export async function createService(
     }
 
     const existingIPPoolCIDRs = await ipPoolRepo.getIPPoolCIDRs()
-        if (!NetUtils.checkCIDROverlap(cidrFromUser, existingIPPoolCIDRs)) {
+    if (!NetUtils.checkCIDROverlap(cidrFromUser, existingIPPoolCIDRs)) {
         throw new Error(`The cidr ${cidrFromUser} overlaps with other ip-pools.`)
     }   
 
