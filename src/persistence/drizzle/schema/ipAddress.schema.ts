@@ -1,11 +1,11 @@
 import { relations } from "drizzle-orm"
 import { ipPoolTable } from "./ipPool.schema"
 import { machineTable } from "./machine.schema"
-import { pgTable, serial, integer, varchar, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, serial, integer, varchar, timestamp, inet } from "drizzle-orm/pg-core"
 
 export const ipAddressTable = pgTable("ip_address", {
     id: serial().primaryKey().notNull(),
-    address: varchar({ length: 15 }).notNull(),
+    address: inet().notNull(),
     status: varchar({ length: 255 }).notNull(),
     poolId: integer("pool_id").notNull().references(() => ipPoolTable.id),
     machineId: integer("machine_id").notNull().references(() => machineTable.id),

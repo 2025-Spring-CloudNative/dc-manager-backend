@@ -44,7 +44,7 @@ export async function createDataCenter(
         dataCenterEntity.subnetId = subnetId;
     }else {
         // temporary throws an error
-        throw Error("A subnet cidr should be selected by user.")
+        throw new Error("A subnet cidr should be selected by user.")
     }
     const createdDataCenterId = await dataCenterRepo.createDataCenter(dataCenterEntity)
 
