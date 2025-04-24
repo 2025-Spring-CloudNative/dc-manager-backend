@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm"
 import { ipPoolTable } from "./ipPool.schema"
-import { pgTable, serial, varchar, timestamp, cidr, inet } from "drizzle-orm/pg-core"
+import { pgTable, serial, timestamp, cidr, inet } from "drizzle-orm/pg-core"
 
 export const subnetTable = pgTable("subnet", {
     id: serial().primaryKey().notNull(),

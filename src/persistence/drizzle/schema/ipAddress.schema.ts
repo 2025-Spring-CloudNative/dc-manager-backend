@@ -8,9 +8,12 @@ export const ipAddressTable = pgTable("ip_address", {
     address: inet().notNull(),
     status: varchar({ length: 255 }).notNull(),
     poolId: integer("pool_id").notNull().references(() => ipPoolTable.id),
-    machineId: integer("machine_id").notNull().references(() => machineTable.id),
+    machineId: integer("machine_id").references(() => machineTable.id),
     createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at"),
+    updatedAt: timestamp("updated_at")
+        .notNull()
+        .defaultNow()
+        .$onUpdate(() => new Date()),
     allocatedAt: timestamp("allocated_at"),
     releasedAt: timestamp("released_at")
 })

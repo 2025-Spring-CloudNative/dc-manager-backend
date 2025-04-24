@@ -5,7 +5,7 @@ export interface IIPPool {
     cidr: string
     subnetId: number
     createdAt?: Date
-    updatedAt?: Date | null
+    updatedAt?: Date
 }
 
 export class IPPoolEntity implements IIPPool {
@@ -15,7 +15,7 @@ export class IPPoolEntity implements IIPPool {
     cidr: string
     subnetId: number
     createdAt?: Date
-    updatedAt?: Date | null
+    updatedAt?: Date
 
     constructor(ipPool: IIPPool) {
         this.id = ipPool.id

@@ -3,6 +3,7 @@ import { IMachine } from "../../domain/machine"
 import { IMachineRepository } from "../repositories/machine.repository"
 import { db } from "./index"
 import { machineTable } from "./schema/machine.schema"
+import { ipAddressTable } from "./schema/ipAddress.schema"
 
 export class MachineDrizzleRepository implements IMachineRepository {
     async getMachines() {
@@ -13,6 +14,15 @@ export class MachineDrizzleRepository implements IMachineRepository {
         return machines
     }
 
+    async getMachinesWithIPAddress() {
+        const machinesWithIPAddress = await db.query.ipAddressTable.findMany({
+            with: {
+                machine: true
+            }
+        })
+        return machinesWithIPAddress
+    }
+
     async getMachineById(id: number) {
         const [machine] = await db
             .select()
@@ -20,6 +30,16 @@ export class MachineDrizzleRepository implements IMachineRepository {
             .where(eq(machineTable.id, id))
         
         return machine as IMachine
+    }
+
+    async getMachineByIdWithIPAddress(id: number) {
+        const machineWithIPAddress = await db.query.ipAddressTable.findFirst({
+            with: {
+                machine: true
+            },
+            where: eq(ipAddressTable.machineId, id)
+        })
+        return machineWithIPAddress as Object
     }
 
     async createMachine(machine: IMachine) {

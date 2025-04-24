@@ -1,10 +1,17 @@
 import { IMachine } from "../../domain/machine"
+import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
 import { IMachineRepository } from "../../persistence/repositories/machine.repository"
 
 export async function getMachines(machineRepo: IMachineRepository) {
     const machines = await machineRepo.getMachines()
 
     return machines
+}
+
+export async function getMachinesWithIPAddress(machineRepo: IMachineRepository) {
+    const machinesWithIPAddress = await machineRepo.getMachinesWithIPAddress()
+
+    return machinesWithIPAddress
 }
 
 export async function getMachineById(
@@ -16,12 +23,34 @@ export async function getMachineById(
     return machine
 }
 
+export async function getMachinesByIdWithIPAddress(
+    machineRepo: IMachineRepository,
+    id: number
+) {
+    const machineWithIPAddress = await machineRepo.getMachineByIdWithIPAddress(id)
+    
+    return machineWithIPAddress
+}
+
 export async function createMachine(
     machineRepo: IMachineRepository,
+    ipAddressRepo: IIPAddressRepository,
     machine: IMachine
 ) {
     const createdMachineId = await machineRepo.createMachine(machine)
-    
+
+    const ipAddresses = await ipAddressRepo.getIPAddresses()
+    for (const ipAddress of ipAddresses) {
+        // The ip address is created but not allocated or the ip address is released
+        if (ipAddress.id && (!ipAddress.allocatedAt || ipAddress.releasedAt)) {
+            await ipAddressRepo.updateIPAddress(ipAddress.id, {
+                machineId: createdMachineId, 
+                allocatedAt: new Date(),
+                releasedAt: null
+            })
+            break
+        }
+    }
     return createdMachineId
 }
 

@@ -13,6 +13,14 @@ export class IPPoolDrizzleRepository implements IIPPoolRepository {
         return ipPools
     }
 
+    async getIPPoolCIDRs() {
+        const ipPoolCidrs = await db
+            .select({ cidr: ipPoolTable.cidr })
+            .from(ipPoolTable)
+        
+        return ipPoolCidrs.map(pool => pool.cidr)
+    }
+
     async getIPPoolById(id: number) {
         const [ipPool] = await db
             .select()

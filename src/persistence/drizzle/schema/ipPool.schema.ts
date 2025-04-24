@@ -11,6 +11,9 @@ export const ipPoolTable = pgTable("ip_pool", {
     subnetId: integer("subnet_id").notNull().references(() => subnetTable.id),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at")
+        .notNull()
+        .defaultNow()
+        .$onUpdate(() => new Date())
 })
 
 export const ipPoolRelations = relations(ipPoolTable, ({ one, many }) => ({

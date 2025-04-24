@@ -10,7 +10,7 @@ export const machineTable = pgTable("machine", {
     macAddress: varchar("mac_address", { length: 17 }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     rackId: integer("rack_id").notNull().references(() => rackTable.id),
-    status: varchar({ length: 255 }).notNull(),
+    status: varchar({ length: 255 }).notNull()
 })
 
 export const machineRelations = relations(machineTable, ({ one }) => ({

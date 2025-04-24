@@ -1,5 +1,6 @@
 import * as ipaddr from "ipaddr.js"
-
+import IPCIDR from "ip-cidr"
+import { IPv4CidrRange } from "ip-num"
 // https://www.npmjs.com/package/ipaddr.js/v/2.2.0
 
 export class NetUtils {
@@ -43,4 +44,43 @@ export class NetUtils {
         const [_, prefixLength] = ipaddr.parseCIDR(cidr)
         return num_ones === prefixLength
     }
+
+    static getIpAddressesFromCIDR(cidr: string, options = { includeNetworkAndBroadcast: false }): string[] {
+        const cidrInstance = new IPCIDR(cidr);
+        if (!IPCIDR.isValidCIDR(cidr)) {
+            throw new Error("Invalid CIDR")
+        }
+        const total = Number(cidrInstance.size)
+        if (total <= 2 && !options.includeNetworkAndBroadcast) {
+            return [];
+        }
+      
+        const from = options.includeNetworkAndBroadcast ? 0 : 1;
+        const limit = options.includeNetworkAndBroadcast
+            ? total
+            : total - 2;
+      
+        return cidrInstance.toArray({ from, limit });
+    }
+    
+    static isCIDRWithinSubnet(ipPoolCidr: string, subnetCidr: string): boolean {
+        const ipPoolRange = IPv4CidrRange.fromCidr(ipPoolCidr)
+        const subnetRange = IPv4CidrRange.fromCidr(subnetCidr)
+
+        return (
+            subnetRange.contains(ipPoolRange)
+        )
+    }
+
+    static checkCIDROverlap(newCidr: string, existingCidrs: string[]): boolean {
+        const newRange = IPv4CidrRange.fromCidr(newCidr)
+        for (const existing of existingCidrs) {
+            const existingRange = IPv4CidrRange.fromCidr(existing)
+            if (newRange.isOverlapping(existingRange)) {
+                return true
+            }
+        }
+        return false
+    }
+    
 }
