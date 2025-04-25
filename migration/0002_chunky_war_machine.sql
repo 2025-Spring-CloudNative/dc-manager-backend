@@ -1,0 +1,1 @@
+ALTER TABLE "rack" ALTER COLUMN "service_id" DROP NOT NULL;

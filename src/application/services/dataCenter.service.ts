@@ -1,10 +1,17 @@
-import { IDataCenter } from "../../domain/dataCenter"
+import { IDataCenter, DataCenterEntity } from "../../domain/dataCenter"
 import { IDataCenterRepository } from "../../persistence/repositories/dataCenter.repository"
+import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
 
 export async function getDataCenters(dataCenterRepo: IDataCenterRepository) {
     const dataCenters = await dataCenterRepo.getDataCenters()
 
     return dataCenters
+}
+
+export async function getDataCentersWithSubnet(dataCenterRepo: IDataCenterRepository) {
+    const dataCentersWithSubnet = await dataCenterRepo.getDataCentersWithSubnet()
+
+    return dataCentersWithSubnet
 }
 
 export async function getDataCenterById(
@@ -16,11 +23,32 @@ export async function getDataCenterById(
     return dataCenter
 }
 
+export async function getDataCenterByIdWithSubnet(
+    dataCenterRepo: IDataCenterRepository,
+    id: number
+) {
+    const dataCenterWithSubnet = await dataCenterRepo.getDataCenterByIdWithSubnet(id)
+
+    return dataCenterWithSubnet
+}
+
 export async function createDataCenter(
     dataCenterRepo: IDataCenterRepository,
-    dataCenter: IDataCenter
+    subnetRepo: ISubnetRepository,
+    dataCenter: IDataCenter,
+    subnetCidr?: string
 ) {
-    const createdDataCenterId = await dataCenterRepo.createDataCenter(dataCenter)
+    const dataCenterEntity = new DataCenterEntity(dataCenter)
+    // if the user selects a subnet, then assign the subnetId to the datacenter
+    // otherwise, the user should pass subnet info to automatically create a subnet
+    if (subnetCidr) {
+        const subnetId = await subnetRepo.getSubnetIdByCidr(subnetCidr);
+        dataCenterEntity.subnetId = subnetId;
+    }else {
+        // temporary throws an error
+        throw new Error("A subnet cidr should be selected by user.")
+    }
+    const createdDataCenterId = await dataCenterRepo.createDataCenter(dataCenterEntity)
 
     return createdDataCenterId
 }

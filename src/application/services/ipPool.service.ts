@@ -1,5 +1,7 @@
-import { IIPPool } from "../../domain/ipPool"
+import { IIPPool, IPPoolEntity } from "../../domain/ipPool"
 import { IIPPoolRepository } from "../../persistence/repositories/ipPool.repository"
+import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
+import { NetUtils } from "../../domain/utils/net"
 
 export async function getIPPools(ipPoolRepo: IIPPoolRepository) {
     const ipPools = await ipPoolRepo.getIPPools()
@@ -30,9 +32,46 @@ export async function updateIPPool(
     id: number,
     ipPool: Partial<IIPPool>
 ) {
-    const updatedIPPool = await ipPoolRepo.updateIPPool(id, ipPool)
+    const prevIPPool = await ipPoolRepo.getIPPoolById(id)
+    const prevIPPoolEntity = new IPPoolEntity(prevIPPool)
+    if (ipPool.cidr && (ipPool.cidr !== prevIPPoolEntity.cidr)) {
+        throw new Error("Cannot extend IPPool using the updateIPPool api.")
+    }
 
+    const updatedIPPool = await ipPoolRepo.updateIPPool(id, ipPool)
+    
     return updatedIPPool
+}
+
+export async function extendIPPool(
+    ipPoolRepo: IIPPoolRepository,
+    subnetRepo: ISubnetRepository,
+    id: number,
+    newCidr: string
+) {
+    const ipPool = await ipPoolRepo.getIPPoolById(id)
+    const subnetId = ipPool.subnetId
+    const subnet = await subnetRepo.getSubnetById(subnetId)
+    const subnetCidr = subnet.cidr
+    
+    const ipPoolCidrs = await ipPoolRepo.getIPPoolCIDRs()
+
+    let extendedIPPool: IIPPool | null = null
+    if (NetUtils.isValidIPv4CIDR(newCidr)) {
+        if (!NetUtils.isCIDRWithinSubnet(newCidr, subnetCidr)) {
+            throw new Error(`The CIDR ${newCidr} is not in the range of subnet ${subnetCidr}.`)
+        }
+        if (!NetUtils.checkCIDROverlap(newCidr, ipPoolCidrs)) {
+            throw new Error(`The CIDR ${newCidr} overlaps with other subnet`)
+        }
+        extendedIPPool = await ipPoolRepo.updateIPPool(id, {
+            cidr: newCidr
+        })
+    }else {
+        throw new Error(`Invalid CIDR format ${newCidr}.`)
+    }
+
+    return extendedIPPool
 }
 
 export async function deleteIPPool(

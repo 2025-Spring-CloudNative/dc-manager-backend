@@ -13,6 +13,15 @@ export class DataCenterDrizzleRepository implements IDataCenterRepository {
         return dataCenters
     }
 
+    async getDataCentersWithSubnet() {
+        const dataCentersWithSubnet = await db.query.dataCenterTable.findMany({
+            with: {
+                subnet: true
+            }
+        })
+        return dataCentersWithSubnet
+    }
+
     async getDataCenterById(id: number) {
         const [dataCenter] = await db
             .select()
@@ -20,6 +29,17 @@ export class DataCenterDrizzleRepository implements IDataCenterRepository {
             .where(eq(dataCenterTable.id, id))
     
         return dataCenter as IDataCenter
+    }
+
+    async getDataCenterByIdWithSubnet(id: number) {
+        const dataCenterWithSubnet = await db.query.dataCenterTable.findFirst({
+            with: {
+              subnet: true,
+            },
+            where: eq(dataCenterTable.id, id)
+        })
+        
+        return dataCenterWithSubnet as Object
     }
 
     async createDataCenter(dataCenter: IDataCenter) {

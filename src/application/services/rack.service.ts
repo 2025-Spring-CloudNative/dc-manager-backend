@@ -1,4 +1,4 @@
-import { IRack } from "../../domain/rack"
+import { IRack, RackEntity } from "../../domain/rack"
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
 
 export async function getRacks(rackRepo: IRackRepository) {
@@ -20,7 +20,8 @@ export async function createRack(
     rackRepo: IRackRepository,
     rack: IRack
 ) {
-    const createdRackId = await rackRepo.createRack(rack)
+    const rackEntity = new RackEntity(rack)
+    const createdRackId = await rackRepo.createRack(rackEntity)
 
     return createdRackId
 }

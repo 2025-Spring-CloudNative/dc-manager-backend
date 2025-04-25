@@ -4,10 +4,10 @@ export interface IIPAddress {
     status: string
     poolId: number
     createdAt?: Date
-    updatedAt?: Date | null
+    updatedAt?: Date
     allocatedAt?: Date | null
     releasedAt?: Date | null
-    machineId: number
+    machineId?: number | null
 }
 
 export class IPAddressEntity implements IIPAddress {
@@ -15,9 +15,9 @@ export class IPAddressEntity implements IIPAddress {
     address: string
     status: string
     poolId: number
-    machineId: number
+    machineId?: number | null
     createdAt?: Date
-    updatedAt?: Date | null
+    updatedAt?: Date
     allocatedAt?: Date | null
     releasedAt?: Date | null
 
