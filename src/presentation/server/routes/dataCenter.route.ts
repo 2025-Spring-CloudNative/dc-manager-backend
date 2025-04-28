@@ -50,11 +50,17 @@ router.post("/",
                 schema: {
                     type: "object",
                     properties: {
-                        name: { type: "string", example: "Main DC" },
-                        location: { type: "string", example: "Taipei" },
-                        subnetId: { type: "number", example: "1" }
+                        dataCenter: {
+                            type: "object",
+                            properties: {
+                                name: { type: "string", example: "Main DC" },
+                                location: { type: "string", example: "Taipei" },
+                                subnetId: { type: "number", example: "1" },
+                            }
+                        },
+                        subnetCidr: { type: "string", example: "192.168.1.0/24" }
                     },
-                    required: ["name", "location", "subnetId"]
+                    required: ["dataCenter", "subnetCidr"]
                 }
             }
         }

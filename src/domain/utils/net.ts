@@ -7,10 +7,24 @@ export class NetUtils {
     /*
     Validate IPv4 CIDR notation (rejects IPv6)
     */
+    // static isValidIPv4CIDR(cidr: string): boolean {
+    //     console.log(ipaddr.IPv4.isValid(cidr))
+    //     console.log(cidr.split(".").length)
+    //     return ipaddr.IPv4.isValid(cidr) && cidr.split(".").length === 4
+    // }
     static isValidIPv4CIDR(cidr: string): boolean {
-        return ipaddr.IPv4.isValidCIDR(cidr) && cidr.split(".").length === 4
+        try {
+            const [ip, prefix] = cidr.split('/');
+            const prefixNum = Number(prefix);
+            return (
+                ip !== undefined && ipaddr.IPv4.isValid(ip) &&
+                prefixNum >= 0 && prefixNum <= 32
+            );
+        } catch {
+            return false;
+        }
     }
-
+    
     /*
     Validate IPv4 netmask (rejects IPv6)
     */
@@ -30,10 +44,10 @@ export class NetUtils {
     /*
     Check whether a IP is inside the given CIDR block
     */
-    static isIPInsideCIDR(gateway: string, cidr: string): boolean {
-        const [networkAddr, prefixLength] = ipaddr.parseCIDR(cidr)
-        return ipaddr.parse(gateway).match(networkAddr, prefixLength)
-    }
+    // static isIPInsideCIDR(gateway: string, cidr: string): boolean {
+    //     const [networkAddr, prefixLength] = ipaddr.parseCIDR(cidr)
+    //     return ipaddr.parse(gateway).match(networkAddr, prefixLength)
+    // }
 
     /*
     Ensure dotted‑decimal netmask corresponds to the CIDR prefix length

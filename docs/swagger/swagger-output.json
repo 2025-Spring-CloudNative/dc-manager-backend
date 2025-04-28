@@ -193,23 +193,31 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "Main DC"
+                  "dataCenter": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "Main DC"
+                      },
+                      "location": {
+                        "type": "string",
+                        "example": "Taipei"
+                      },
+                      "subnetId": {
+                        "type": "number",
+                        "example": "1"
+                      }
+                    }
                   },
-                  "location": {
+                  "subnetCidr": {
                     "type": "string",
-                    "example": "Taipei"
-                  },
-                  "subnetId": {
-                    "type": "number",
-                    "example": "1"
+                    "example": "192.168.1.0/24"
                   }
                 },
                 "required": [
-                  "name",
-                  "location",
-                  "subnetId"
+                  "dataCenter",
+                  "subnetCidr"
                 ]
               }
             }
@@ -1202,10 +1210,6 @@
                   "roomId": {
                     "type": "number",
                     "example": 1
-                  },
-                  "serviceId": {
-                    "type": "number",
-                    "example": 2
                   }
                 },
                 "required": [
@@ -1923,6 +1927,10 @@
                     "type": "number",
                     "example": 1
                   },
+                  "startUnit": {
+                    "type": "number",
+                    "example": 1
+                  },
                   "macAddress": {
                     "type": "string",
                     "example": "00:1A:2B:3C:4D:5E"
@@ -1939,6 +1947,7 @@
                 "required": [
                   "name",
                   "unit",
+                  "startUnit",
                   "macAddress",
                   "rackId",
                   "status"
@@ -2144,10 +2153,70 @@
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "成功創建 Service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         },
         "requestBody": {
@@ -2157,23 +2226,56 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
+                  "service": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Web Server"
+                      }
+                    }
                   },
-                  "name": {
+                  "racks": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Rack-01"
+                        },
+                        "height": {
+                          "type": "number",
+                          "example": 42
+                        },
+                        "tag": {
+                          "type": "string",
+                          "example": "tag001"
+                        },
+                        "roomId": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
+                    }
+                  },
+                  "cidrFromUser": {
                     "type": "string",
-                    "example": "Web Server"
-                  },
-                  "poolId": {
-                    "type": "number",
-                    "example": 100
+                    "example": "192.168.1.0/25"
                   }
                 },
                 "required": [
-                  "id",
-                  "name",
-                  "poolId"
+                  "service",
+                  "racks",
+                  "cidrFromUser"
                 ]
               }
             }

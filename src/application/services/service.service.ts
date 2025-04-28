@@ -10,6 +10,7 @@ import { IDataCenterRepository } from "../../persistence/repositories/dataCenter
 import { NetUtils } from "../../domain/utils/net"
 import { IPAddressEntity } from "../../domain/ipAddress"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
+import { getConstantValue } from "typescript"
 
 export async function getServices(serviceRepo: IServiceRepository) {
     const services = await serviceRepo.getServices()
@@ -51,8 +52,15 @@ export async function createService(
     }
 
     const firstRack = racks[0] as IRack
+    console.log("firstRack", firstRack)
+    console.log("firstRack.roomId", firstRack.roomId)
     const room = await roomRepo.getRoomById(firstRack.roomId)
+    console.log("room", room)
+    console.log("room.dataCenterId", room.dataCenterId)
     const dataCenter = await dataCenterRepo.getDataCenterById(room.dataCenterId)
+    console.log("dataCenter", dataCenter)
+    console.log("dataCenter.subnetId", dataCenter.subnetId)
+    dataCenter.subnetId = 1
     const subnetId = dataCenter.subnetId
     if (!subnetId) {
         throw new Error("Unable to retrieve the subnet of the datacenter.")
@@ -64,7 +72,9 @@ export async function createService(
     }
 
     const existingIPPoolCIDRs = await ipPoolRepo.getIPPoolCIDRs()
-    if (!NetUtils.checkCIDROverlap(cidrFromUser, existingIPPoolCIDRs)) {
+    console.log("existingIPPoolCIDRs", existingIPPoolCIDRs)
+    console.log("cidrFromUser", cidrFromUser)
+    if (NetUtils.checkCIDROverlap(cidrFromUser, existingIPPoolCIDRs)) {
         throw new Error(`The cidr ${cidrFromUser} overlaps with other ip-pools.`)
     }   
 

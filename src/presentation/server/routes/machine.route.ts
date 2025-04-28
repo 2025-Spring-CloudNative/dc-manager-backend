@@ -95,11 +95,12 @@ router.patch("/:id",
                         properties: {
                             name: { type: "string", example: "Server-01" },
                             unit: { type: "number", example: 1 },
+                            startUnit: { type: "number", example: 1 },
                             macAddress: { type: "string", example: "00:1A:2B:3C:4D:5E" },
                             rackId: { type: "number", example: 1 },
                             status: { type: "string", example: "active" },
                         },
-                        required: ["name", "unit", "macAddress", "rackId", "status"]
+                        required: ["name", "unit", "startUnit", "macAddress", "rackId", "status"]
                     }
                 }
             }

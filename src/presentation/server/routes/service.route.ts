@@ -48,14 +48,42 @@ router.post("/",
                     schema: {
                         type: "object",
                         properties: {
-                            id: { type: "number", example: 1 },
-                            name: { type: "string", example: "Web Server" },
-                            poolId: { type: "number", example: 100 }
+                            service: {
+                                type: "object",
+                                properties: {
+                                    id: { type: "number", example: 1 },
+                                    name: { type: "string", example: "Web Server" }
+                                }
+                            },
+                            racks: {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        id: { type: "number", example: 1 },
+                                        name: { type: "string", example: "Rack-01" },
+                                        height: { type: "number", example: 42 },
+                                        tag: { type: "string", example: "tag001" },
+                                        roomId: { type: "number", example: 1 }
+                                    }
+                                }
+                            },
+                            cidrFromUser: { type: "string", example: "192.168.1.0/25" }
                         },
-                        required: ["id", "name", "poolId"]
+                        required: ["service", "racks", "cidrFromUser"]
                     }
                 }
             }
+        }
+        #swagger.responses[200] = {
+            description: '成功創建 Service',
+            schema: {
+                id: "number"
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
         }
     */  
     serviceController.createService)

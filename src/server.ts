@@ -36,12 +36,16 @@ server.use(express.json())
 const swaggerUiOptions = {
     swaggerOptions: { supportedSubmitMethods: [] }
 }
+// server.use(
+//     "/docs",
+//     swaggerUi.serve,
+//     swaggerUi.setup(swaggerFile, swaggerUiOptions)
+// )
 server.use(
-    "/docs",
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerFile, swaggerUiOptions)
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerFile)
 )
-
 server.use("/data-center", dataCenterRoute)
 server.use("/room", roomRoute)
 server.use("/rack", rackRoute)
