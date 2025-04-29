@@ -1,13 +1,13 @@
 export interface IService {
     id?: number
     name: string
-    poolId: number
+    poolId: number | null
 }
 
 export class ServiceEntity implements IService {
     id?: number
     name: string
-    poolId: number
+    poolId: number | null
 
     constructor(service: IService) {
         this.id = service.id

@@ -74,10 +74,12 @@ export async function createDataCenter(req: Request, res: Response) {
     console.log("dataCenterRepo", dataCenterRepo)
     console.log("req.body", req.body)
     try {
+        const { dataCenter, subnetCidr } = req.body
         const createdDataCenterId = await dataCenterService.createDataCenter(
             dataCenterRepo,
             subnetRepo,
-            req.body
+            dataCenter,
+            subnetCidr
         )
         res.status(200).json({ id: createdDataCenterId })
     } catch (error: any) {

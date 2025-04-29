@@ -86,7 +86,6 @@ router.patch("/",
                             height: { type: "number", example: 42 },
                             tag: { type: "string", example: "Storage" },
                             roomId: { type: "number", example: 1 },
-                            serviceId: { type: "number", example: 2 }
                         },
                         required: ["id", "name", "height", "tag", "roomId"]
                     }
