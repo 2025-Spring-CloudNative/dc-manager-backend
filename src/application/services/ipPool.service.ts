@@ -54,22 +54,10 @@ export async function extendIPPool(
     const subnet = await subnetRepo.getSubnetById(subnetId)
     const subnetCidr = subnet.cidr
     
-    const ipPoolCidrs = await ipPoolRepo.getIPPoolCIDRs()
+    const ipPoolCidrs = await ipPoolRepo.getOtherIPPoolCIDRs(id)
 
-    let extendedIPPool: IIPPool | null = null
-    if (NetUtils.isValidIPv4CIDR(newCidr)) {
-        if (!NetUtils.isCIDRWithinSubnet(newCidr, subnetCidr)) {
-            throw new Error(`The CIDR ${newCidr} is not in the range of subnet ${subnetCidr}.`)
-        }
-        if (!NetUtils.checkCIDROverlap(newCidr, ipPoolCidrs)) {
-            throw new Error(`The CIDR ${newCidr} overlaps with other subnet`)
-        }
-        extendedIPPool = await ipPoolRepo.updateIPPool(id, {
-            cidr: newCidr
-        })
-    }else {
-        throw new Error(`Invalid CIDR format ${newCidr}.`)
-    }
+    const patch = IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)
+    let extendedIPPool = await ipPoolRepo.updateIPPool(id, patch)
 
     return extendedIPPool
 }

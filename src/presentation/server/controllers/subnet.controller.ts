@@ -34,7 +34,6 @@ export async function getSubnetById(req: Request, res: Response) {
 
 export async function createSubnet(req: Request, res: Response) {
     const subnetRepo =  new SubnetDrizzleRepository()
-    console.log("🚀 req.body", req.body)
 
     try {
         const createdSubnetId = await subnetService.createSubnet(

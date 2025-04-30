@@ -23,7 +23,7 @@ router.get("/:id",
         #swagger.tags = ['IP Pool']
         #swagger.summary = 'getIPPoolById'
         #swagger.responses[200] = {
-            description: '成功取得 IP Pool',
+            description: 'Get IP Pool successfully',
             schema: {
                 id: "number",
                 name: "string",

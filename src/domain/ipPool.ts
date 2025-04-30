@@ -1,3 +1,5 @@
+import { NetUtils } from "./utils/net"
+
 export interface IIPPool {
     id?: number
     name: string
@@ -26,4 +28,21 @@ export class IPPoolEntity implements IIPPool {
         this.createdAt = ipPool.createdAt
         this.updatedAt = ipPool.updatedAt
     }
+
+    static extend(
+        newCidr: string,
+        subnetCidr: string, 
+        ipPoolCidrs: string[]
+    ): Partial<IPPoolEntity> {
+        if (!NetUtils.isValidIPv4CIDR(newCidr)) {
+            throw new Error(`Invalid CIDR format ${newCidr}.`)
+        }
+        if (!NetUtils.isCIDRWithinSubnet(newCidr, subnetCidr)) {
+            throw new Error(`The CIDR ${newCidr} is not in the range of subnet ${subnetCidr}.`)
+        }
+        if (!NetUtils.checkCIDROverlap(newCidr, ipPoolCidrs)) {
+            throw new Error(`The CIDR ${newCidr} overlaps with other ipPools.`)
+        }
+        return {cidr: newCidr};
+    } 
 }

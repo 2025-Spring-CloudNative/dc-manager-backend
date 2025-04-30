@@ -24,7 +24,7 @@ router.get("/:id",
         #swagger.tags = ['DataCenter']
         #swagger.summary = 'getDataCenterById'
         #swagger.responses[200] = {
-            description: 'An array of DataCenter objects',
+            description: 'Get DataCenter successfully',
             schema: [{ $ref: '#/definitions/DataCenter' }]
             }
         #swagger.responses[404] = {
@@ -54,8 +54,7 @@ router.post("/",
                             type: "object",
                             properties: {
                                 name: { type: "string", example: "Main DC" },
-                                location: { type: "string", example: "Taipei" },
-                                subnetId: { type: "number", example: "1" },
+                                location: { type: "string", example: "Taipei" }
                             }
                         },
                         subnetCidr: { type: "string", example: "192.168.1.0/24" }
@@ -68,7 +67,6 @@ router.post("/",
   */
   dataCenterController.createDataCenter)
 
-// todo 
 router.patch("/:id",
     /* 
         #swagger.tags = ['DataCenter']
@@ -81,9 +79,8 @@ router.patch("/:id",
                         type: "object",
                         properties: {
                             id: { type: "number", example: 1 },
-                            name: { type: "string", example: "台北資料中心" },
-                            location: { type: "string", example: "台北市" },
-                            subnetId: { type: "number", example: 1 }
+                            name: { type: "string", example: "Updated DC" },
+                            location: { type: "string", example: "Taipei" }
                         },
                         required: ["id", "name", "location", "subnetId"]
                     }
@@ -91,7 +88,7 @@ router.patch("/:id",
             }
         }
         #swagger.responses[200] = {
-            description: 'update Subnet successfully',
+            description: 'update dataCenter successfully',
             content: {
                 "application/json": {
                     schema: {

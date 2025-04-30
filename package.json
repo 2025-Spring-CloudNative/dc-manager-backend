@@ -12,6 +12,7 @@
         "build": "tsc",
         "db:generate": "npx drizzle-kit generate",
         "db:migrate": "npx drizzle-kit migrate",
+        "db:drop": "npx drizzle-kit drop",
         "db:studio": "npx drizzle-kit studio"
     },
     "keywords": [],
@@ -21,7 +22,7 @@
         "cors": "^2.8.5",
         "drizzle-orm": "^0.43.1",
         "express": "^5.1.0",
-        "ip-cidr": "^4.0.2",
+        "ip-cidr": "^3.1.0",
         "ip-num": "^1.5.1",
         "ipaddr.js": "^2.2.0",
         "pg": "^8.14.1",

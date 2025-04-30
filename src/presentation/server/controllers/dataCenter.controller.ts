@@ -4,18 +4,6 @@ import * as dataCenterService from "../../../application/services/dataCenter.ser
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
 
 export async function getDataCenters(req: Request, res: Response) {
-    /* 
-        #swagger.tags = ['data-center']
-        #swagger.summary = 'Retrieve all data centers'
-        #swagger.responses[200] = {
-            description: 'An array of DataCenter objects',
-            schema: [{ $ref: '#/definitions/DataCenter' }]
-        }
-        #swagger.responses[500] = {
-            description: 'Internal Server Error',
-            schema: { message: 'string' }
-        }
-    */
     const dataCenterRepo = new DataCenterDrizzleRepository()
 
     try {
@@ -48,31 +36,8 @@ export async function getDataCenterById(req: Request, res: Response) {
 }
 
 export async function createDataCenter(req: Request, res: Response) {
-    /* 
-        #swagger.tags = ['data-center']
-        #swagger.summary = 'create a data center'
-        #swagger.requestBody = {
-            required: true,
-            description: 'Data center object',
-            content: {
-                'application/json': {
-                    schema: { $ref: '#/definitions/DataCenterInput' }
-                }
-            }
-        }
-        #swagger.responses[200] = {
-            description: 'id of the created data center',
-            schema: {id: 'number'}
-        }
-        #swagger.responses[500] = {
-            description: 'Internal Server Error',
-            schema: { message: 'string' }
-        }
-    */
     const dataCenterRepo = new DataCenterDrizzleRepository()
     const subnetRepo = new SubnetDrizzleRepository()
-    console.log("dataCenterRepo", dataCenterRepo)
-    console.log("req.body", req.body)
     try {
         const { dataCenter, subnetCidr } = req.body
         const createdDataCenterId = await dataCenterService.createDataCenter(

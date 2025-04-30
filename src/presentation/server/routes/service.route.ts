@@ -23,11 +23,11 @@ router.get("/:id",
         #swagger.tags = ['Services']
         #swagger.summary = 'getServiceById'
         #swagger.responses[200] = {
-            description: '成功取得服務',
+            description: 'Get service successfully',
             schema: {
                 id: "number",
                 name: "string",
-                machineId: "number"
+                poolId: "number"
             }
         }
         #swagger.responses[500] = {
@@ -51,32 +51,26 @@ router.post("/",
                             service: {
                                 type: "object",
                                 properties: {
-                                    id: { type: "number", example: 1 },
                                     name: { type: "string", example: "Web Server" }
                                 }
                             },
-                            racks: {
-                                type: "array",
-                                items: {
-                                    type: "object",
-                                    properties: {
-                                        id: { type: "number", example: 1 },
-                                        name: { type: "string", example: "Rack-01" },
-                                        height: { type: "number", example: 42 },
-                                        tag: { type: "string", example: "tag001" },
-                                        roomId: { type: "number", example: 1 }
-                                    }
+                            dataCenter: {
+                                type: "object",
+                                properties: {
+                                    "name": { type: "string", example: "Main DC" },
+                                    "location": { type: "string", example: "Taipei" },
+                                    "subnetId": { type: "string", example: 1 }
                                 }
-                            },
-                            cidrFromUser: { type: "string", example: "192.168.1.0/25" }
+                            }
+                            cidrFromUser: { type: "string", example: "192.168.1.0/24" }
                         },
-                        required: ["service", "racks", "cidrFromUser"]
+                        required: ["service", "dataCenter", "cidrFromUser"]
                     }
                 }
             }
         }
         #swagger.responses[200] = {
-            description: '成功創建 Service',
+            description: 'create service successfully',
             schema: {
                 id: "number"
             }
@@ -100,9 +94,9 @@ router.patch("/:id",
                         type: "object",
                         properties: {
                             name: { type: "string", example: "Web Server" },
-                            machineId: { type: "number", example: 1 }
+                            poolId: { type: "number", example: 1 }
                         },
-                        required: ["name", "machineId"]
+                        required: ["name", "poolId"]
                     }
                 }
             }
@@ -115,7 +109,7 @@ router.delete("/:id",
         #swagger.tags = ['Services']
         #swagger.summary = 'deleteService'
         #swagger.responses[200] = {
-            description: '成功刪除服務',
+            description: 'Delete service successfully',
             schema: { message: "string" }
         }
         #swagger.responses[500] = {
