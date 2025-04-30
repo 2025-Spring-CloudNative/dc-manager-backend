@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm"
+import { eq, ne } from "drizzle-orm"
 import { IIPPool } from "../../domain/ipPool"
 import { IIPPoolRepository } from "../repositories/ipPool.repository"
 import { db } from "./index"
@@ -13,11 +13,20 @@ export class IPPoolDrizzleRepository implements IIPPoolRepository {
         return ipPools
     }
 
-    async getIPPoolCIDRs() {
+    async getAllIPPoolCIDRs() {
         const ipPoolCidrs = await db
             .select({ cidr: ipPoolTable.cidr })
             .from(ipPoolTable)
         
+        return ipPoolCidrs.map(pool => pool.cidr)
+    }
+
+    async getOtherIPPoolCIDRs(id: number) {
+        const ipPoolCidrs = await db
+            .select({ cidr: ipPoolTable.cidr })
+            .from(ipPoolTable)
+            .where(ne(ipPoolTable.id, id))
+
         return ipPoolCidrs.map(pool => pool.cidr)
     }
 

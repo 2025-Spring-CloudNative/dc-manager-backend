@@ -12,6 +12,7 @@
         "build": "tsc",
         "db:generate": "npx drizzle-kit generate",
         "db:migrate": "npx drizzle-kit migrate",
+        "db:drop": "npx drizzle-kit drop",
         "db:studio": "npx drizzle-kit studio"
     },
     "keywords": [],

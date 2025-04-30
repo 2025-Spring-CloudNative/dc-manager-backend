@@ -1,16 +1,12 @@
 import { IService, ServiceEntity } from "../../domain/service"
-import { IRack } from "../../domain/rack"
+import { IDataCenter } from "../../domain/dataCenter"
 import { IPPoolEntity } from "../../domain/ipPool"
 import { IServiceRepository } from "../../persistence/repositories/service.repository"
-import { IRackRepository } from "../../persistence/repositories/rack.repository"
 import { IIPPoolRepository } from "../../persistence/repositories/ipPool.repository"
 import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
-import { IRoomRepository } from "../../persistence/repositories/room.repository"
-import { IDataCenterRepository } from "../../persistence/repositories/dataCenter.repository"
 import { NetUtils } from "../../domain/utils/net"
 import { IPAddressEntity } from "../../domain/ipAddress"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
-import { getConstantValue } from "typescript"
 
 export async function getServices(serviceRepo: IServiceRepository) {
     const services = await serviceRepo.getServices()
@@ -29,38 +25,16 @@ export async function getServiceById(
 
 export async function createService(
     serviceRepo: IServiceRepository,
-    rackRepo: IRackRepository,
-    roomRepo: IRoomRepository,
-    dataCenterRepo: IDataCenterRepository,
     ipAddressRepo: IIPAddressRepository,
     ipPoolRepo: IIPPoolRepository,
     subnetRepo: ISubnetRepository,
     service: IService,
-    racks: IRack[],
+    dataCenter: IDataCenter,
     cidrFromUser: string
 ) {
     const serviceEntity = new ServiceEntity(service)
     const createdServiceId = await serviceRepo.createService(serviceEntity)
-    // update serviceId of rack
-    for (const rack of racks) {
-        if (rack.id) {
-            await rackRepo.updateRack(rack.id, {
-                ...rack,
-                serviceId: createdServiceId,
-            });
-        }
-    }
 
-    const firstRack = racks[0] as IRack
-    console.log("firstRack", firstRack)
-    console.log("firstRack.roomId", firstRack.roomId)
-    const room = await roomRepo.getRoomById(firstRack.roomId)
-    console.log("room", room)
-    console.log("room.dataCenterId", room.dataCenterId)
-    const dataCenter = await dataCenterRepo.getDataCenterById(room.dataCenterId)
-    console.log("dataCenter", dataCenter)
-    console.log("dataCenter.subnetId", dataCenter.subnetId)
-    dataCenter.subnetId = 1
     const subnetId = dataCenter.subnetId
     if (!subnetId) {
         throw new Error("Unable to retrieve the subnet of the datacenter.")
@@ -71,9 +45,7 @@ export async function createService(
         throw new Error(`The cidr ${cidrFromUser} is not in the subnet range.`)
     }
 
-    const existingIPPoolCIDRs = await ipPoolRepo.getIPPoolCIDRs()
-    console.log("existingIPPoolCIDRs", existingIPPoolCIDRs)
-    console.log("cidrFromUser", cidrFromUser)
+    const existingIPPoolCIDRs = await ipPoolRepo.getAllIPPoolCIDRs()
     if (NetUtils.checkCIDROverlap(cidrFromUser, existingIPPoolCIDRs)) {
         throw new Error(`The cidr ${cidrFromUser} overlaps with other ip-pools.`)
     }   
