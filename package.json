@@ -4,7 +4,7 @@
     "description": "backend for tsmc datacenter management system",
     "main": "server.js",
     "scripts": {
-        "doc:generate": "ts-node swagger.ts",
+        "doc:generate": "npx ts-node swagger.ts",
         "test": "jest",
         "local:build": "tsc -w",
         "local:run": "nodemon build/server.js",
