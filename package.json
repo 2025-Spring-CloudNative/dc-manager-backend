@@ -20,9 +20,7 @@
     "dependencies": {
         "cors": "^2.8.5",
         "drizzle-orm": "^0.43.1",
-        "esbuild": "^0.25.3",
         "express": "^5.1.0",
-        "glob": "^11.0.2",
         "ip-cidr": "^4.0.2",
         "ip-num": "^1.5.1",
         "ipaddr.js": "^2.2.0",

@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1744784354047,
-      "tag": "0000_known_puma",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1745418805089,
-      "tag": "0001_busy_lady_deathstrike",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1745421018438,
-      "tag": "0002_chunky_war_machine",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1745461300560,
-      "tag": "0003_busy_sentry",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1745475804788,
-      "tag": "0004_tiny_harry_osborn",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1745866249506,
-      "tag": "0005_wet_gladiator",
+      "when": 1745976248068,
+      "tag": "0000_keen_spencer_smythe",
       "breakpoints": true
     }
   ]

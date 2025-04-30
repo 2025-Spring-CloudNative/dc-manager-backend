@@ -1,5 +1,5 @@
 {
-  "id": "b3a57449-46fd-4b30-b7a8-b9f023cc23de",
+  "id": "fcad4320-fc12-449b-a403-921613456bac",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -30,7 +30,7 @@
           "name": "subnet_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -87,7 +87,7 @@
           "name": "machine_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -100,7 +100,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         },
         "allocated_at": {
           "name": "allocated_at",
@@ -172,15 +173,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "start_ip": {
-          "name": "start_ip",
-          "type": "varchar(15)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "end_ip": {
-          "name": "end_ip",
-          "type": "varchar(15)",
+        "cidr": {
+          "name": "cidr",
+          "type": "varchar(18)",
           "primaryKey": false,
           "notNull": true
         },
@@ -201,7 +196,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -239,6 +235,12 @@
         "name": {
           "name": "name",
           "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_unit": {
+          "name": "start_unit",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -324,6 +326,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "room_id": {
+          "name": "room_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "service_id": {
+          "name": "service_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -335,19 +349,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
-        },
-        "room_id": {
-          "name": "room_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "service_id": {
-          "name": "service_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -375,7 +378,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -456,7 +459,7 @@
           "name": "pool_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -471,7 +474,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -520,7 +523,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},

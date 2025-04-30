@@ -5,7 +5,7 @@ import { pgTable, serial, integer, varchar, timestamp, inet } from "drizzle-orm/
 
 export const ipAddressTable = pgTable("ip_address", {
     id: serial().primaryKey().notNull(),
-    address: inet().notNull(),
+    address: varchar({ length: 15 }).notNull(),
     status: varchar({ length: 255 }).notNull(),
     poolId: integer("pool_id").notNull().references(() => ipPoolTable.id),
     machineId: integer("machine_id").references(() => machineTable.id),

@@ -7,7 +7,7 @@ export const ipPoolTable = pgTable("ip_pool", {
     id: serial().primaryKey().notNull(),
     name: varchar({ length: 255 }).notNull(),
     type: varchar({ length: 255 }).notNull(),
-    cidr: cidr().notNull(),
+    cidr: varchar({ length: 18 }).notNull(),
     subnetId: integer("subnet_id").notNull().references(() => subnetTable.id),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at")
