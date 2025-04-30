@@ -9,8 +9,8 @@ router.get(
         #swagger.tags = ['Room']
         #swagger.summary = 'getRooms'
         #swagger.responses[200] = {
-          description: 'An array of DataCenter objects',
-          schema: [{ $ref: '#/definitions/Room' }]
+            description: 'An array of room objects',
+            schema: [{ $ref: '#/definitions/Room' }]
         }
         #swagger.responses[500] = {
             description: 'Internal Server Error',
@@ -26,7 +26,7 @@ router.get(
         #swagger.tags = ['Room']
         #swagger.summary = 'getRoomById'
         #swagger.responses[200] = {
-            description: '成功取得子網路',
+            description: 'Get room successfully',
             schema: {
                 id: "number",
                 name: "string",
@@ -54,7 +54,7 @@ router.post(
                     schema: {
                         type: "object",
                         properties: {
-                            name: { type: "string", example: "A 區機房" },
+                            name: { type: "string", example: "Room A" },
                             unit: { type: "number", example: 3 },
                             dataCenterId: { type: "number", example: 1 }
                         },
@@ -85,7 +85,7 @@ router.patch(
                         type: "object",
                         properties: {
                             id: { type: "number", example: 1 },
-                            name: { type: "string", example: "A 區機房" },
+                            name: { type: "string", example: "Updated Room A" },
                             unit: { type: "number", example: 3 },
                             dataCenterId: { type: "number", example: 1 }
                         },
@@ -94,7 +94,9 @@ router.patch(
                 }
             }
         }
-        #swagger.responses[200] = { description: 'OK' }
+        #swagger.responses[200] = { 
+            description: 'OK' 
+        }
         #swagger.responses[500] = {
             description: 'Internal Server Error',
             schema: { message: 'string' }

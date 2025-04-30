@@ -23,10 +23,11 @@ router.get("/:id",
         #swagger.tags = ['Machine']
         #swagger.summary = 'getMachineById'
         #swagger.responses[200] = {
-            description: '成功取得機器',
+            description: 'Get machine successfully',
             schema: {
                 id: "number",
                 name: "string",
+                startUnit: "number",
                 unit: "number",
                 macAddress: "string",
                 rackId: "number",
@@ -52,6 +53,7 @@ router.post("/",
                         type: "object",
                         properties: {
                             name: { type: "string", example: "Server-01" },
+                            startUnit: { type: "number", example: 1 },
                             unit: { type: "number", example: 1 },
                             macAddress: { type: "string", example: "00:1A:2B:3C:4D:5E" },
                             rackId: { type: "number", example: 1 },
@@ -63,7 +65,7 @@ router.post("/",
             }
         }
         #swagger.responses[200] = {
-            description: '成功創建機器',
+            description: 'Create machine successfully',
             schema: {
                 id: "number",
                 name: "string",
@@ -106,7 +108,7 @@ router.patch("/:id",
             }
         }
         #swagger.responses[200] = {
-            description: '成功更新機器',
+            description: 'Update machine successfully',
             schema: {
                 id: "number",
                 name: "string",
@@ -129,7 +131,7 @@ router.delete("/:id",
         #swagger.tags = ['Machine']
         #swagger.summary = 'deleteMachine'
         #swagger.responses[200] = {
-            description: '成功刪除機器',
+            description: 'Delete machine successfully',
             schema: {
                 id: "number",
                 name: "string",

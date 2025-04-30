@@ -8,7 +8,7 @@ router.get("/",
         #swagger.tags = ['Subnet']
         #swagger.summary = 'getSubnets'
         #swagger.responses[200] = {
-          description: 'An array of DataCenter objects',
+          description: 'An array of subnet objects',
           schema: [{ $ref: '#/definitions/Subnet' }]
         }
         #swagger.responses[500] = {
@@ -23,7 +23,7 @@ router.get("/:id",
         #swagger.tags = ['Subnet']
         #swagger.summary = 'getSubnetById'
         #swagger.responses[200] = {
-            description: '成功取得子網路',
+            description: 'Get subnet successfully',
             schema: {
                 id: "number",
                 cidr: "string",
@@ -72,7 +72,6 @@ router.post("/",
     
     subnetController.createSubnet)
 
-// todo: update time null
 router.patch("/:id", 
     /* 
         #swagger.tags = ['Subnet']
@@ -121,6 +120,14 @@ router.delete("/:id",
     /*
         #swagger.tags = ['Subnet']
         #swagger.summary = 'deleteSubnet'
+        #swagger.responses[200] = {
+            description: 'OK',
+            schema: { message: 'string' }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
     */
     subnetController.deleteSubnet)
 

@@ -30,7 +30,6 @@ export async function getRackById(req: Request, res: Response) {
 
 export async function createRack(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
-    console.log("createRack body:", req.body)
 
     try {
         const createdRackId = await rackService.createRack(

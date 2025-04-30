@@ -23,7 +23,7 @@ router.get("/:id",
         #swagger.tags = ['IP Address']
         #swagger.summary = 'getIPAddressById'
         #swagger.responses[200] = {
-            description: '成功取得 IP 地址',
+            description: 'Get IP Address successfully',
             schema: {
                 id: "number",
                 address: "string",
@@ -66,7 +66,7 @@ router.post("/",
             }
         }
         #swagger.responses[200] = {
-            description: '成功創建 IP 地址',
+            description: 'Create IP Address successfully',
             schema: {
                 id: "number",
                 address: "string",
@@ -109,7 +109,7 @@ router.patch("/:id",
             }
         }
         #swagger.responses[200] = {
-            description: '成功更新 IP 地址',
+            description: 'Update IP Address successfully',
             schema: {
                 id: "number",
                 address: "string",
@@ -134,7 +134,7 @@ router.delete("/:id",
         #swagger.tags = ['IP Address']
         #swagger.summary = 'deleteIPAddress'
         #swagger.responses[200] = {
-            description: '成功刪除 IP 地址',
+            description: 'Delete IP address successfully',
             schema: {
                 message: "string"
             }

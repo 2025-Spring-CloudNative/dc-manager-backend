@@ -8,7 +8,7 @@ router.get("/",
         #swagger.tags = ['Rack']
         #swagger.summary = 'getRacks'
         #swagger.responses[200] = {
-          description: 'An array of DataCenter objects',
+          description: 'An array of Rack objects',
           schema: [{ $ref: '#/definitions/Rack' }]
         }
         #swagger.responses[500] = {
@@ -23,14 +23,13 @@ router.get("/:id",
         #swagger.tags = ['Rack']
         #swagger.summary = 'getRackById'
         #swagger.responses[200] = {
-            description: '成功取得機櫃',
+            description: 'Get rack successfully',
             schema: {
                 id: "number",
                 name: "string",
                 height: "number",
                 tag: "string",
-                roomId: "number",
-                serviceId: "number"
+                roomId: "number"
             }
         }
         #swagger.responses[500] = {
@@ -51,11 +50,10 @@ router.post("/",
                     schema: {
                         type: "object",
                         properties: {
-                            name: { type: "string", example: "A 區機櫃" },
-                            height: { type: "number", example: 42 },
+                            name: { type: "string", example: "Rack A" },
+                            height: { type: "number", example: 2 },
                             tag: { type: "string", example: "Storage" },
-                            roomId: { type: "number", example: 1 },
-                            serviceId: { type: "number", example: 2 }
+                            roomId: { type: "number", example: 1 }
                         },
                         required: ["name", "height", "tag", "roomId"]
                     }
@@ -82,7 +80,7 @@ router.patch("/",
                         type: "object",
                         properties: {
                             id: { type: "number", example: 1 },
-                            name: { type: "string", example: "A 區機櫃" },
+                            name: { type: "string", example: "Updated Rack A" },
                             height: { type: "number", example: 42 },
                             tag: { type: "string", example: "Storage" },
                             roomId: { type: "number", example: 1 },
