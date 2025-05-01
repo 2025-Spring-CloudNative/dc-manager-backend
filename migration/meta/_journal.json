@@ -15,6 +15,13 @@
       "when": 1746083639183,
       "tag": "0001_adorable_bucky",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1746115580014,
+      "tag": "0002_eminent_purple_man",
+      "breakpoints": true
     }
   ]
 }

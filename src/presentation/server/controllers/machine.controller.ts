@@ -63,11 +63,14 @@ export async function updateMachine(req: Request, res: Response) {
 
 export async function deleteMachine(req: Request, res: Response) {
     const machineRepo = new MachineDrizzleRepository()
+    const ipAddressRepo = new IPAddressDrizzleRepository()
+
     const id = Number(req.params.id)
 
     try {
         await machineService.deleteMachine(
             machineRepo,
+            ipAddressRepo,
             id
         )
         res.status(200).json({ message: "Machine deleted successfully" })
