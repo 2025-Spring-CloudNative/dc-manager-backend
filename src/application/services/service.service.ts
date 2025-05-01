@@ -5,7 +5,7 @@ import { IServiceRepository } from "../../persistence/repositories/service.repos
 import { IIPPoolRepository } from "../../persistence/repositories/ipPool.repository"
 import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
 import { NetUtils } from "../../domain/utils/net"
-import { IPAddressEntity } from "../../domain/ipAddress"
+import { IPAddressEntity, IPAddressStatus } from "../../domain/ipAddress"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
 
 export async function getServices(serviceRepo: IServiceRepository) {
@@ -67,7 +67,7 @@ export async function createService(
     for (const ipAddr of ipAddresses) {
         const ipAddressEntity = new IPAddressEntity({
             address: ipAddr,
-            status: 'created',
+            status: IPAddressStatus.Created,
             poolId: createdIPPoolId
         })
         await ipAddressRepo.createIPAddress(ipAddressEntity)

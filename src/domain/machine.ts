@@ -1,3 +1,10 @@
+export enum MachineStatus {
+    Created = "created",
+    Active = "active",
+    Inactive = "inactive",
+    Removed = "removed"
+}
+
 export interface IMachine {
     id?: number
     name: string
@@ -6,7 +13,7 @@ export interface IMachine {
     macAddress: string
     createdAt?: Date
     rackId: number
-    status: string
+    status: MachineStatus
 }
 
 export class MachineEntity implements IMachine {
@@ -17,7 +24,7 @@ export class MachineEntity implements IMachine {
     macAddress: string
     createdAt?: Date
     rackId: number
-    status: string
+    status: MachineStatus
 
     constructor(machine: IMachine) {
         this.id = machine.id

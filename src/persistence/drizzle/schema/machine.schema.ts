@@ -1,6 +1,9 @@
 import { relations } from "drizzle-orm"
 import { rackTable } from "./rack.schema"
-import { pgTable, serial, integer, varchar, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, pgEnum, serial, integer, varchar, timestamp } from "drizzle-orm/pg-core"
+import { MachineStatus } from "../../../domain/machine"
+
+export const machineEnum = pgEnum("machine_status", MachineStatus)
 
 export const machineTable = pgTable("machine", {
     id: serial().primaryKey().notNull(),
@@ -10,7 +13,7 @@ export const machineTable = pgTable("machine", {
     macAddress: varchar("mac_address", { length: 17 }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     rackId: integer("rack_id").notNull().references(() => rackTable.id),
-    status: varchar({ length: 255 }).notNull()
+    status: machineEnum("status").notNull()
 })
 
 export const machineRelations = relations(machineTable, ({ one }) => ({

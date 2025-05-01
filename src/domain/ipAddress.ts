@@ -1,7 +1,13 @@
+export enum IPAddressStatus {
+    Created = "created",
+    Allocated = "allocated",
+    Released = "released"
+}
+
 export interface IIPAddress {
     id?: number
     address: string
-    status: string
+    status: IPAddressStatus
     poolId: number
     createdAt?: Date
     updatedAt?: Date
@@ -13,7 +19,7 @@ export interface IIPAddress {
 export class IPAddressEntity implements IIPAddress {
     id?: number
     address: string
-    status: string
+    status: IPAddressStatus
     poolId: number
     machineId?: number | null
     createdAt?: Date
