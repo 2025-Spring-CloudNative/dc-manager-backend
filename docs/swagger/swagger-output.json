@@ -54,15 +54,6 @@
                   }
                 }
               }
-            },
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/DataCenter"
-              },
-              "xml": {
-                "name": "main"
-              }
             }
           },
           "500": {
@@ -95,18 +86,6 @@
                     "name": "main"
                   }
                 }
-              }
-            },
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "string"
-                }
-              },
-              "xml": {
-                "name": "main"
               }
             }
           }
@@ -120,70 +99,10 @@
         "description": "",
         "responses": {
           "200": {
-            "description": "id of the created data center",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "example": "number"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "example": "number"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           },
           "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "string"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "string"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              }
-            }
+            "description": "Internal Server Error"
           }
         },
         "requestBody": {
@@ -203,10 +122,6 @@
                       "location": {
                         "type": "string",
                         "example": "Taipei"
-                      },
-                      "subnetId": {
-                        "type": "number",
-                        "example": "1"
                       }
                     }
                   },
@@ -244,7 +159,7 @@
         ],
         "responses": {
           "200": {
-            "description": "An array of DataCenter objects",
+            "description": "Get DataCenter successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -356,7 +271,7 @@
         ],
         "responses": {
           "200": {
-            "description": "update Subnet successfully",
+            "description": "update dataCenter successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -426,15 +341,11 @@
                   },
                   "name": {
                     "type": "string",
-                    "example": "台北資料中心"
+                    "example": "Updated DC"
                   },
                   "location": {
                     "type": "string",
-                    "example": "台北市"
-                  },
-                  "subnetId": {
-                    "type": "number",
-                    "example": 1
+                    "example": "Taipei"
                   }
                 },
                 "required": [
@@ -576,7 +487,7 @@
         "description": "",
         "responses": {
           "200": {
-            "description": "An array of DataCenter objects",
+            "description": "An array of room objects",
             "content": {
               "application/json": {
                 "schema": {
@@ -690,7 +601,7 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "example": "A 區機房"
+                    "example": "Room A"
                   },
                   "unit": {
                     "type": "number",
@@ -768,7 +679,7 @@
                   },
                   "name": {
                     "type": "string",
-                    "example": "A 區機房"
+                    "example": "Updated Room A"
                   },
                   "unit": {
                     "type": "number",
@@ -810,7 +721,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功取得子網路",
+            "description": "Get room successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -996,7 +907,7 @@
         "description": "",
         "responses": {
           "200": {
-            "description": "An array of DataCenter objects",
+            "description": "An array of Rack objects",
             "content": {
               "application/json": {
                 "schema": {
@@ -1110,11 +1021,11 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "example": "A 區機櫃"
+                    "example": "Rack A"
                   },
                   "height": {
                     "type": "number",
-                    "example": 42
+                    "example": 2
                   },
                   "tag": {
                     "type": "string",
@@ -1123,10 +1034,6 @@
                   "roomId": {
                     "type": "number",
                     "example": 1
-                  },
-                  "serviceId": {
-                    "type": "number",
-                    "example": 2
                   }
                 },
                 "required": [
@@ -1197,7 +1104,7 @@
                   },
                   "name": {
                     "type": "string",
-                    "example": "A 區機櫃"
+                    "example": "Updated Rack A"
                   },
                   "height": {
                     "type": "number",
@@ -1244,7 +1151,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功取得機櫃",
+            "description": "Get rack successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -1267,10 +1174,6 @@
                       "example": "string"
                     },
                     "roomId": {
-                      "type": "string",
-                      "example": "number"
-                    },
-                    "serviceId": {
                       "type": "string",
                       "example": "number"
                     }
@@ -1301,10 +1204,6 @@
                       "example": "string"
                     },
                     "roomId": {
-                      "type": "string",
-                      "example": "number"
-                    },
-                    "serviceId": {
                       "type": "string",
                       "example": "number"
                     }
@@ -1485,7 +1384,7 @@
         "description": "",
         "responses": {
           "200": {
-            "description": "成功創建機器",
+            "description": "Create machine successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -1618,6 +1517,10 @@
                     "type": "string",
                     "example": "Server-01"
                   },
+                  "startUnit": {
+                    "type": "number",
+                    "example": 1
+                  },
                   "unit": {
                     "type": "number",
                     "example": 1
@@ -1665,7 +1568,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功取得機器",
+            "description": "Get machine successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -1678,6 +1581,10 @@
                     "name": {
                       "type": "string",
                       "example": "string"
+                    },
+                    "startUnit": {
+                      "type": "string",
+                      "example": "number"
                     },
                     "unit": {
                       "type": "string",
@@ -1712,6 +1619,10 @@
                     "name": {
                       "type": "string",
                       "example": "string"
+                    },
+                    "startUnit": {
+                      "type": "string",
+                      "example": "number"
                     },
                     "unit": {
                       "type": "string",
@@ -1790,7 +1701,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功更新機器",
+            "description": "Update machine successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -1975,7 +1886,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功刪除機器",
+            "description": "Delete machine successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2153,7 +2064,7 @@
         "description": "",
         "responses": {
           "200": {
-            "description": "成功創建 Service",
+            "description": "create service successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2219,68 +2130,7 @@
             }
           }
         },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "service": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "number",
-                        "example": 1
-                      },
-                      "name": {
-                        "type": "string",
-                        "example": "Web Server"
-                      }
-                    }
-                  },
-                  "racks": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "number",
-                          "example": 1
-                        },
-                        "name": {
-                          "type": "string",
-                          "example": "Rack-01"
-                        },
-                        "height": {
-                          "type": "number",
-                          "example": 42
-                        },
-                        "tag": {
-                          "type": "string",
-                          "example": "tag001"
-                        },
-                        "roomId": {
-                          "type": "number",
-                          "example": 1
-                        }
-                      }
-                    }
-                  },
-                  "cidrFromUser": {
-                    "type": "string",
-                    "example": "192.168.1.0/25"
-                  }
-                },
-                "required": [
-                  "service",
-                  "racks",
-                  "cidrFromUser"
-                ]
-              }
-            }
-          }
-        }
+        "requestBody": {}
       }
     },
     "/service/{id}": {
@@ -2302,7 +2152,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功取得服務",
+            "description": "Get service successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2316,7 +2166,7 @@
                       "type": "string",
                       "example": "string"
                     },
-                    "machineId": {
+                    "poolId": {
                       "type": "string",
                       "example": "number"
                     }
@@ -2338,7 +2188,7 @@
                       "type": "string",
                       "example": "string"
                     },
-                    "machineId": {
+                    "poolId": {
                       "type": "string",
                       "example": "number"
                     }
@@ -2420,14 +2270,14 @@
                     "type": "string",
                     "example": "Web Server"
                   },
-                  "machineId": {
+                  "poolId": {
                     "type": "number",
                     "example": 1
                   }
                 },
                 "required": [
                   "name",
-                  "machineId"
+                  "poolId"
                 ]
               }
             }
@@ -2452,7 +2302,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功刪除服務",
+            "description": "Delete service successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2529,7 +2379,7 @@
         "description": "",
         "responses": {
           "200": {
-            "description": "An array of DataCenter objects",
+            "description": "An array of subnet objects",
             "content": {
               "application/json": {
                 "schema": {
@@ -2714,7 +2564,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功取得子網路",
+            "description": "Get subnet successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -3029,10 +2879,70 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -3297,7 +3207,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功取得 IP Pool",
+            "description": "Get IP Pool successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -3784,7 +3694,7 @@
         "description": "",
         "responses": {
           "200": {
-            "description": "成功創建 IP 地址",
+            "description": "Create IP Address successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -3974,7 +3884,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功取得 IP 地址",
+            "description": "Get IP Address successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -4123,7 +4033,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功更新 IP 地址",
+            "description": "Update IP Address successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -4311,7 +4221,7 @@
         ],
         "responses": {
           "200": {
-            "description": "成功刪除 IP 地址",
+            "description": "Delete IP address successfully",
             "content": {
               "application/json": {
                 "schema": {
