@@ -28,7 +28,7 @@ router.get("/:id",
                 id: "number",
                 name: "string",
                 subnetId: "number",
-                cidr: "string"
+                cidr: "string",
                 createdAt: "string",
                 updatedAt: "string"
             }
