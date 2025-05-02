@@ -68,7 +68,7 @@ router.post("/",
     */
     rackController.createRack)
 
-router.patch("/",
+router.patch("/:id",
     /*
         #swagger.tags = ['Rack']
         #swagger.summary = 'updateRack'

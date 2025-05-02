@@ -84,7 +84,6 @@ router.post("/",
             schema: { message: 'string' }
         }
     */
-
     ipPoolController.createIPPool)
 
 router.patch("/:id",

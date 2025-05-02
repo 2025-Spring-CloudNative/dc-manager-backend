@@ -114,8 +114,6 @@ router.patch("/:id",
     */
     subnetController.updateSubnet)
 
-// todo: {"message": "update or delete on table \"subnet\" violates foreign key constraint \"data_center_subnet_id_subnet_id_fk\" on table \"data_center\""}
-// delete subnet after remove related data center
 router.delete("/:id",
     /*
         #swagger.tags = ['Subnet']

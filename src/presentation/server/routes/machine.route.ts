@@ -126,6 +126,7 @@ router.patch("/:id",
         }
     */
     machineController.updateMachine)
+    
 router.delete("/:id",
     /*
         #swagger.tags = ['Machine']
