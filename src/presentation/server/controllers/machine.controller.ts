@@ -2,6 +2,8 @@ import { Request, Response } from "express"
 import { MachineDrizzleRepository } from "../../../persistence/drizzle/machine.persistence"
 import * as machineService from "../../../application/services/machine.service"
 import { IPAddressDrizzleRepository } from "../../../persistence/drizzle/ipAddress.persistence"
+import { RackDrizzleRepository } from "../../../persistence/drizzle/rack.persistence"
+import { ServiceDrizzleRepository } from "../../../persistence/drizzle/service.persistence"
 
 export async function getMachines(req: Request, res: Response) {
     const machineRepo = new MachineDrizzleRepository()
@@ -32,11 +34,15 @@ export async function getMachineById(req: Request, res: Response) {
 export async function createMachine(req: Request, res: Response) {
     const machineRepo = new MachineDrizzleRepository()
     const ipAddressRepo = new IPAddressDrizzleRepository()
+    const rackRepo = new RackDrizzleRepository()
+    const serviceRepo = new ServiceDrizzleRepository()
 
     try {
         const createdMachineId = await machineService.createMachine(
             machineRepo,
             ipAddressRepo,
+            rackRepo,
+            serviceRepo,
             req.body
         )
         res.status(200).json({ id: createdMachineId })

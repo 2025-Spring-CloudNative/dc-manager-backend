@@ -8,7 +8,7 @@ router.get("/",
         #swagger.tags = ['Subnet']
         #swagger.summary = 'getSubnets'
         #swagger.responses[200] = {
-          description: 'An array of subnet objects',
+          description: 'An array of Subnet objects',
           schema: [{ $ref: '#/definitions/Subnet' }]
         }
         #swagger.responses[500] = {

@@ -7,6 +7,7 @@ import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.r
 import { NetUtils } from "../../domain/utils/net"
 import { IPAddressEntity, IPAddressStatus } from "../../domain/ipAddress"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
+import { IRackRepository } from "../../persistence/repositories/rack.repository"
 
 export async function getServices(serviceRepo: IServiceRepository) {
     const services = await serviceRepo.getServices()
@@ -87,9 +88,21 @@ export async function updateService(
 
 export async function deleteService(
     serviceRepo: IServiceRepository,
+    rackRepo: IRackRepository,
+    ipPoolRepo: IIPPoolRepository,
     id: number
 ) {
+    const poolId = (await serviceRepo.getServiceById(id)).poolId
     const deletedServiceId = await serviceRepo.deleteService(id)
+
+    const racks = await rackRepo.getRacksByServiceId(deletedServiceId)
+    for (const rack of racks) {
+        await rackRepo.updateRack(rack.id as number, {
+            serviceId: null,
+        })
+    }
+
+    await ipPoolRepo.deleteIPPool(poolId as number)
 
     return deletedServiceId
 }

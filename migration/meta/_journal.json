@@ -29,6 +29,13 @@
       "when": 1746195356171,
       "tag": "0003_daffy_vulcan",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1746196258330,
+      "tag": "0004_hesitant_nekra",
+      "breakpoints": true
     }
   ]
 }

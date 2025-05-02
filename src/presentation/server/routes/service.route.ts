@@ -8,7 +8,7 @@ router.get("/",
         #swagger.tags = ['Services']
         #swagger.summary = 'getServices'
         #swagger.responses[200] = {
-          description: 'An array of DataCenter objects',
+          description: 'An array of Service objects',
           schema: [{ $ref: '#/definitions/Service' }]
         }
         #swagger.responses[500] = {

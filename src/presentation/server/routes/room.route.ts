@@ -9,7 +9,7 @@ router.get(
         #swagger.tags = ['Room']
         #swagger.summary = 'getRooms'
         #swagger.responses[200] = {
-            description: 'An array of room objects',
+            description: 'An array of Room objects',
             schema: [{ $ref: '#/definitions/Room' }]
         }
         #swagger.responses[500] = {

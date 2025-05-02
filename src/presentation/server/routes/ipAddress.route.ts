@@ -8,7 +8,7 @@ router.get("/",
         #swagger.tags = ['IP Address']
         #swagger.summary = 'getIPAddresses'
         #swagger.responses[200] = {
-          description: 'An array of DataCenter objects',
+          description: 'An array of IPAddress objects',
           schema: [{ $ref: '#/definitions/IPAddress' }]
         }
         #swagger.responses[500] = {
