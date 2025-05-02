@@ -12,7 +12,7 @@ export const machineTable = pgTable("machine", {
     unit: integer().notNull(),
     macAddress: varchar("mac_address", { length: 17 }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
-    rackId: integer("rack_id").notNull().references(() => rackTable.id),
+    rackId: integer("rack_id").notNull().references(() => rackTable.id, { onDelete: 'no action' }),
     status: machineEnum("status").notNull()
 })
 

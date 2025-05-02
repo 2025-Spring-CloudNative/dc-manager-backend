@@ -2130,7 +2130,53 @@
             }
           }
         },
-        "requestBody": {}
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "service": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "Web Server"
+                      }
+                    }
+                  },
+                  "dataCenter": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "Main DC"
+                      },
+                      "location": {
+                        "type": "string",
+                        "example": "Taipei"
+                      },
+                      "subnetId": {
+                        "type": "string",
+                        "example": 1
+                      }
+                    }
+                  },
+                  "cidrFromUser": {
+                    "type": "string",
+                    "example": "192.168.1.0/24"
+                  }
+                },
+                "required": [
+                  "service",
+                  "dataCenter",
+                  "cidrFromUser"
+                ]
+              }
+            }
+          }
+        }
       }
     },
     "/service/{id}": {

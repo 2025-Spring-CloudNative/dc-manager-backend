@@ -32,9 +32,6 @@ export async function createService(
     dataCenter: IDataCenter,
     cidrFromUser: string
 ) {
-    const serviceEntity = new ServiceEntity(service)
-    const createdServiceId = await serviceRepo.createService(serviceEntity)
-
     const subnetId = dataCenter.subnetId
     if (!subnetId) {
         throw new Error("Unable to retrieve the subnet of the datacenter.")
@@ -49,6 +46,9 @@ export async function createService(
     if (NetUtils.checkCIDROverlap(cidrFromUser, existingIPPoolCIDRs)) {
         throw new Error(`The cidr ${cidrFromUser} overlaps with other ip-pools.`)
     }   
+
+    const serviceEntity = new ServiceEntity(service)
+    const createdServiceId = await serviceRepo.createService(serviceEntity)
 
     const ipPoolEntity = new IPPoolEntity({
         name: `Service-${createdServiceId}-ippool`,

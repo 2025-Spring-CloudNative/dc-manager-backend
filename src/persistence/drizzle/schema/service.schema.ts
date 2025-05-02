@@ -6,8 +6,7 @@ import { pgTable, serial, integer, varchar } from "drizzle-orm/pg-core"
 export const serviceTable = pgTable("service", {
     id: serial().primaryKey().notNull(),
     name: varchar({ length: 255 }).notNull(),
-    // poolId: integer("pool_id").notNull().references(() => ipPoolTable.id)
-    poolId: integer("pool_id").references(() => ipPoolTable.id, { onDelete: "set null" })
+    poolId: integer("pool_id").references(() => ipPoolTable.id, { onDelete: 'set null' })
 })
 
 export const serviceRelations = relations(serviceTable, ({ one }) => ({

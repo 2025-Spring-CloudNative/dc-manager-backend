@@ -8,7 +8,7 @@ export const ipPoolTable = pgTable("ip_pool", {
     name: varchar({ length: 255 }).notNull(),
     type: varchar({ length: 255 }).notNull(),
     cidr: varchar({ length: 18 }).notNull(),
-    subnetId: integer("subnet_id").notNull().references(() => subnetTable.id),
+    subnetId: integer("subnet_id").notNull().references(() => subnetTable.id, { onDelete: 'no action' }),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at")
         .notNull()

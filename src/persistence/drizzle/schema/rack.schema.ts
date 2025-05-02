@@ -9,9 +9,8 @@ export const rackTable = pgTable("rack", {
     name: varchar({ length: 255 }).notNull(),
     height: integer().notNull(),
     tag: varchar({ length: 255 }).notNull(),
-    roomId: integer("room_id").notNull().references(() => roomTable.id),
-    // serviceId: integer("service_id").references(() => serviceTable.id),
-    serviceId: integer("service_id").references(() => serviceTable.id, { onDelete: "set null" }),
+    roomId: integer("room_id").notNull().references(() => roomTable.id, { onDelete: 'no action' }),
+    serviceId: integer("service_id").references(() => serviceTable.id, { onDelete: 'set null' }),
 
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at")

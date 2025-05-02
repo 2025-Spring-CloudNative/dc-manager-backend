@@ -61,7 +61,7 @@ router.post("/",
                                     "location": { type: "string", example: "Taipei" },
                                     "subnetId": { type: "string", example: 1 }
                                 }
-                            }
+                            },
                             cidrFromUser: { type: "string", example: "192.168.1.0/24" }
                         },
                         required: ["service", "dataCenter", "cidrFromUser"]
