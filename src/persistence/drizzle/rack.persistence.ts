@@ -22,6 +22,15 @@ export class RackDrizzleRepository implements IRackRepository {
         return rack as IRack
     }
 
+    async getRacksByServiceId(serviceId: number) {
+        const racks = await db
+            .select()
+            .from(rackTable)
+            .where(eq(rackTable.serviceId, serviceId))
+        
+        return racks
+    }
+
     async createRack(rack: IRack) {
         const [createdRack] = await db
             .insert(rackTable)

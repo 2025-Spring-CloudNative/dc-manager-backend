@@ -17,7 +17,7 @@ router.get("/",
             schema: { message: 'string' }
         }
     */
-  dataCenterController.getDataCenters)    
+    dataCenterController.getDataCenters)    
 
 router.get("/:id", 
     /*
@@ -36,7 +36,7 @@ router.get("/:id",
             schema: { message: 'string' }
         }
     */
-  dataCenterController.getDataCenterById);
+    dataCenterController.getDataCenterById);
 
 
 router.post("/",
@@ -64,8 +64,8 @@ router.post("/",
             }
         }
     } 
-  */
-  dataCenterController.createDataCenter)
+    */
+    dataCenterController.createDataCenter)
 
 router.patch("/:id",
     /* 
@@ -127,7 +127,7 @@ router.delete("/:id",
             schema: { message: 'string' }
         }
     */
-  dataCenterController.deleteDataCenter);
+    dataCenterController.deleteDataCenter);
 
 
 

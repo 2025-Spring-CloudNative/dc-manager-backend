@@ -10,8 +10,8 @@ export const ipAddressTable = pgTable("ip_address", {
     id: serial().primaryKey().notNull(),
     address: varchar({ length: 15 }).notNull(),
     status: ipAddressEnum("status").notNull(),
-    poolId: integer("pool_id").notNull().references(() => ipPoolTable.id),
-    machineId: integer("machine_id").references(() => machineTable.id),
+    poolId: integer("pool_id").notNull().references(() => ipPoolTable.id, { onDelete: 'cascade' }),
+    machineId: integer("machine_id").references(() => machineTable.id, { onDelete: 'set null' }),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at")
         .notNull()

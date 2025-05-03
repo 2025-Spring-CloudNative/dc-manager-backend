@@ -8,7 +8,7 @@ router.get("/",
         #swagger.tags = ['IP Pool']
         #swagger.summary = 'getIPPools'
         #swagger.responses[200] = {
-          description: 'An array of DataCenter objects',
+          description: 'An array of IPPool objects',
           schema: [{ $ref: '#/definitions/IPPool' }]
         }
         #swagger.responses[500] = {
@@ -28,11 +28,7 @@ router.get("/:id",
                 id: "number",
                 name: "string",
                 subnetId: "number",
-                startIp: "string",
-                endIp: "string",
-                gateway: "string",
-                netmask: "string",
-                dns: "string",
+                cidr: "string",
                 createdAt: "string",
                 updatedAt: "string"
             }
@@ -57,11 +53,10 @@ router.post("/",
                         properties: {
                             name: { type: "string", example: "Main IP Pool" },
                             type: { type: "string", example: "static" },
-                            startIp: { type: "string", example: "192.168.0.100" }, 
-                            endIp: { type: "string", example: "192.168.0.200" },
+                            cidr: { type: "string", example: "192.168.1.0/25" },
                             subnetId: { type: "number", example: 1 },
                         },
-                        required: ["name", "type", "startIp", "endIp", "subnetId"]
+                        required: ["name", "type", "cidr", "subnetId"]
                     }
                 }
             }
@@ -72,8 +67,7 @@ router.post("/",
             id: "number",
             name: "string",
             type: "string",
-            startIp: "string",
-            endIp: "string",
+            cidr: "string",
             subnetId: "number",
             createdAt: "string",
             updatedAt: "string"
@@ -84,7 +78,6 @@ router.post("/",
             schema: { message: 'string' }
         }
     */
-
     ipPoolController.createIPPool)
 
 router.patch("/:id",
@@ -101,11 +94,9 @@ router.patch("/:id",
                             id: { type: "number", example: 1 },
                             name: { type: "string", example: "Main IP Pool" },
                             type: { type: "string", example: "dynamic" },
-                            startIp: { type: "string", example: "10.0.0.10"},
-                            endIP: { type: "string", example: "10.0.0.50"},
                             subnetId: { type: "number", example: 1}
                         },
-                        required: ["name", "type", "startIp", "endIp", "subnetId"]
+                        required: ["name", "type", "subnetId"]
                     }
                 }
             }
@@ -116,8 +107,7 @@ router.patch("/:id",
                 id: "number",
                 name: "string",
                 type: "string",
-                startIp: "string",
-                endIp: "string",
+                cidr: "string",
                 subnetId: "number",
                 createdAt: "string",
                 updatedAt: "string"
@@ -129,6 +119,43 @@ router.patch("/:id",
         }
     */
     ipPoolController.updateIPPool)
+
+router.patch("/extend/:id",
+    /*
+        #swagger.tags = ['IP Pool']
+        #swagger.summary = 'extendIPPool'
+        #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            cidr: { type: "string", example: "192.168.1.0/25" },
+                        },
+                        required: ["cidr"]
+                    }
+                }
+            }
+        }
+        #swagger.responses[200] = {
+            description: 'IP Pool extended successfully',
+            schema: {
+                id: "number",
+                name: "string",
+                type: "string",
+                cidr: "string",
+                subnetId: "number",
+                createdAt: "string",
+                updatedAt: "string"
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    ipPoolController.extendIPPool)
     
 router.delete("/:id",
     /*

@@ -4,6 +4,7 @@ import * as serviceService from "../../../application/services/service.service"
 import { IPAddressDrizzleRepository } from "../../../persistence/drizzle/ipAddress.persistence"
 import { IPPoolDrizzleRepository } from "../../../persistence/drizzle/ipPool.persistence"
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
+import { RackDrizzleRepository } from '../../../persistence/drizzle/rack.persistence'
 
 
 export async function getServices(req: Request, res: Response) {
@@ -71,11 +72,16 @@ export async function updateService(req: Request, res: Response) {
 
 export async function deleteService(req: Request, res: Response) {
     const serviceRepo = new ServiceDrizzleRepository()
+    const rackRepo = new RackDrizzleRepository()
+    const ipPoolRepo = new IPPoolDrizzleRepository()
+    
     const id = Number(req.params.id)
 
     try {
         const deletedServiceId = await serviceService.deleteService(
             serviceRepo,
+            rackRepo,
+            ipPoolRepo,
             id
         )
         res.status(200).json({ id: deletedServiceId })

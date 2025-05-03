@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { IPPoolDrizzleRepository } from "../../../persistence/drizzle/ipPool.persistence"
 import * as ipPoolService from "../../../application/services/ipPool.service"
+import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
 
 export async function getIPPools(req: Request, res: Response) {
     const ipPoolRepo = new IPPoolDrizzleRepository()
@@ -53,6 +54,24 @@ export async function updateIPPool(req: Request, res: Response) {
             req.body
         )
         res.status(200).json(updatedIPPool)
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function extendIPPool(req: Request, res: Response) {
+    const ipPoolRepo = new IPPoolDrizzleRepository()
+    const subnetRepo = new SubnetDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        const extendedIPPool = await ipPoolService.extendIPPool(
+            ipPoolRepo,
+            subnetRepo,
+            id,
+            req.body
+        )
+        res.status(200).json(extendedIPPool)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

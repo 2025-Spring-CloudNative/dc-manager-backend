@@ -9,7 +9,7 @@ router.get(
         #swagger.tags = ['Room']
         #swagger.summary = 'getRooms'
         #swagger.responses[200] = {
-            description: 'An array of room objects',
+            description: 'An array of Room objects',
             schema: [{ $ref: '#/definitions/Room' }]
         }
         #swagger.responses[500] = {
@@ -20,8 +20,7 @@ router.get(
     roomController.getRooms
 )
 
-router.get(
-    "/:id",
+router.get("/:id",
     /*
         #swagger.tags = ['Room']
         #swagger.summary = 'getRoomById'
@@ -42,8 +41,7 @@ router.get(
     roomController.getRoomById
 )
 
-router.post(
-    "/",
+router.post("/",
     /*
         #swagger.tags = ['Room']
         #swagger.summary = 'createRoom'
@@ -72,8 +70,7 @@ router.post(
     roomController.createRoom
 )
 
-router.patch(
-    "/",
+router.patch("/:id",
     /*
         #swagger.tags = ['Room']
         #swagger.summary = 'updateRoom'
@@ -105,8 +102,7 @@ router.patch(
     roomController.updateRoom
 )
 
-router.delete(
-    "/:id",
+router.delete("/:id",
     /*
         #swagger.tags = ['Room']
         #swagger.summary = 'deleteRoom'

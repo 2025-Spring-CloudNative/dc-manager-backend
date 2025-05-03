@@ -1,6 +1,8 @@
 import { IMachine } from "../../domain/machine"
 import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
 import { IMachineRepository } from "../../persistence/repositories/machine.repository"
+import { IRackRepository } from "../../persistence/repositories/rack.repository"
+import { IServiceRepository } from "../../persistence/repositories/service.repository"
 
 export async function getMachines(machineRepo: IMachineRepository) {
     const machines = await machineRepo.getMachines()
@@ -35,11 +37,17 @@ export async function getMachinesByIdWithIPAddress(
 export async function createMachine(
     machineRepo: IMachineRepository,
     ipAddressRepo: IIPAddressRepository,
+    rackRepo: IRackRepository,
+    serviceRepo: IServiceRepository,
     machine: IMachine
 ) {
     const createdMachineId = await machineRepo.createMachine(machine)
 
-    const ipAddresses = await ipAddressRepo.getIPAddresses()
+    const rack = await rackRepo.getRackById(machine.rackId)    
+
+    const service = await serviceRepo.getServiceById(rack.serviceId as number)
+    const ipAddresses = await ipAddressRepo.getIPAddressesByPoolId(service.poolId as number)
+
     for (const ipAddress of ipAddresses) {
         // The ip address is created but not allocated or the ip address is released
         if (ipAddress.id && (!ipAddress.allocatedAt || ipAddress.releasedAt)) {
@@ -66,9 +74,16 @@ export async function updateMachine(
 
 export async function deleteMachine(
     machineRepo: IMachineRepository,
+    ipAddressRepo: IIPAddressRepository,
     id: number
 ) {
+    const ipAddress = await ipAddressRepo.getIPAddressByMachineId(id)
+    if (ipAddress.id) {
+        await ipAddressRepo.updateIPAddress(ipAddress.id, {
+            releasedAt: new Date()
+        })
+    }
     const deletedMachineId = await machineRepo.deleteMachine(id)
-
+    
     return deletedMachineId
 }

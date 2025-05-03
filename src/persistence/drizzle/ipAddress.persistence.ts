@@ -10,7 +10,7 @@ export class IPAddressDrizzleRepository implements IIPAddressRepository {
             .select()
             .from(ipAddressTable)
         
-            return ipAddresses
+        return ipAddresses
     }
 
     async getIPAddressById(id: number) {
@@ -20,6 +20,24 @@ export class IPAddressDrizzleRepository implements IIPAddressRepository {
             .where(eq(ipAddressTable.id, id))
 
         return ipAddress as IIPAddress
+    }
+
+    async getIPAddressByMachineId(machineId: number) {
+        const [ipAddress] = await db
+            .select()
+            .from(ipAddressTable)
+            .where(eq(ipAddressTable.machineId, machineId))
+
+        return ipAddress as IIPAddress
+    }
+
+    async getIPAddressesByPoolId(poolId: number) {
+        const ipAddresses = await db
+            .select()
+            .from(ipAddressTable)
+            .where(eq(ipAddressTable.poolId, poolId))
+
+        return ipAddresses
     }
 
     async createIPAddress(ipAddress: IIPAddress) {

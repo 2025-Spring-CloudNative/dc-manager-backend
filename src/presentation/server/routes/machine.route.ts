@@ -8,7 +8,7 @@ router.get("/",
         #swagger.tags = ['Machine']
         #swagger.summary = 'getMachines'
         #swagger.responses[200] = {
-          description: 'An array of DataCenter objects',
+          description: 'An array of Machine objects',
           schema: [{ $ref: '#/definitions/Machine' }]
         }
         #swagger.responses[500] = {
@@ -69,6 +69,7 @@ router.post("/",
             schema: {
                 id: "number",
                 name: "string",
+                startUnit: "number",
                 unit: "number",
                 macAddress: "string",
                 rackId: "number",
@@ -112,6 +113,7 @@ router.patch("/:id",
             schema: {
                 id: "number",
                 name: "string",
+                startUnit: "number",
                 unit: "number",
                 macAddress: "string",
                 rackId: "number",
@@ -126,6 +128,7 @@ router.patch("/:id",
         }
     */
     machineController.updateMachine)
+
 router.delete("/:id",
     /*
         #swagger.tags = ['Machine']
