@@ -7,7 +7,7 @@ export const roomTable = pgTable("room", {
     id: serial().primaryKey().notNull(),
     name: varchar({ length: 255 }).notNull(),
     unit: integer().notNull(),
-    dataCenterId: integer("data_center_id").notNull().references(() => dataCenterTable.id)
+    dataCenterId: integer("data_center_id").notNull().references(() => dataCenterTable.id, { onDelete: 'no action' })
 })
 
 export const roomRelations = relations(roomTable, ({ one, many }) => ({

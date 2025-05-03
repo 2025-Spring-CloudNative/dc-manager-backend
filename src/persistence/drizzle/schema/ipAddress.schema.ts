@@ -1,18 +1,24 @@
 import { relations } from "drizzle-orm"
 import { ipPoolTable } from "./ipPool.schema"
 import { machineTable } from "./machine.schema"
-import { pgTable, serial, integer, varchar, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, pgEnum, serial, integer, varchar, timestamp } from "drizzle-orm/pg-core"
+import { IPAddressStatus } from "../../../domain/ipAddress"
+
+export const ipAddressEnum = pgEnum("ip_address_status", IPAddressStatus)
 
 export const ipAddressTable = pgTable("ip_address", {
     id: serial().primaryKey().notNull(),
     address: varchar({ length: 15 }).notNull(),
-    status: varchar({ length: 255 }).notNull(),
-    poolId: integer("pool_id").notNull().references(() => ipPoolTable.id),
+    status: ipAddressEnum("status").notNull(),
+    poolId: integer("pool_id").notNull().references(() => ipPoolTable.id, { onDelete: 'cascade' }),
+    machineId: integer("machine_id").references(() => machineTable.id, { onDelete: 'set null' }),
     createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at"),
+    updatedAt: timestamp("updated_at")
+        .notNull()
+        .defaultNow()
+        .$onUpdate(() => new Date()),
     allocatedAt: timestamp("allocated_at"),
-    releasedAt: timestamp("released_at"),
-    machineId: integer("machine_id").notNull().references(() => machineTable.id)
+    releasedAt: timestamp("released_at")
 })
 
 export const ipAddressRelations = relations(ipAddressTable, ({ one }) => ({

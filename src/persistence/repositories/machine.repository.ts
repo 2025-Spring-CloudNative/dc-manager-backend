@@ -1,10 +1,11 @@
 import { IMachine } from "../../domain/machine"
 
-// TODO
 export interface IMachineRepository {
     getMachines(): Promise<IMachine[]>
-    // getMachineById(id: number): Promise<IMachine>
+    getMachinesWithIPAddress(): Promise<Object[]>
+    getMachineById(id: number): Promise<IMachine>
+    getMachineByIdWithIPAddress(id: number): Promise<Object>
     createMachine(machine: IMachine): Promise<number>
-    // updateMachine(id: number, machine: IMachine): Promise<IMachine>
-    // deleteMachine(id: number): Promise<number>
+    updateMachine(id: number, machine: Partial<IMachine>): Promise<IMachine>
+    deleteMachine(id: number): Promise<number>
 }

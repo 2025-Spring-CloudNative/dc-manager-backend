@@ -3,9 +3,10 @@ export interface IRack {
     name: string
     height: number
     tag: string
-    createdAt: Date
-    updatedAt?: Date | null
-    roomId: number   
+    createdAt?: Date
+    updatedAt?: Date
+    roomId: number
+    serviceId?: number | null
 }
 
 export class RackEntity implements IRack {
@@ -13,17 +14,19 @@ export class RackEntity implements IRack {
     name: string
     height: number
     tag: string
-    createdAt: Date
-    updatedAt?: Date | null
+    createdAt?: Date
+    updatedAt?: Date
     roomId: number
+    serviceId?: number | null
 
     constructor(rack: IRack) {
         this.id = rack.id
         this.name = rack.name
-        this.height = rack.height 
+        this.height = rack.height
         this.tag = rack.tag
         this.createdAt = rack.createdAt
         this.updatedAt = rack.updatedAt
         this.roomId = rack.roomId
+        this.serviceId = rack.serviceId
     }
 }

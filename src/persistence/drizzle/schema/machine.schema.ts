@@ -1,17 +1,19 @@
 import { relations } from "drizzle-orm"
 import { rackTable } from "./rack.schema"
-import { serviceTable } from "./service.schema"
-import { pgTable, serial, integer, varchar, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, pgEnum, serial, integer, varchar, timestamp } from "drizzle-orm/pg-core"
+import { MachineStatus } from "../../../domain/machine"
+
+export const machineEnum = pgEnum("machine_status", MachineStatus)
 
 export const machineTable = pgTable("machine", {
     id: serial().primaryKey().notNull(),
     name: varchar({ length: 255 }).notNull(),
+    startUnit: integer("start_unit").notNull(),
     unit: integer().notNull(),
     macAddress: varchar("mac_address", { length: 17 }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
-    rackId: integer("rack_id").notNull().references(() => rackTable.id),
-    status: varchar({ length: 255 }).notNull(),
-    serviceId: integer("service_id").notNull().references(() => serviceTable.id)
+    rackId: integer("rack_id").notNull().references(() => rackTable.id, { onDelete: 'no action' }),
+    status: machineEnum("status").notNull()
 })
 
 export const machineRelations = relations(machineTable, ({ one }) => ({

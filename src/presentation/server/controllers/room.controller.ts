@@ -13,6 +13,21 @@ export async function getRooms(req: Request, res: Response) {
     }
 }
 
+export async function getRoomById(req: Request, res: Response) {
+    const roomRepo = new RoomDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        const room = await roomService.getRoomById(
+            roomRepo, 
+            id
+        )
+        res.status(200).json(room)
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export async function createRoom(req: Request, res: Response) {
     const roomRepo = new RoomDrizzleRepository()
 
@@ -22,6 +37,37 @@ export async function createRoom(req: Request, res: Response) {
             req.body
         )
         res.status(200).json({ id: createdRoomId })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function updateRoom(req: Request, res: Response) {
+    const roomRepo = new RoomDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        const updatedRoom = await roomService.updateRoom(
+            roomRepo, 
+            id, 
+            req.body
+        )
+        res.status(200).json(updatedRoom)
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function deleteRoom(req: Request, res: Response) { 
+    const roomRepo = new RoomDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        await roomService.deleteRoom(
+            roomRepo, 
+            id
+        )
+        res.status(200).json({ message: "Room deleted successfully" })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
