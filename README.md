@@ -93,6 +93,15 @@ Start the backend and database services using docker-compose in detached mode
 ```shell
 docker-compose up -d
 ```
+
+### Rebuild the service
+Stop the service before rebuilding:
+
+```shell
+docker-compose down
+docker-compose build --no-cache
+```
+
 ### Verify the Service
 Check if the containers are running
 ```shell
@@ -109,8 +118,8 @@ docker-compose logs backend
 * Connect to the **NTU VPN**.
 * The service should be accessible via the PASLab server's internal IP address and the port mapped in your `docker-compose.yml` (e.g., `http://140.112.90.37:4000`). 
 * Please don't attack the server :broken_heart:
-### Stopping the Service
 
+### Stopping the Service
 To stop the running services
 
 ```shell
