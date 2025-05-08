@@ -1,12 +1,19 @@
 import { Request, Response } from "express"
 import { RackDrizzleRepository } from "../../../persistence/drizzle/rack.persistence"
 import * as rackService from "../../../application/services/rack.service"
+import { SortOrder } from "../../../types/common"
 
 export async function getRacks(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
+    const rackQueryParams: rackService.RackQueryParams = {
+        name: req.query.name as string,
+        tag: req.query.tag as string,
+        sortBy: req.query.sortBy as rackService.RackSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
-        const racks = await rackService.getRacks(rackRepo)
+        const racks = await rackService.getRacks(rackRepo, rackQueryParams)
         res.status(200).json(racks)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -16,10 +23,17 @@ export async function getRacks(req: Request, res: Response) {
 export async function getRackById(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
     const id = Number(req.params.id)
+    const rackQueryParams: rackService.RackQueryParams = {
+        name: req.query.name as string,
+        tag: req.query.tag as string,
+        sortBy: req.query.sortBy as rackService.RackSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
         const rack = await rackService.getRackById(
             rackRepo,
+            rackQueryParams,
             id
         )
         res.status(200).json(rack)

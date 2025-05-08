@@ -1,9 +1,23 @@
 import { IIPPool, IPPoolEntity } from "../../domain/ipPool"
 import { IIPPoolRepository } from "../../persistence/repositories/ipPool.repository"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
-import { NetUtils } from "../../domain/utils/net"
+import { SortOrder } from "../../types/common"
 
-export async function getIPPools(ipPoolRepo: IIPPoolRepository) {
+export type IPPoolSortBy = 
+    'name' | 'type' | 'cidr' | 'createdAt' | 'updatedAt'
+
+export interface IPPoolQueryParams {
+    name?: string
+    type?: string
+    cidr?: string
+    sortBy?: IPPoolSortBy
+    sortOrder?: SortOrder
+}
+
+export async function getIPPools(
+    ipPoolRepo: IIPPoolRepository,
+    ipPoolQueryParams: IPPoolQueryParams
+) {
     const ipPools = await ipPoolRepo.getIPPools()
     
     return ipPools
@@ -11,6 +25,7 @@ export async function getIPPools(ipPoolRepo: IIPPoolRepository) {
 
 export async function getIPPoolById(
     ipPoolRepo: IIPPoolRepository,
+    ipPoolQueryParams: IPPoolQueryParams,
     id: number
 ) {
     const ipPool = await ipPoolRepo.getIPPoolById(id)

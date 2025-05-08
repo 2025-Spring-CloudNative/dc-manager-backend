@@ -2,9 +2,22 @@ import { IDataCenter, DataCenterEntity } from "../../domain/dataCenter"
 import { SubnetEntity } from "../../domain/subnet"
 import { IDataCenterRepository } from "../../persistence/repositories/dataCenter.repository"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
+import { SortOrder } from "../../types/common"
 
-export async function getDataCenters(dataCenterRepo: IDataCenterRepository) {
-    const dataCenters = await dataCenterRepo.getDataCenters()
+export type DataCenterSortBy = 'name' | 'location'
+
+export interface DataCenterQueryParams {
+    name?: string
+    location?: string
+    sortBy?: DataCenterSortBy
+    sortOrder?: SortOrder
+}
+
+export async function getDataCenters(
+    dataCenterRepo: IDataCenterRepository, 
+    dataCenterQueryParams: DataCenterQueryParams
+) {
+    const dataCenters = await dataCenterRepo.getDataCenters(dataCenterQueryParams)
 
     return dataCenters
 }
@@ -17,9 +30,10 @@ export async function getDataCentersWithSubnet(dataCenterRepo: IDataCenterReposi
 
 export async function getDataCenterById(
     dataCenterRepo: IDataCenterRepository,
+    dataCenterQueryParams: DataCenterQueryParams,
     id: number
 ) {
-    const dataCenter = await dataCenterRepo.getDataCenterById(id)
+    const dataCenter = await dataCenterRepo.getDataCenterById(id, dataCenterQueryParams)
 
     return dataCenter
 }

@@ -2,13 +2,21 @@ import { Request, Response } from "express"
 import { DataCenterDrizzleRepository } from "../../../persistence/drizzle/dataCenter.persistence"
 import * as dataCenterService from "../../../application/services/dataCenter.service"
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
+import { SortOrder } from "../../../types/common"
 
 export async function getDataCenters(req: Request, res: Response) {
     const dataCenterRepo = new DataCenterDrizzleRepository()
+    const dataCenterQueryParams: dataCenterService.DataCenterQueryParams = {
+        name: req.query.name as string,
+        location: req.query.location as string,
+        sortBy: req.query.sortBy as dataCenterService.DataCenterSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
         const dataCenters = await dataCenterService.getDataCenters(
-            dataCenterRepo
+            dataCenterRepo,
+            dataCenterQueryParams
         )
         res.status(200).json(dataCenters)
     } catch (error: any) {
@@ -19,10 +27,17 @@ export async function getDataCenters(req: Request, res: Response) {
 export async function getDataCenterById(req: Request, res: Response) {
     const dataCenterRepo = new DataCenterDrizzleRepository()
     const id = Number(req.params.id)
+    const dataCenterQueryParams: dataCenterService.DataCenterQueryParams = {
+        name: req.query.name as string,
+        location: req.query.location as string,
+        sortBy: req.query.sortBy as dataCenterService.DataCenterSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
         const dataCenter = await dataCenterService.getDataCenterById(
             dataCenterRepo, 
+            dataCenterQueryParams,
             id
         )
         if (dataCenter) {

@@ -1,23 +1,77 @@
-import { eq } from "drizzle-orm"
+import { eq, ilike, desc, asc, and, SQL } from "drizzle-orm"
+import { PgColumn } from "drizzle-orm/pg-core"
 import { IRack } from "../../domain/rack"
 import { IRackRepository } from "../repositories/rack.repository"
 import { db } from "./index"
 import { rackTable } from "./schema/rack.schema"
+import { RackQueryParams } from "../../application/services/rack.service"
+
+function buildRackQueryFilters(queryParams?: RackQueryParams): SQL[] {
+    if (!queryParams) {
+        return []
+    }
+    const filters: SQL[] = []
+    if (!queryParams.name) {
+        filters.push(ilike(rackTable.name, `%${queryParams.name}%`))
+    }
+    if (!queryParams.tag) {
+        filters.push(ilike(rackTable.tag, `%${queryParams.tag}%`))
+    }
+    return filters
+}
+
+function buildRackQueryOrder(queryParams?: RackQueryParams): SQL[] {
+    if (!queryParams || !queryParams.sortBy) {
+        return []
+    }
+    let column: PgColumn
+    switch (queryParams.sortBy) {
+        case 'name':
+            column = rackTable.name
+            break
+        case 'tag':
+            column = rackTable.tag
+            break
+        case 'height':
+            column = rackTable.height
+            break
+        case 'createdAt':
+            column = rackTable.createdAt
+            break    
+        case 'updatedAt':
+            column = rackTable.updatedAt
+            break
+        default:
+            column = rackTable.id
+            break        
+    }
+    const orderFn = queryParams.sortOrder === 'desc' ? desc : asc
+    return [orderFn(column)]
+}
 
 export class RackDrizzleRepository implements IRackRepository {
-    async getRacks() {
+    async getRacks(rackQueryParams?: RackQueryParams) {
+        const filters = buildRackQueryFilters(rackQueryParams)
+        const order = buildRackQueryOrder(rackQueryParams)
+
         const racks = await db
             .select()
             .from(rackTable)
+            .where(filters.length ? and(...filters) : undefined)
+            .orderBy(...order)
 
         return racks
     }
 
-    async getRackById(id: number) {
+    async getRackById(id: number, rackQueryParams?: RackQueryParams) {
+        const filters = buildRackQueryFilters(rackQueryParams)
+        const order = buildRackQueryOrder(rackQueryParams)
+
         const [rack] = await db
             .select()
             .from(rackTable)
-            .where(eq(rackTable.id, id))
+            .where(filters.length ? and(...filters, eq(rackTable.id, id)) : eq(rackTable.id, id))
+            .orderBy(...order)
         
         return rack as IRack
     }

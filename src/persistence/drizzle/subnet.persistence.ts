@@ -1,23 +1,74 @@
-import { eq } from "drizzle-orm"
+import { eq, ilike, desc, asc, and, SQL } from "drizzle-orm"
+import { PgColumn } from "drizzle-orm/pg-core"
 import { ISubnet } from "../../domain/subnet"
 import { ISubnetRepository } from "../repositories/subnet.repository"
 import { db } from "./index"
 import { subnetTable } from "./schema/subnet.schema"
+import { SubnetQueryParams } from "../../application/services/subnet.service"
+
+function buildSubnetQueryFilters(queryParams?: SubnetQueryParams): SQL[] {
+    if (!queryParams) {
+        return []
+    }
+    const filters: SQL[] = []
+    if (queryParams.cidr) {
+        filters.push(ilike(subnetTable.cidr, `%${queryParams.cidr}%`))
+    }
+    if (queryParams.gateway) {
+        filters.push(ilike(subnetTable.gateway, `%${queryParams.gateway}%`))
+    }
+    if (queryParams.netmask) {
+        filters.push(ilike(subnetTable.netmask, `%${queryParams.netmask}%`))
+    }
+    return filters
+}
+
+function buildSubnetQueryOrder(queryParams?: SubnetQueryParams): SQL[] {
+    if (!queryParams || !queryParams.sortBy) {
+        return []
+    }
+    let column: PgColumn
+    switch(queryParams.sortBy) {
+        case 'cidr':
+            column = subnetTable.cidr
+            break
+        case 'createdAt':
+            column = subnetTable.createdAt
+            break
+        case 'updatedAt':
+            column = subnetTable.updatedAt
+            break
+        default:
+            column = subnetTable.id
+            break
+    }
+    const orderFn = queryParams.sortOrder === 'desc' ? desc : asc
+    return [orderFn(column)]
+}
 
 export class SubnetDrizzleRepository implements ISubnetRepository {
-    async getSubnets() {
+    async getSubnets(subnetQueryParams?: SubnetQueryParams) {
+        const filters = buildSubnetQueryFilters(subnetQueryParams)
+        const order = buildSubnetQueryOrder(subnetQueryParams)
+
         const subnets = await db
             .select()
             .from(subnetTable)
-        
+            .where(filters.length ? and(...filters) : undefined)
+            .orderBy(...order)
+
         return subnets
     }
 
-    async getSubnetById(id: number) {
+    async getSubnetById(id: number, subnetQueryParams?: SubnetQueryParams) {
+        const filters = buildSubnetQueryFilters(subnetQueryParams)
+        const order = buildSubnetQueryOrder(subnetQueryParams)
+
         const [subnet] = await db
             .select()
             .from(subnetTable)
-            .where(eq(subnetTable.id, id))
+            .where(filters.length ? and(...filters, eq(subnetTable.id, id)) : eq(subnetTable.id, id))
+            .orderBy(...order)
         
         return subnet as ISubnet
     }

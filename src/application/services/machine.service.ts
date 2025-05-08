@@ -1,11 +1,26 @@
-import { IMachine } from "../../domain/machine"
+import { IMachine, MachineStatus } from "../../domain/machine"
 import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
 import { IMachineRepository } from "../../persistence/repositories/machine.repository"
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
 import { IServiceRepository } from "../../persistence/repositories/service.repository"
+import { SortOrder } from "../../types/common"
 
-export async function getMachines(machineRepo: IMachineRepository) {
-    const machines = await machineRepo.getMachines()
+export type MachineSortBy = 
+    'name' | 'unit' | 'macAddress' | 'status' | 'createdAt'
+
+export interface MachineQueryParams {
+    name?: string
+    status?: MachineStatus
+    macAddress?: string
+    sortBy?: MachineSortBy
+    sortOrder?: SortOrder
+}
+
+export async function getMachines(
+    machineRepo: IMachineRepository,
+    machineQueryParams: MachineQueryParams
+) {
+    const machines = await machineRepo.getMachines(machineQueryParams)
 
     return machines
 }
@@ -18,9 +33,10 @@ export async function getMachinesWithIPAddress(machineRepo: IMachineRepository) 
 
 export async function getMachineById(
     machineRepo: IMachineRepository,
+    machineQueryParams: MachineQueryParams,
     id: number
 ) {
-    const machine = await machineRepo.getMachineById(id)
+    const machine = await machineRepo.getMachineById(id, machineQueryParams)
 
     return machine
 }

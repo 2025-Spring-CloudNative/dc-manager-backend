@@ -1,14 +1,32 @@
 import { ISubnet, SubnetEntity } from "../../domain/subnet"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
+import { SortOrder } from "../../types/common"
 
-export async function getSubnets(subnetRepo: ISubnetRepository) {
-    const subnets = await subnetRepo.getSubnets()
+export type SubnetSortBy = 'cidr' | 'createdAt' | 'updatedAt'
+
+export interface SubnetQueryParams {
+    cidr?: string
+    netmask?: string
+    gateway?: string
+    sortBy?: SubnetSortBy
+    sortOrder?: SortOrder
+}
+
+export async function getSubnets(
+    subnetRepo: ISubnetRepository,
+    subnetQueryParams: SubnetQueryParams
+) {
+    const subnets = await subnetRepo.getSubnets(subnetQueryParams)
 
     return subnets
 }
 
-export async function getSubnetById(subnetRepo: ISubnetRepository, id: number) {
-    const subnet = await subnetRepo.getSubnetById(id)
+export async function getSubnetById(
+    subnetRepo: ISubnetRepository,
+    subnetQueryParams: SubnetQueryParams,
+    id: number
+) {
+    const subnet = await subnetRepo.getSubnetById(id, subnetQueryParams)
 
     return subnet
 }

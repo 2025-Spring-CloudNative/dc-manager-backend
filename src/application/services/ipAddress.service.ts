@@ -1,17 +1,32 @@
-import { IIPAddress } from "../../domain/ipAddress"
+import { IIPAddress, IPAddressStatus } from "../../domain/ipAddress"
 import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
+import { SortOrder } from "../../types/common"
 
-export async function getIPAddresses(ipAddressRepo: IIPAddressRepository) {
-    const ipAddresses = await ipAddressRepo.getIPAddresses()
+export type IPAddressSortBy = 
+    'address' | 'status' | 'createdAt' | 'updatedAt' | 'allocatedAt' | 'releasedAt'
+
+export interface IPAddressQueryParams {
+    address?: string,
+    status?: IPAddressStatus,
+    sortBy?: IPAddressSortBy,
+    sortOrder?: SortOrder
+}
+
+export async function getIPAddresses(
+    ipAddressRepo: IIPAddressRepository,
+    ipAddressQueryParams: IPAddressQueryParams
+) {
+    const ipAddresses = await ipAddressRepo.getIPAddresses(ipAddressQueryParams)
 
     return ipAddresses
 }
 
 export async function getIPAddressById(
     ipAddressRepo: IIPAddressRepository,
+    ipAddressQueryParams: IPAddressQueryParams,
     id: number
 ) {
-    const ipAddress = await ipAddressRepo.getIPAddressById(id)
+    const ipAddress = await ipAddressRepo.getIPAddressById(id, ipAddressQueryParams)
 
     return ipAddress
 }

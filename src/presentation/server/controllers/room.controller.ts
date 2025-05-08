@@ -1,12 +1,18 @@
 import { Request, Response } from "express"
 import { RoomDrizzleRepository } from "../../../persistence/drizzle/room.persistence"
 import * as roomService from "../../../application/services/room.service"
+import { SortOrder } from "../../../types/common"
 
 export async function getRooms(req: Request, res: Response) {
     const roomRepo = new RoomDrizzleRepository()
+    const roomQueryParams : roomService.RoomQueryParams = {
+        name: req.query.name as string,
+        sortBy: req.query.sortBy as roomService.RoomSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
-        const rooms = await roomService.getRooms(roomRepo)
+        const rooms = await roomService.getRooms(roomRepo, roomQueryParams)
         res.status(200).json(rooms)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -16,10 +22,16 @@ export async function getRooms(req: Request, res: Response) {
 export async function getRoomById(req: Request, res: Response) {
     const roomRepo = new RoomDrizzleRepository()
     const id = Number(req.params.id)
+    const roomQueryParams : roomService.RoomQueryParams = {
+        name: req.query.name as string,
+        sortBy: req.query.sortBy as roomService.RoomSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
         const room = await roomService.getRoomById(
             roomRepo, 
+            roomQueryParams,
             id
         )
         res.status(200).json(room)

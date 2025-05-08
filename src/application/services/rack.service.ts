@@ -1,17 +1,32 @@
 import { IRack, RackEntity } from "../../domain/rack"
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
+import { SortOrder } from "../../types/common"
 
-export async function getRacks(rackRepo: IRackRepository) {
-    const racks = await rackRepo.getRacks()
+export type RackSortBy = 
+    'name' | 'tag' | 'height' | 'createdAt' | 'updatedAt'
+
+export interface RackQueryParams {
+    name?: string
+    tag?: string
+    sortBy?: RackSortBy
+    sortOrder?: SortOrder
+}
+
+export async function getRacks(
+    rackRepo: IRackRepository,
+    rackQueryParams: RackQueryParams
+) {
+    const racks = await rackRepo.getRacks(rackQueryParams)
     
     return racks
 }
 
 export async function getRackById(
     rackRepo: IRackRepository,
+    rackQueryParams: RackQueryParams,
     id: number
 ) {
-    const rack = await rackRepo.getRackById(id)
+    const rack = await rackRepo.getRackById(id, rackQueryParams)
 
     return rack
 }

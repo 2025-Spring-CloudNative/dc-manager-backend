@@ -8,18 +8,31 @@ import { NetUtils } from "../../domain/utils/net"
 import { IPAddressEntity, IPAddressStatus } from "../../domain/ipAddress"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
+import { SortOrder } from "../../types/common"
 
-export async function getServices(serviceRepo: IServiceRepository) {
-    const services = await serviceRepo.getServices()
+export type ServiceSortBy = 'name'
+
+export interface ServiceQueryParams {
+    name?: string
+    sortBy?: ServiceSortBy
+    sortOrder?: SortOrder
+}
+
+export async function getServices(
+    serviceRepo: IServiceRepository,
+    serviceQueryParams: ServiceQueryParams
+) {
+    const services = await serviceRepo.getServices(serviceQueryParams)
 
     return services
 }
 
 export async function getServiceById(
     serviceRepo: IServiceRepository,
+    serviceQueryParams: ServiceQueryParams,
     id: number
 ) {
-    const service = await serviceRepo.getServiceById(id)
+    const service = await serviceRepo.getServiceById(id, serviceQueryParams)
 
     return service
 }

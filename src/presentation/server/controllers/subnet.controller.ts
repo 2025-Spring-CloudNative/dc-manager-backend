@@ -1,12 +1,20 @@
 import { Request, Response } from "express"
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
 import * as subnetService from "../../../application/services/subnet.service"
+import { SortOrder } from "../../../types/common"
 
 export async function getSubnets(req: Request, res: Response) {
     const subnetRepo =  new SubnetDrizzleRepository()
+    const subnetQueryParams: subnetService.SubnetQueryParams = {
+        cidr: req.query.cidr as string,
+        netmask: req.query.netmask as string,
+        gateway: req.query.gateway as string,
+        sortBy: req.query.sortBy as subnetService.SubnetSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
-        const subnets = await subnetService.getSubnets(subnetRepo)
+        const subnets = await subnetService.getSubnets(subnetRepo, subnetQueryParams)
         res.status(200).json(subnets)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -16,9 +24,18 @@ export async function getSubnets(req: Request, res: Response) {
 export async function getSubnetById(req: Request, res: Response) {
     const subnetRepo = new SubnetDrizzleRepository();
     const id = Number(req.params.id)
+    const subnetQueryParams: subnetService.SubnetQueryParams = {
+        cidr: req.query.cidr as string,
+        netmask: req.query.netmask as string,
+        gateway: req.query.gateway as string,
+        sortBy: req.query.sortBy as subnetService.SubnetSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
+
     try {
         const subnet = await subnetService.getSubnetById(
             subnetRepo,
+            subnetQueryParams,
             id
         );
         if (subnet) {
