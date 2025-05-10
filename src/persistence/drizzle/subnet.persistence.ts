@@ -60,7 +60,7 @@ export class SubnetDrizzleRepository implements ISubnetRepository {
         return subnets
     }
 
-    async getSubnetById(id: number, subnetQueryParams?: SubnetQueryParams) {
+    async getSubnetById(id: number) {
         const [subnet] = await db
             .select()
             .from(subnetTable)
