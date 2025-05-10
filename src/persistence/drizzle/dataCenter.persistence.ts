@@ -1,15 +1,46 @@
-import { eq } from "drizzle-orm"
+import { eq, ilike, asc, desc, and, SQL } from "drizzle-orm"
 import { IDataCenter } from "../../domain/dataCenter"
 import { IDataCenterRepository } from "../repositories/dataCenter.repository"
 import { db } from "./index"
 import { dataCenterTable } from "./schema/dataCenter.schema"
+import { DataCenterQueryParams } from "../../application/services/dataCenter.service"
+
+function buildDataCenterQueryFilters(queryParams?: DataCenterQueryParams): SQL[] {
+    if (!queryParams) {
+        return []
+    }
+    const filters: SQL[] = []
+    if (queryParams.name) {
+        filters.push(ilike(dataCenterTable.name, `%${queryParams.name}%`))
+    }
+    if (queryParams.location) {
+        filters.push(ilike(dataCenterTable.location, `%${queryParams.location}%`))
+    }
+    return filters;
+}
+
+function buildDataCenterQueryOrder(queryParams?: DataCenterQueryParams): SQL[] {
+    if (!queryParams || !queryParams.sortBy) {
+        return []
+    }
+    const column = queryParams.sortBy === 'name' ? dataCenterTable.name
+        : queryParams.sortBy === 'location' ? dataCenterTable.location
+        : dataCenterTable.id
+    const orderFn = queryParams.sortOrder === 'desc' ? desc : asc
+    return [orderFn(column)]
+}
 
 export class DataCenterDrizzleRepository implements IDataCenterRepository {
-    async getDataCenters() {
+    async getDataCenters(dataCenterQueryParams?: DataCenterQueryParams) {       
+        const filters = buildDataCenterQueryFilters(dataCenterQueryParams)
+        const order = buildDataCenterQueryOrder(dataCenterQueryParams)
+        
         const dataCenters = await db
             .select()
             .from(dataCenterTable)
-
+            .where(filters.length ? and(...filters) : undefined)    
+            .orderBy(...order)
+        
         return dataCenters
     }
 
@@ -27,7 +58,7 @@ export class DataCenterDrizzleRepository implements IDataCenterRepository {
             .select()
             .from(dataCenterTable)
             .where(eq(dataCenterTable.id, id))
-    
+
         return dataCenter as IDataCenter
     }
 

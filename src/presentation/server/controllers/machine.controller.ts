@@ -4,12 +4,21 @@ import * as machineService from "../../../application/services/machine.service"
 import { IPAddressDrizzleRepository } from "../../../persistence/drizzle/ipAddress.persistence"
 import { RackDrizzleRepository } from "../../../persistence/drizzle/rack.persistence"
 import { ServiceDrizzleRepository } from "../../../persistence/drizzle/service.persistence"
+import { MachineStatus } from "../../../domain/machine"
+import { SortOrder } from "../../../types/common"
 
 export async function getMachines(req: Request, res: Response) {
     const machineRepo = new MachineDrizzleRepository()
+    const machineQueryParams: machineService.MachineQueryParams = {
+        name: req.query.name as string,
+        status: req.query.status as MachineStatus,
+        macAddress: req.query.macAddress as string,
+        sortBy: req.query.sortBy as machineService.MachineSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
-        const machines = await machineService.getMachines(machineRepo)
+        const machines = await machineService.getMachines(machineRepo, machineQueryParams)
         res.status(200).json(machines)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -21,10 +30,7 @@ export async function getMachineById(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        const machine = await machineService.getMachineById(
-            machineRepo,
-            id
-        )
+        const machine = await machineService.getMachineById(machineRepo, id)
         res.status(200).json(machine)
     } catch (error: any) {
         res.status(500).json({ message: error.message })

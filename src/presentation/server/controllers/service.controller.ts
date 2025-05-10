@@ -5,13 +5,19 @@ import { IPAddressDrizzleRepository } from "../../../persistence/drizzle/ipAddre
 import { IPPoolDrizzleRepository } from "../../../persistence/drizzle/ipPool.persistence"
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
 import { RackDrizzleRepository } from '../../../persistence/drizzle/rack.persistence'
+import { SortOrder } from '../../../types/common'
 
 
 export async function getServices(req: Request, res: Response) {
     const serviceRepo = new ServiceDrizzleRepository()
+    const serviceQueryParams: serviceService.ServiceQueryParams = {
+        name: req.query.name as string,
+        sortBy: req.query.sortBy as serviceService.ServiceSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
-        const services = await serviceService.getServices(serviceRepo)
+        const services = await serviceService.getServices(serviceRepo, serviceQueryParams)
         res.status(200).json(services)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -21,11 +27,9 @@ export async function getServices(req: Request, res: Response) {
 export async function getServiceById(req: Request, res: Response) {
     const serviceRepo = new ServiceDrizzleRepository()
     const id = Number(req.params.id)
+
     try {
-        const service = await serviceService.getServiceById(
-            serviceRepo,
-            id
-        )
+        const service = await serviceService.getServiceById(serviceRepo, id)
         res.status(200).json(service)
     } catch (error: any) {
         res.status(500).json({ message: error.message })

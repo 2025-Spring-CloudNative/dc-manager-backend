@@ -1,14 +1,40 @@
-import { eq } from "drizzle-orm"
+import { eq, ilike, desc, asc, and, SQL } from "drizzle-orm"
 import { IService } from "../../domain/service"
 import { IServiceRepository } from "../repositories/service.repository"
 import { db } from "./index"
 import { serviceTable } from "./schema/service.schema"
+import { ServiceQueryParams } from "../../application/services/service.service"
+
+function buildServiceQueryFilters(queryParams?: ServiceQueryParams): SQL[] {
+    if (!queryParams) {
+        return []
+    }
+    const filters: SQL[] = []
+    if (queryParams.name) {
+        filters.push(ilike(serviceTable.name, `%${queryParams.name}%`))
+    }
+    return filters
+}
+
+function buildServiceQueryOrder(queryParams?: ServiceQueryParams): SQL[] {
+    if (!queryParams || !queryParams.sortBy) {
+        return []
+    }
+    const column = queryParams.sortBy === 'name' ? serviceTable.name : serviceTable.id
+    const orderFn = queryParams.sortOrder === 'desc' ? desc : asc
+    return [orderFn(column)]
+}
 
 export class ServiceDrizzleRepository implements IServiceRepository {
-    async getServices() {
+    async getServices(serviceQueryParams?: ServiceQueryParams) {
+        const filters = buildServiceQueryFilters(serviceQueryParams)
+        const order = buildServiceQueryOrder(serviceQueryParams)
+
         const services = await db
             .select()
             .from(serviceTable)
+            .where(filters.length ? and(...filters) : undefined)
+            .orderBy(...order)
 
         return services
     }

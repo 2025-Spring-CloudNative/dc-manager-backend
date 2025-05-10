@@ -1,7 +1,8 @@
 import { ISubnet } from "../../domain/subnet"
+import { SubnetQueryParams } from "../../application/services/subnet.service"
 
 export interface ISubnetRepository {
-    getSubnets(): Promise<ISubnet[]>
+    getSubnets(subnetQueryParams?: SubnetQueryParams): Promise<ISubnet[]>
     getSubnetById(id: number): Promise<ISubnet>
     getSubnetIdByCidr(cidr: string): Promise<number>
     createSubnet(subnet: ISubnet): Promise<number>

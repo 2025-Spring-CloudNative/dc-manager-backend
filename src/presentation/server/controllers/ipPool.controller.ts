@@ -2,12 +2,20 @@ import { Request, Response } from "express"
 import { IPPoolDrizzleRepository } from "../../../persistence/drizzle/ipPool.persistence"
 import * as ipPoolService from "../../../application/services/ipPool.service"
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
+import { SortOrder } from "../../../types/common"
 
 export async function getIPPools(req: Request, res: Response) {
     const ipPoolRepo = new IPPoolDrizzleRepository()
+    const ipPoolQueryParams : ipPoolService.IPPoolQueryParams = {
+        name: req.query.name as string,
+        type: req.query.type as string,
+        cidr: req.query.cidr as string,
+        sortBy: req.query.sortBy as ipPoolService.IPPoolSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
-        const ipPools = await ipPoolService.getIPPools(ipPoolRepo)
+        const ipPools = await ipPoolService.getIPPools(ipPoolRepo, ipPoolQueryParams)
         res.status(200).json(ipPools)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -19,10 +27,7 @@ export async function getIPPoolById(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        const ipPool = await ipPoolService.getIPPoolById(
-            ipPoolRepo,
-            id
-        )
+        const ipPool = await ipPoolService.getIPPoolById(ipPoolRepo, id)
         res.status(200).json(ipPool)
     } catch (error: any) {
         res.status(500).json({ message: error.message })

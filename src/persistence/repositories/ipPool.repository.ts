@@ -1,7 +1,8 @@
 import { IIPPool } from "../../domain/ipPool"
+import { IPPoolQueryParams } from "../../application/services/ipPool.service"
 
 export interface IIPPoolRepository {
-    getIPPools(): Promise<IIPPool[]>
+    getIPPools(ipPoolQueryParams?: IPPoolQueryParams): Promise<IIPPool[]>
     getAllIPPoolCIDRs(): Promise<string[]>
     getOtherIPPoolCIDRs(id: number): Promise<string[]>
     getIPPoolById(id: number): Promise<IIPPool>
