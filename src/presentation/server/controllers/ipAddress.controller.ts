@@ -23,18 +23,8 @@ export async function getIPAddresses(req: Request, res: Response) {
 export async function getIPAddressById(req: Request, res: Response) {
     const ipAddressRepo = new IPAddressDrizzleRepository()
     const id = Number(req.params.id)
-    const ipAddressQueryParams: ipAddressService.IPAddressQueryParams = {
-        address: req.query.address as string,
-        status: req.query.status as IPAddressStatus,
-        sortBy: req.query.sortBy as ipAddressService.IPAddressSortBy,
-        sortOrder: req.query.sortOrder as SortOrder
-    }
     try {
-        const ipAddress = await ipAddressService.getIPAddressById(
-            ipAddressRepo,
-            ipAddressQueryParams,
-            id
-        )
+        const ipAddress = await ipAddressService.getIPAddressById(ipAddressRepo, id)
         res.status(200).json(ipAddress)
     } catch (error: any) {
         res.status(500).json({ message: error.message })

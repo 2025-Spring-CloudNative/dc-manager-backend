@@ -23,10 +23,9 @@ export async function getIPAddresses(
 
 export async function getIPAddressById(
     ipAddressRepo: IIPAddressRepository,
-    ipAddressQueryParams: IPAddressQueryParams,
     id: number
 ) {
-    const ipAddress = await ipAddressRepo.getIPAddressById(id, ipAddressQueryParams)
+    const ipAddress = await ipAddressRepo.getIPAddressById(id)
 
     return ipAddress
 }

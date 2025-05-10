@@ -83,15 +83,11 @@ export class IPPoolDrizzleRepository implements IIPPoolRepository {
         return ipPoolCidrs.map(pool => pool.cidr)
     }
 
-    async getIPPoolById(id: number, ipPoolQueryParams?: IPPoolQueryParams) {
-        const filters = buildIPPoolQueryFilters(ipPoolQueryParams)
-        const order = buildIPPoolQueryOrder(ipPoolQueryParams)
-
+    async getIPPoolById(id: number) {
         const [ipPool] = await db
             .select()
             .from(ipPoolTable)
-            .where(filters.length ? and(...filters, eq(ipPoolTable.id, id)) : eq(ipPoolTable.id, id))
-            .orderBy(...order)
+            .where(eq(ipPoolTable.id, id))
         
         return ipPool as IIPPool
     }

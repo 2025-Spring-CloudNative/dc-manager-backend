@@ -18,14 +18,13 @@ export async function getIPPools(
     ipPoolRepo: IIPPoolRepository,
     ipPoolQueryParams: IPPoolQueryParams
 ) {
-    const ipPools = await ipPoolRepo.getIPPools()
+    const ipPools = await ipPoolRepo.getIPPools(ipPoolQueryParams)
     
     return ipPools
 }
 
 export async function getIPPoolById(
     ipPoolRepo: IIPPoolRepository,
-    ipPoolQueryParams: IPPoolQueryParams,
     id: number
 ) {
     const ipPool = await ipPoolRepo.getIPPoolById(id)

@@ -33,19 +33,15 @@ export async function getSubnetById(req: Request, res: Response) {
     }
 
     try {
-        const subnet = await subnetService.getSubnetById(
-            subnetRepo,
-            subnetQueryParams,
-            id
-        );
+        const subnet = await subnetService.getSubnetById(subnetRepo, id)
         if (subnet) {
-            res.status(200).json(subnet);
+            res.status(200).json(subnet)
         } else {
-            res.status(404).json({ message: "Subnet not found" });
+            res.status(404).json({ message: "Subnet not found" })
         }
         
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message })
     }
 }
 

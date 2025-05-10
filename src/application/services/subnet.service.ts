@@ -23,10 +23,9 @@ export async function getSubnets(
 
 export async function getSubnetById(
     subnetRepo: ISubnetRepository,
-    subnetQueryParams: SubnetQueryParams,
     id: number
 ) {
-    const subnet = await subnetRepo.getSubnetById(id, subnetQueryParams)
+    const subnet = await subnetRepo.getSubnetById(id)
 
     return subnet
 }

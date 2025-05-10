@@ -28,20 +28,9 @@ export async function getMachines(req: Request, res: Response) {
 export async function getMachineById(req: Request, res: Response) {
     const machineRepo = new MachineDrizzleRepository()
     const id = Number(req.params.id)
-    const machineQueryParams: machineService.MachineQueryParams = {
-        name: req.query.name as string,
-        status: req.query.status as MachineStatus,
-        macAddress: req.query.macAddress as string,
-        sortBy: req.query.sortBy as machineService.MachineSortBy,
-        sortOrder: req.query.sortOrder as SortOrder
-    }
 
     try {
-        const machine = await machineService.getMachineById(
-            machineRepo,
-            machineQueryParams,
-            id
-        )
+        const machine = await machineService.getMachineById(machineRepo, id)
         res.status(200).json(machine)
     } catch (error: any) {
         res.status(500).json({ message: error.message })

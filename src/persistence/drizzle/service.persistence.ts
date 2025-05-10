@@ -39,15 +39,11 @@ export class ServiceDrizzleRepository implements IServiceRepository {
         return services
     }
 
-    async getServiceById(id: number, serviceQueryParams?: ServiceQueryParams) {
-        const filters = buildServiceQueryFilters(serviceQueryParams)
-        const order = buildServiceQueryOrder(serviceQueryParams)
-
+    async getServiceById(id: number) {
         const [service] = await db
             .select()
             .from(serviceTable)
-            .where(filters.length ? and(...filters, eq(serviceTable.id, id)) : eq(serviceTable.id, id))
-            .orderBy(...order)
+            .where(eq(serviceTable.id, id))
         
         return service as IService
     }

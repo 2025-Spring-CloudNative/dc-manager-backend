@@ -76,15 +76,11 @@ export class MachineDrizzleRepository implements IMachineRepository {
         return machinesWithIPAddress
     }
 
-    async getMachineById(id: number, machineQueryParams?: MachineQueryParams) {
-        const filters = buildMachineQueryFilters(machineQueryParams)
-        const order = buildMachineQueryOrder(machineQueryParams)
-
+    async getMachineById(id: number) {
         const [machine] = await db
             .select()
             .from(machineTable)
-            .where(filters.length ? and(...filters, eq(machineTable.id, id)) : eq(machineTable.id, id))
-            .orderBy(...order)
+            .where(eq(machineTable.id, id))
         
         return machine as IMachine
     }

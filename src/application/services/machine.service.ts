@@ -33,10 +33,9 @@ export async function getMachinesWithIPAddress(machineRepo: IMachineRepository) 
 
 export async function getMachineById(
     machineRepo: IMachineRepository,
-    machineQueryParams: MachineQueryParams,
     id: number
 ) {
-    const machine = await machineRepo.getMachineById(id, machineQueryParams)
+    const machine = await machineRepo.getMachineById(id)
 
     return machine
 }

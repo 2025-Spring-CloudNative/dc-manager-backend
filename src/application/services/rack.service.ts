@@ -23,10 +23,9 @@ export async function getRacks(
 
 export async function getRackById(
     rackRepo: IRackRepository,
-    rackQueryParams: RackQueryParams,
     id: number
 ) {
-    const rack = await rackRepo.getRackById(id, rackQueryParams)
+    const rack = await rackRepo.getRackById(id)
 
     return rack
 }

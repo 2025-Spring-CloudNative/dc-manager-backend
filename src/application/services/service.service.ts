@@ -29,10 +29,9 @@ export async function getServices(
 
 export async function getServiceById(
     serviceRepo: IServiceRepository,
-    serviceQueryParams: ServiceQueryParams,
     id: number
 ) {
-    const service = await serviceRepo.getServiceById(id, serviceQueryParams)
+    const service = await serviceRepo.getServiceById(id)
 
     return service
 }

@@ -25,20 +25,9 @@ export async function getIPPools(req: Request, res: Response) {
 export async function getIPPoolById(req: Request, res: Response) {
     const ipPoolRepo = new IPPoolDrizzleRepository()
     const id = Number(req.params.id)
-    const ipPoolQueryParams : ipPoolService.IPPoolQueryParams = {
-        name: req.query.name as string,
-        type: req.query.type as string,
-        cidr: req.query.cidr as string,
-        sortBy: req.query.sortBy as ipPoolService.IPPoolSortBy,
-        sortOrder: req.query.sortOrder as SortOrder
-    }
 
     try {
-        const ipPool = await ipPoolService.getIPPoolById(
-            ipPoolRepo,
-            ipPoolQueryParams,
-            id
-        )
+        const ipPool = await ipPoolService.getIPPoolById(ipPoolRepo, id)
         res.status(200).json(ipPool)
     } catch (error: any) {
         res.status(500).json({ message: error.message })

@@ -27,19 +27,9 @@ export async function getDataCenters(req: Request, res: Response) {
 export async function getDataCenterById(req: Request, res: Response) {
     const dataCenterRepo = new DataCenterDrizzleRepository()
     const id = Number(req.params.id)
-    const dataCenterQueryParams: dataCenterService.DataCenterQueryParams = {
-        name: req.query.name as string,
-        location: req.query.location as string,
-        sortBy: req.query.sortBy as dataCenterService.DataCenterSortBy,
-        sortOrder: req.query.sortOrder as SortOrder
-    }
 
     try {
-        const dataCenter = await dataCenterService.getDataCenterById(
-            dataCenterRepo, 
-            dataCenterQueryParams,
-            id
-        )
+        const dataCenter = await dataCenterService.getDataCenterById(dataCenterRepo, id)
         if (dataCenter) {
             res.status(200).json(dataCenter)
         } else {

@@ -53,15 +53,11 @@ export class DataCenterDrizzleRepository implements IDataCenterRepository {
         return dataCentersWithSubnet
     }
 
-    async getDataCenterById(id: number, dataCenterQueryParams?: DataCenterQueryParams) {
-        const filters = buildDataCenterQueryFilters(dataCenterQueryParams)
-        const order = buildDataCenterQueryOrder(dataCenterQueryParams)
-
+    async getDataCenterById(id: number) {
         const [dataCenter] = await db
             .select()
             .from(dataCenterTable)
-            .where(filters.length ? and(...filters, eq(dataCenterTable.id, id)) : eq(dataCenterTable.id, id))
-            .orderBy(...order)
+            .where(eq(dataCenterTable.id, id))
 
         return dataCenter as IDataCenter
     }

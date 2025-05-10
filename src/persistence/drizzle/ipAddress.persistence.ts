@@ -66,15 +66,11 @@ export class IPAddressDrizzleRepository implements IIPAddressRepository {
         return ipAddresses
     }
 
-    async getIPAddressById(id: number, ipAddressQueryParams?: IPAddressQueryParams) {
-        const filters = buildIPAddressQueryFilters(ipAddressQueryParams)
-        const order = buildIPAddressQueryOrder(ipAddressQueryParams)
-
+    async getIPAddressById(id: number) {
         const [ipAddress] = await db
             .select()
             .from(ipAddressTable)
-            .where(filters.length ? and(...filters, eq(ipAddressTable.id, id)) : eq(ipAddressTable.id, id))
-            .orderBy(...order)
+            .where(eq(ipAddressTable.id, id))
             
         return ipAddress as IIPAddress
     }

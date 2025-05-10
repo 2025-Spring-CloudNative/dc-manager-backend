@@ -22,10 +22,9 @@ export async function getRooms(
 
 export async function getRoomById(
     roomRepo: IRoomRepository,
-    roomQueryParams: RoomQueryParams,
     id: number
 ) {
-    const room = await roomRepo.getRoomById(id, roomQueryParams)
+    const room = await roomRepo.getRoomById(id)
 
     return room
 }

@@ -30,10 +30,9 @@ export async function getDataCentersWithSubnet(dataCenterRepo: IDataCenterReposi
 
 export async function getDataCenterById(
     dataCenterRepo: IDataCenterRepository,
-    dataCenterQueryParams: DataCenterQueryParams,
     id: number
 ) {
-    const dataCenter = await dataCenterRepo.getDataCenterById(id, dataCenterQueryParams)
+    const dataCenter = await dataCenterRepo.getDataCenterById(id)
 
     return dataCenter
 }

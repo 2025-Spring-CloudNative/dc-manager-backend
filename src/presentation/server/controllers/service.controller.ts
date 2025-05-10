@@ -27,18 +27,9 @@ export async function getServices(req: Request, res: Response) {
 export async function getServiceById(req: Request, res: Response) {
     const serviceRepo = new ServiceDrizzleRepository()
     const id = Number(req.params.id)
-    const serviceQueryParams: serviceService.ServiceQueryParams = {
-        name: req.query.name as string,
-        sortBy: req.query.sortBy as serviceService.ServiceSortBy,
-        sortOrder: req.query.sortOrder as SortOrder
-    }
 
     try {
-        const service = await serviceService.getServiceById(
-            serviceRepo,
-            serviceQueryParams,
-            id
-        )
+        const service = await serviceService.getServiceById(serviceRepo, id)
         res.status(200).json(service)
     } catch (error: any) {
         res.status(500).json({ message: error.message })

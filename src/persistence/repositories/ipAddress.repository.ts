@@ -3,7 +3,7 @@ import { IPAddressQueryParams } from "../../application/services/ipAddress.servi
 
 export interface IIPAddressRepository {
     getIPAddresses(ipAddressQueryParams?: IPAddressQueryParams): Promise<IIPAddress[]>
-    getIPAddressById(id: number, ipAddressQueryParams?: IPAddressQueryParams): Promise<IIPAddress>
+    getIPAddressById(id: number): Promise<IIPAddress>
     getIPAddressByMachineId(machineId: number): Promise<IIPAddress>
     getIPAddressesByPoolId(poolId: number): Promise<IIPAddress[]>
     createIPAddress(ipAddress: IIPAddress): Promise<number>

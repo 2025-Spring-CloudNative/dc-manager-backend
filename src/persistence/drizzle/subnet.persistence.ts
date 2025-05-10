@@ -61,14 +61,10 @@ export class SubnetDrizzleRepository implements ISubnetRepository {
     }
 
     async getSubnetById(id: number, subnetQueryParams?: SubnetQueryParams) {
-        const filters = buildSubnetQueryFilters(subnetQueryParams)
-        const order = buildSubnetQueryOrder(subnetQueryParams)
-
         const [subnet] = await db
             .select()
             .from(subnetTable)
-            .where(filters.length ? and(...filters, eq(subnetTable.id, id)) : eq(subnetTable.id, id))
-            .orderBy(...order)
+            .where(eq(subnetTable.id, id))
         
         return subnet as ISubnet
     }

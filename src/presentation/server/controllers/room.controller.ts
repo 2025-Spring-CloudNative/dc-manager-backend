@@ -22,18 +22,9 @@ export async function getRooms(req: Request, res: Response) {
 export async function getRoomById(req: Request, res: Response) {
     const roomRepo = new RoomDrizzleRepository()
     const id = Number(req.params.id)
-    const roomQueryParams : roomService.RoomQueryParams = {
-        name: req.query.name as string,
-        sortBy: req.query.sortBy as roomService.RoomSortBy,
-        sortOrder: req.query.sortOrder as SortOrder
-    }
 
     try {
-        const room = await roomService.getRoomById(
-            roomRepo, 
-            roomQueryParams,
-            id
-        )
+        const room = await roomService.getRoomById(roomRepo, id)
         res.status(200).json(room)
     } catch (error: any) {
         res.status(500).json({ message: error.message })

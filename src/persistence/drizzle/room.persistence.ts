@@ -41,15 +41,11 @@ export class RoomDrizzleRepository implements IRoomRepository {
         return rooms
     }
 
-    async getRoomById(id: number, roomQueryParams: RoomQueryParams) {
-        const filters = buildRoomQueryFilters(roomQueryParams)
-        const order = buildRoomQueryOrder(roomQueryParams)
-
+    async getRoomById(id: number) {
         const [room] = await db
             .select()
             .from(roomTable)
-            .where(filters.length ? and(...filters, eq(roomTable.id, id)) : eq(roomTable.id, id))
-            .orderBy(...order)
+            .where(eq(roomTable.id, id))
         
         return room as IRoom
     }

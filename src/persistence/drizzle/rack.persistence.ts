@@ -63,15 +63,11 @@ export class RackDrizzleRepository implements IRackRepository {
         return racks
     }
 
-    async getRackById(id: number, rackQueryParams?: RackQueryParams) {
-        const filters = buildRackQueryFilters(rackQueryParams)
-        const order = buildRackQueryOrder(rackQueryParams)
-
+    async getRackById(id: number) {
         const [rack] = await db
             .select()
             .from(rackTable)
-            .where(filters.length ? and(...filters, eq(rackTable.id, id)) : eq(rackTable.id, id))
-            .orderBy(...order)
+            .where(eq(rackTable.id, id))
         
         return rack as IRack
     }
