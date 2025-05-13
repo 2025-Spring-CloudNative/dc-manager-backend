@@ -1,5 +1,5 @@
 {
-  "id": "ce15e92b-6112-4cf4-8aa8-9bfc4e012b59",
+  "id": "9232dd6c-8c5e-4343-8bbc-9b0c49c4af1e",
   "prevId": "2a6d6b5d-4646-4bfd-9f50-8a3c53d64127",
   "version": "7",
   "dialect": "postgresql",
@@ -404,8 +404,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "token_hash": {
-          "name": "token_hash",
+        "token": {
+          "name": "token",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -424,7 +424,23 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "token_idx": {
+          "name": "token_idx",
+          "columns": [
+            {
+              "expression": "token",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "refresh_token_userId_user_id_fk": {
           "name": "refresh_token_userId_user_id_fk",
