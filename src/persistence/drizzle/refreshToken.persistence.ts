@@ -13,11 +13,11 @@ export class RefreshTokenDrizzleRepository implements IRefreshTokenRepository {
         return refreshTokens
     }
 
-    async getRefreshTokenById(id: number) {
+    async getRefreshTokenByToken(token: string) {
         const [refreshToken] = await db
             .select()
             .from(refreshTokenTable)
-            .where(eq(refreshTokenTable.id, id))
+            .where(eq(refreshTokenTable.token, token))
 
         return refreshToken as IRefreshToken
     }
@@ -31,19 +31,20 @@ export class RefreshTokenDrizzleRepository implements IRefreshTokenRepository {
         return createdRefreshToken?.id as number
     }
 
-    async updateRefreshToken(id: number, refreshToken: Partial<IRefreshToken>) {
+    async updateRefreshToken(token: string, refreshToken: Partial<IRefreshToken>) {
         const [updatedRefreshToken] = await db
             .update(refreshTokenTable)
             .set(refreshToken)
+            .where(eq(refreshTokenTable.token, token))
             .returning()
 
         return updatedRefreshToken as IRefreshToken
     }
 
-    async deleteRefreshToken(id: number) {
+    async deleteRefreshToken(token: string) {
         const [deletedRefreshToken] = await db
             .delete(refreshTokenTable)
-            .where(eq(refreshTokenTable.id, id))
+            .where(eq(refreshTokenTable.token, token))
             .returning({ id: refreshTokenTable.id })
 
         return deletedRefreshToken?.id as number
