@@ -82,5 +82,4 @@ export class NetUtils {
         }
         return false
     }
-    
 }
