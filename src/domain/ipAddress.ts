@@ -1,3 +1,5 @@
+import { NetUtils } from "./utils/net"
+
 export enum IPAddressStatus {
     Created = "created",
     Allocated = "allocated",
@@ -28,6 +30,9 @@ export class IPAddressEntity implements IIPAddress {
     releasedAt?: Date | null
 
     constructor(ipAddress: IIPAddress) {
+        if (!NetUtils.isValidIPv4IP(ipAddress.address)) {
+            throw new Error(`Invalid IPv4 address: ${ipAddress.address}`)
+        }
         this.id = ipAddress.id
         this.address = ipAddress.address
         this.status = ipAddress.status
