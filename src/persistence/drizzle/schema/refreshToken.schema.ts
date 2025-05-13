@@ -4,10 +4,10 @@ import { userTable } from "./user.schema"
 
 export const refreshTokenTable = pgTable("refresh_token", {
     id: serial().primaryKey().notNull(),
-    tokenHash: varchar("token_hash", { length: 255 }).notNull(),
     userId: integer().notNull().references(() => userTable.id, {onDelete: 'no action'}),
+    tokenHash: varchar("token_hash", { length: 255 }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
-    expiredAt: timestamp("created_at").notNull()
+    expiredAt: timestamp("expired_at").notNull()
 })
 
 export const refreshTokenRelations = relations(refreshTokenTable, ({ one }) => ({

@@ -3,7 +3,7 @@ export interface IRefreshToken {
     userId: number
     tokenHash: string
     createdAt?: Date
-    expiredAt?: Date
+    expiredAt: Date
 }
 
 export class RefreshTokenEntity implements IRefreshToken {
@@ -11,7 +11,7 @@ export class RefreshTokenEntity implements IRefreshToken {
     userId: number
     tokenHash: string
     createdAt?: Date
-    expiredAt?: Date
+    expiredAt: Date
 
     constructor(refreshToken: IRefreshToken) {
         this.id = refreshToken.id
