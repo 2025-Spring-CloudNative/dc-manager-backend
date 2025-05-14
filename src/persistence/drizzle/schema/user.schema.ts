@@ -8,7 +8,7 @@ export const userRoleEnum = pgEnum("user_role", UserRole)
 export const userTable = pgTable("user", {
     id: serial().primaryKey().notNull(),
     name: varchar({ length: 255 }).notNull(),
-    email: varchar({ length: 255 }).notNull(),
+    email: varchar({ length: 255 }).unique().notNull(),
     passwordHash: varchar("password_hash", { length: 255 }).notNull(),
     role: userRoleEnum("role").notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),

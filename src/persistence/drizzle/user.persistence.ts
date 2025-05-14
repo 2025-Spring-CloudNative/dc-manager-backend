@@ -22,6 +22,15 @@ export class UserDrizzleRepository implements IUserRepository {
         return user as IUser
     }
 
+    async getUserByEmail(email: string) {
+        const [user] = await db
+            .select()
+            .from(userTable)
+            .where(eq(userTable.email, email))
+        
+        return user as IUser
+    }
+
     async createUser(user: IUser) {
         const [createdUser] = await db
             .insert(userTable)

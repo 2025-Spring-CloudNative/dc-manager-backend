@@ -1,4 +1,4 @@
-import { IUser } from "../../domain/user"
+import { IUser, UserRole } from "../../domain/user"
 import jwt, { JwtPayload } from "jsonwebtoken"
 
 const ACCESS_EXPIRED_IN = '15m'
@@ -44,15 +44,21 @@ export class JWTRepository implements IJWTRepository {
 
     verifyAccess(token: string) {
         const decoded = jwt.verify(token, this.accessSecret) as JwtPayload
-        if (typeof decoded.userId === 'number')
-            return decoded.userId
+        if (typeof decoded.id === 'number' || typeof decoded.email === 'string'
+            || decoded.role === UserRole.User || decoded.role === UserRole.Admin)
+        {
+            return decoded.id
+        }
         throw new Error('Invalid access token')
     }
 
     verifyRefresh(token: string) {
         const decoded = jwt.verify(token, this.refreshSecret) as JwtPayload
-        if (typeof decoded.userId === 'number')
-            return decoded.userId
+        if (typeof decoded.id === 'number' || typeof decoded.email === 'string'
+            || decoded.role === UserRole.User || decoded.role === UserRole.Admin)
+        {
+            return decoded.id
+        }
         throw new Error('Invalid refresh token')
     }
 
