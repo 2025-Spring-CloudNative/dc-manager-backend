@@ -7,7 +7,7 @@ export const dataCenterTable = pgTable("data_center", {
     id: serial().primaryKey().notNull(),
     name: varchar({ length: 255 }).notNull(),
     location: varchar({ length: 255 }).notNull(),
-    subnetId: integer("subnet_id").unique().references(() => subnetTable.id, { onDelete: 'no action' })
+    subnetId: integer("subnet_id").unique().references(() => subnetTable.id, { onDelete: 'cascade' })
 })
 
 export const dataCenterRelations = relations(dataCenterTable, ({ one, many }) => ({
