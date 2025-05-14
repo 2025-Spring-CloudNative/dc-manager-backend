@@ -1,8 +1,6 @@
 export enum MachineStatus {
-    Created = "created",
     Active = "active",
-    Inactive = "inactive",
-    Removed = "removed"
+    Inactive = "inactive"
 }
 
 export interface IMachine {

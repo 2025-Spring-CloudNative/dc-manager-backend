@@ -9,6 +9,7 @@ export interface IJWTRepository {
     signRefresh(user: IUser): string
     verifyAccess(token: string): number
     verifyRefresh(token: string): number
+    decode(token: string): JwtPayload
 }
 
 export class JWTRepository implements IJWTRepository {
@@ -54,4 +55,10 @@ export class JWTRepository implements IJWTRepository {
             return decoded.userId
         throw new Error('Invalid refresh token')
     }
+
+    decode(token: string) {
+        const decoded = jwt.decode(token) as JwtPayload
+        return decoded
+    }
+
 }
