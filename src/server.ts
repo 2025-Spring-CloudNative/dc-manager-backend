@@ -23,14 +23,14 @@ const server = express()
 
 // Add a list of allowed origins.
 // If you have more origins you would like to add, you can add them to the array below.
-// const allowedOrigins = ["http://localhost:3000"]
+const allowedOrigins = ["http://localhost:3000"]
 
-// const options: cors.CorsOptions = {
-//     origin: allowedOrigins
-// }
+const options: cors.CorsOptions = {
+    origin: allowedOrigins,
+    credentials: true
+}
 
-// server.use(cors(options))
-server.use(cors())
+server.use(cors(options))
 server.use(express.json())
 
 // swagger-autogen + swagger-ui-express

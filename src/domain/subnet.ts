@@ -30,18 +30,17 @@ export class SubnetEntity implements ISubnet {
                 `Gateway must be a valid IPv4 address: ${subnet.gateway}`
             )
         }
-        // if (!NetUtils.isIPInsideCIDR(subnet.gateway, subnet.cidr)) {
-        //     throw new Error(
-        //         `Gateway ${subnet.gateway} is outside subnet ${subnet.cidr}`
-        //     )
-        // }
+        if (!NetUtils.isIPInsideCIDR(subnet.gateway, subnet.cidr)) {
+            throw new Error(
+                `Gateway ${subnet.gateway} is outside subnet ${subnet.cidr}`
+            )
+        }
         if (!NetUtils.prefixMatchesNetmask(subnet.netmask, subnet.cidr)) {
             throw new Error(
                 `Netmask ${subnet.netmask} does not match prefix length of ${subnet.cidr}`
             )
         }
 
-        // assign
         this.id = subnet.id
         this.cidr = subnet.cidr
         this.netmask = subnet.netmask
