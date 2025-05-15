@@ -20,6 +20,9 @@ export class IPPoolEntity implements IIPPool {
     updatedAt?: Date
 
     constructor(ipPool: IIPPool) {
+        if (!NetUtils.isValidIPv4CIDR(ipPool.cidr)) {
+            throw new Error(`Invalid CIDR format ${ipPool.cidr}`)
+        }
         this.id = ipPool.id
         this.name = ipPool.name
         this.type = ipPool.type
