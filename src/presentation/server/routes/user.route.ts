@@ -81,3 +81,5 @@ router.patch(
     */
     userController.updateUserPassword
 )
+
+export default router
