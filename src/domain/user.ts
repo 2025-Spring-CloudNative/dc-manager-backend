@@ -13,6 +13,8 @@ export interface IUser {
     updatedAt?: Date
 }
 
+export type SafeUser = Omit<IUser, "passwordHash">
+
 export class UserEntity implements IUser {
     id?: number
     name: string

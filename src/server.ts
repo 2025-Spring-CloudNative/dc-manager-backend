@@ -16,6 +16,7 @@ import serviceRoute from "./presentation/server/routes/service.route"
 import subnetRoute from "./presentation/server/routes/subnet.route"
 import ipPoolRoute from "./presentation/server/routes/ipPool.route"
 import ipAddressRoute from "./presentation/server/routes/ipAddress.route"
+import userRoute from "./presentation/server/routes/user.route"
 
 const PORT = process.env.PORT || 4000
 
@@ -42,11 +43,7 @@ const swaggerUiOptions = {
 //     swaggerUi.serve,
 //     swaggerUi.setup(swaggerFile, swaggerUiOptions)
 // )
-server.use(
-  "/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerFile)
-)
+server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile))
 server.use("/data-center", dataCenterRoute)
 server.use("/room", roomRoute)
 server.use("/rack", rackRoute)
@@ -55,6 +52,7 @@ server.use("/service", serviceRoute)
 server.use("/subnet", subnetRoute)
 server.use("/ip-pool", ipPoolRoute)
 server.use("/ip-address", ipAddressRoute)
+server.use("/user", userRoute)
 
 server.get("/", (req, res) => {
     console.log(process.env.DATABASE_URL, db)
