@@ -1,4 +1,4 @@
-import { IUser, UserEntity, SafeUser } from "../../domain/user"
+import { IUser, UserEntity } from "../../domain/user"
 import { RefreshTokenEntity } from "../../domain/refreshToken"
 import { IUserRepository } from "../../persistence/repositories/user.repository"
 import { IRefreshTokenRepository } from "../../persistence/repositories/refreshToken.repository"
@@ -10,35 +10,36 @@ export type UserLoginInfo = {
     password: string
 }
 
+export type SafeUser = Omit<IUser, "passwordHash">
+
 /* assume auto-login after register */
 export async function userRegister(
     userRepo: IUserRepository,
     passwordHasherRepo: IPasswordHasherRepository,
     JWTRepo: IJWTRepository,
     refreshTokenRepo: IRefreshTokenRepository,
-    user: IUser
+    user: IUser,
 ) {
     const userEntity = new UserEntity(user)
     /* hash the password */
-    userEntity.passwordHash = await passwordHasherRepo.hash(
-        userEntity.passwordHash
-    )
-
+    userEntity.passwordHash = await passwordHasherRepo.hash(userEntity.passwordHash)
+    
     const createdUserId = await userRepo.createUser(userEntity)
 
     /* generate accessToken and refreshToken */
     const accessToken = JWTRepo.signAccess(userEntity)
     const refreshToken = JWTRepo.signRefresh(userEntity)
-
+    
     const refreshTokenEntity = new RefreshTokenEntity({
         userId: createdUserId,
         token: refreshToken,
-        expiredAt: new Date(JWTRepo.decode(refreshToken).exp as number)
+        // expiredAt: new Date(JWTRepo.decode(refreshToken).exp as number)
+        expiredAt: new Date(JWTRepo.decode(refreshToken).exp as number * 1000)
     })
+
     /* store refreshToken to database */
-    const createdRefreshTokenId = await refreshTokenRepo.createRefreshToken(
-        refreshTokenEntity
-    )
+    const createdRefreshTokenId = await refreshTokenRepo
+        .createRefreshToken(refreshTokenEntity)
 
     /* strip sensitive information of user */
     const { passwordHash, ...safeUser } = userEntity
@@ -61,7 +62,7 @@ export async function userLogin(
     if (!user) {
         throw new Error("Invalid email or password")
     }
-
+    
     const isPasswordValid = await passwordHasherRepo.compare(
         userLoginInfo.password,
         user.passwordHash
@@ -78,12 +79,12 @@ export async function userLogin(
     const refreshTokenEntity = new RefreshTokenEntity({
         userId: user.id as number,
         token: refreshToken,
-        expiredAt: new Date(JWTRepo.decode(refreshToken).exp as number)
+        // expiredAt: new Date(JWTRepo.decode(refreshToken).exp as number)
+        expiredAt: new Date(JWTRepo.decode(refreshToken).exp as number * 1000)
     })
-
-    const createdRefreshTokenId = await refreshTokenRepo.createRefreshToken(
-        refreshTokenEntity
-    )
+    
+    const createdRefreshTokenId = await refreshTokenRepo
+        .createRefreshToken(refreshTokenEntity)
 
     /* strip sensitive information of user */
     const { passwordHash, ...safeUser } = userEntity
@@ -99,10 +100,9 @@ export async function userLogout(
     refreshTokenRepo: IRefreshTokenRepository,
     refreshToken: string
 ) {
-    const deletedRefreshTokenId = await refreshTokenRepo.deleteRefreshToken(
-        refreshToken
-    )
-
+    const deletedRefreshTokenId = await refreshTokenRepo
+        .deleteRefreshToken(refreshToken)
+    
     return deletedRefreshTokenId
 }
 
@@ -113,20 +113,15 @@ export async function refreshAccessToken(
     refreshToken: string
 ) {
     const userId = JWTRepo.verifyRefresh(refreshToken)
-    const existRefreshToken = await refreshTokenRepo.getRefreshTokenByToken(
-        refreshToken
-    )
-
+    const existRefreshToken = await refreshTokenRepo
+        .getRefreshTokenByToken(refreshToken)
     /* check whether the refreshToken is expired or not */
     const now: Date = new Date()
     if (now > existRefreshToken.expiredAt) {
-        const deletedRefreshTokenId = await refreshTokenRepo.deleteRefreshToken(
-            refreshToken
-        )
-
-        throw new Error(
-            "The refresh token has expired, user has been logged out"
-        )
+        const deletedRefreshTokenId = await refreshTokenRepo
+            .deleteRefreshToken(refreshToken)
+        
+        throw new Error("The refresh token has expired, user has been logged out")
     }
 
     const user = await userRepo.getUserById(userId)
@@ -147,7 +142,7 @@ export async function getSession(
 ) {
     const userId = JWTRepo.verifyAccess(accessToken)
     if (!userId) {
-        throw new Error("Unauthorized user")
+        throw new Error('Unauthorized user')
     }
     const user = await userRepo.getUserById(userId)
     const { passwordHash, ...safeUser } = user

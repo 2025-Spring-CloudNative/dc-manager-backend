@@ -7,7 +7,7 @@ export const authenticate: RequestHandler = async function (req, res, next) {
     if (
         req.path === "/auth/login" ||
         req.path === "/auth/register" ||
-        req.path === "/docs"
+        req.path.startsWith("/docs")
     ) {
         return next()
     }
