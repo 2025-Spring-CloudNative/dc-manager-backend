@@ -5,8 +5,7 @@ import { uniqueIndex } from "drizzle-orm/pg-core"
 
 export const refreshTokenTable = pgTable("refresh_token", {
     id: serial().primaryKey().notNull(),
-    // userId: integer().notNull().references(() => userTable.id, {onDelete: 'no action'}),
-    userId: integer("user_id").notNull().references(() => userTable.id, { onDelete: 'no action' }),
+    userId: integer().notNull().references(() => userTable.id, {onDelete: 'no action'}),
     token: varchar("token", { length: 512 }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     expiredAt: timestamp("expired_at").notNull()
