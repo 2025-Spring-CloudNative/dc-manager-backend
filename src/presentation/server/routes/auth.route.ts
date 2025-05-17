@@ -114,7 +114,7 @@ router.get("/session",
     /*
         #swagger.tags = ['Auth']
         #swagger.summary = 'Get Session'
-        
+        #swagger.security = [{ bearerAuth: [] }]
         #swagger.responses[200] = {
             description: 'Session retrieved successfully',
             schema: {

@@ -30,11 +30,6 @@ export async function userRegister(req: Request, res: Response) {
             secure: false,
             sameSite: 'strict'
         })
-        res.cookie("accessToken", accessToken, {
-            httpOnly: true,
-            secure: false, // 注意 dev 環境要是 false
-            sameSite: "strict"
-        })
 
         res.status(201).json({
             accessToken,
@@ -45,6 +40,7 @@ export async function userRegister(req: Request, res: Response) {
     }
 }
 
+// Automatically fill accessToken into Swagger UI's Authorize field ?
 export async function userLogin(req: Request, res: Response) {
     const userRepo = new UserDrizzleRepository()
     const passwordHasherRepo = new PasswordHasherRepository()
@@ -67,11 +63,6 @@ export async function userLogin(req: Request, res: Response) {
             httpOnly: true,
             secure: false,
             sameSite: 'strict'
-        })
-        res.cookie("accessToken", accessToken, {
-            httpOnly: true,
-            secure: false, // 注意 dev 環境要是 false
-            sameSite: "strict"
         })
 
         res.status(200).json({
@@ -136,9 +127,10 @@ export async function getSession(req: Request, res: Response) {
         process.env.ACCESS_SECRET as string,
         process.env.REFRESH_SECRET as string
     )
-    const accessToken = req.cookies.accessToken
-    // const accessToken = req.params.accessToken
-    // const accessToken = req.body.accessToken
+    // const authHeader = req.headers.authorization
+    // const accessToken = authHeader?.split(" ")[1]
+    
+    const accessToken = req.headers?.authorization?.split(" ")[1]
     console.log("accessToken", accessToken)
     try {
         if (!accessToken) {
