@@ -16,7 +16,7 @@ router.patch(
                         type: "object",
                         properties: {
                             name: { type: "string", example: "John" },
-                            email: { type: "string", example: "test@gmail.com" }
+                            email: { type: "string", example: "test@gmail.com" },
                             role: { type: "string", example: "user"}
                         },
                         required: ["name", "email"]
