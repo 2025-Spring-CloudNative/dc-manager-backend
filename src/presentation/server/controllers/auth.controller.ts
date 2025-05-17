@@ -28,6 +28,7 @@ export async function userRegister(req: Request, res: Response) {
             secure: false,
             sameSite: 'strict'
         })
+
         res.status(201).json({
             accessToken,
             user: createdUser
@@ -37,8 +38,38 @@ export async function userRegister(req: Request, res: Response) {
     }
 }
 
+// Automatically fill accessToken into Swagger UI's Authorize field ?
 export async function userLogin(req: Request, res: Response) {
+    const userRepo = new UserDrizzleRepository()
+    const passwordHasherRepo = new PasswordHasherRepository()
 
+    const JWTRepo = new JWTRepository(
+        process.env.ACCESS_SECRET as string,
+        process.env.REFRESH_SECRET as string
+    )
+    const refreshTokenRepo = new RefreshTokenDrizzleRepository()
+    try {
+        const userLoginInfo = req.body
+        const { accessToken, refreshToken, user } = await authService.userLogin(
+            userRepo,
+            passwordHasherRepo,
+            JWTRepo,
+            refreshTokenRepo,
+            userLoginInfo
+        )
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict'
+        })
+
+        res.status(200).json({
+            accessToken,
+            user,
+        })
+    } catch(error: any) {
+        res.status(500).json({ message: error.message })
+    }
 }
 
 export async function userLogout(req: Request, res: Response) {
@@ -50,5 +81,28 @@ export async function refreshAccessToken(req: Request, res: Response) {
 }
 
 export async function getSession(req: Request, res: Response) {
+    const userRepo = new UserDrizzleRepository()
+    const JWTRepo = new JWTRepository(
+        process.env.ACCESS_SECRET as string,
+        process.env.REFRESH_SECRET as string
+    )
+    // const authHeader = req.headers.authorization
+    // const accessToken = authHeader?.split(" ")[1]
     
+    const accessToken = req.headers?.authorization?.split(" ")[1]
+    console.log("accessToken", accessToken)
+    try {
+        if (!accessToken) {
+            res.status(401).json({ message: "No access token provided" })
+            return
+        }
+        const user = await authService.getSession(
+            userRepo,
+            JWTRepo,
+            accessToken
+        )
+        res.status(200).json(user)
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
 }
