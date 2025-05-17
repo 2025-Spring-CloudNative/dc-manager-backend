@@ -57,9 +57,9 @@ router.post("/",
                                 location: { type: "string", example: "Taipei" }
                             }
                         },
-                        subnetCidr: { type: "string", example: "192.168.1.0/24" }
+                        subnetId: { type: "number", example: "1" }
                     },
-                    required: ["dataCenter", "subnetCidr"]
+                    required: ["dataCenter", "subnetId"]
                 }
             }
         }
