@@ -50,13 +50,11 @@ export async function createDataCenter(
     dataCenterRepo: IDataCenterRepository,
     subnetRepo: ISubnetRepository,
     dataCenter: IDataCenter,
-    subnetCidr?: string
+    subnetId?: number
 ) {
     const dataCenterEntity = new DataCenterEntity(dataCenter)
     // if the user selects a subnet, then assign the subnetId to the datacenter
-    if (subnetCidr) {
-        //! TODO: Assigning subnet CIDR is ambiguous when creating dataCenter
-        const subnetId = await subnetRepo.getSubnetIdByCidr(subnetCidr)
+    if (subnetId) {
         dataCenterEntity.subnetId = subnetId
     }else {
         const subnetEntity = new SubnetEntity({
