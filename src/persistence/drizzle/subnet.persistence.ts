@@ -69,15 +69,6 @@ export class SubnetDrizzleRepository implements ISubnetRepository {
         return subnet as ISubnet
     }
 
-    async getSubnetIdByCidr(cidr: string) {
-        const [subnet] = await db
-            .select()
-            .from(subnetTable)
-            .where(eq(subnetTable.cidr, cidr))
-            
-        return subnet?.id as number
-    }
-
     async createSubnet(subnet: ISubnet) {
         const [createdSubnet] = await db
             .insert(subnetTable)

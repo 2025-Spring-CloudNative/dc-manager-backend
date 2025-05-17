@@ -44,12 +44,12 @@ export async function createDataCenter(req: Request, res: Response) {
     const dataCenterRepo = new DataCenterDrizzleRepository()
     const subnetRepo = new SubnetDrizzleRepository()
     try {
-        const { dataCenter, subnetCidr } = req.body
+        const { dataCenter, subnetId } = req.body
         const createdDataCenterId = await dataCenterService.createDataCenter(
             dataCenterRepo,
             subnetRepo,
             dataCenter,
-            subnetCidr
+            subnetId
         )
         res.status(200).json({ id: createdDataCenterId })
     } catch (error: any) {
