@@ -118,7 +118,6 @@ router.patch("/:id",
                     schema: {
                         type: "object",
                         properties: {
-                            id: { type: "number", example: 1 },
                             name: { type: "string", example: "Main IP Pool" },
                             type: { type: "string", example: "dynamic" },
                             subnetId: { type: "number", example: 1}

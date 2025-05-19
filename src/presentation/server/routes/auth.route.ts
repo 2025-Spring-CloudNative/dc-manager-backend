@@ -19,7 +19,7 @@ router.post("/register",
                             email: { type: "string", example: "user@example.com" },
                             passwordHash: { type: "string", example: "password123" },
                             role: { type: "string", example: "user" }
-                            },
+                        },
                         required: ["email", "passwordHash", "name", "role"]
                     }
                 }

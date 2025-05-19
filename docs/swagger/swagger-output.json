@@ -1095,10 +1095,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "name": {
                     "type": "string",
                     "example": "Updated DC"
@@ -1109,10 +1105,8 @@
                   }
                 },
                 "required": [
-                  "id",
                   "name",
-                  "location",
-                  "subnetId"
+                  "location"
                 ]
               }
             }
@@ -1577,10 +1571,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "name": {
                     "type": "string",
                     "example": "Updated Room A"
@@ -1595,7 +1585,6 @@
                   }
                 },
                 "required": [
-                  "id",
                   "name",
                   "unit",
                   "dataCenterId"
@@ -2050,10 +2039,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "name": {
                     "type": "string",
                     "example": "Updated Rack A"
@@ -2072,7 +2057,6 @@
                   }
                 },
                 "required": [
-                  "id",
                   "name",
                   "height",
                   "tag",
@@ -4504,10 +4488,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "name": {
                     "type": "string",
                     "example": "Main IP Pool"
@@ -5086,10 +5066,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "address": {
                     "type": "string",
                     "example": "192.168.0.10"
@@ -5108,7 +5084,6 @@
                   }
                 },
                 "required": [
-                  "id",
                   "address",
                   "status",
                   "poolId",
@@ -5425,10 +5400,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "address": {
                     "type": "string",
                     "example": "192.168.0.11"
@@ -5447,7 +5418,6 @@
                   }
                 },
                 "required": [
-                  "id",
                   "address",
                   "status",
                   "poolId",
