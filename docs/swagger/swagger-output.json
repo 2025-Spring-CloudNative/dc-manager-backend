@@ -4643,26 +4643,9 @@
                   "type": "object",
                   "properties": {
                     "utilization": {
-                      "type": "string",
-                      "example": "number"
+                      "type": "number",
+                      "example": 0.75
                     }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "utilization": {
-                      "type": "string",
-                      "example": "number"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
                   }
                 }
               }
