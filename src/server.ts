@@ -48,10 +48,11 @@ const swaggerUiOptions = {
 //     swaggerUi.serve,
 //     swaggerUi.setup(swaggerFile, swaggerUiOptions)
 // )
+server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
 server.use(authenticate)
 server.use("/user", userRoute)
 server.use("/auth", authRoute)
-server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile))
 server.use("/data-center", dataCenterRoute)
 server.use("/room", roomRoute)
 server.use("/rack", rackRoute)
