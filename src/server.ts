@@ -29,7 +29,7 @@ const server = express()
 
 // Add a list of allowed origins.
 // If you have more origins you would like to add, you can add them to the array below.
-const allowedOrigins = ["http://localhost:3000"]
+const allowedOrigins = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 const options: cors.CorsOptions = {
     origin: allowedOrigins,
