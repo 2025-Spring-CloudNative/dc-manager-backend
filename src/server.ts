@@ -21,6 +21,7 @@ import ipAddressRoute from "./presentation/server/routes/ipAddress.route"
 import userRoute from "./presentation/server/routes/user.route"
 import authRoute from "./presentation/server/routes/auth.route"
 import { authenticate } from "./presentation/server/middleware/auth.middleware"
+import { authorize } from "./presentation/server/middleware/auth.middleware"
 
 const PORT = process.env.PORT || 4000
 
@@ -38,6 +39,8 @@ const options: cors.CorsOptions = {
 server.use(cors(options))
 server.use(express.json())
 server.use(cookieParser())
+server.use(authenticate)
+server.use(authorize)
 
 // swagger-autogen + swagger-ui-express
 const swaggerUiOptions = {
@@ -49,18 +52,19 @@ const swaggerUiOptions = {
 //     swaggerUi.setup(swaggerFile, swaggerUiOptions)
 // )
 server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile))
-
-server.use(authenticate)
-server.use("/user", userRoute)
 server.use("/auth", authRoute)
+server.use("/user", userRoute)
+
 server.use("/data-center", dataCenterRoute)
 server.use("/room", roomRoute)
 server.use("/rack", rackRoute)
 server.use("/machine", machineRoute)
 server.use("/service", serviceRoute)
+
 server.use("/subnet", subnetRoute)
 server.use("/ip-pool", ipPoolRoute)
 server.use("/ip-address", ipAddressRoute)
+
 
 server.get("/", (req, res) => {
     console.log(process.env.DATABASE_URL, db)
