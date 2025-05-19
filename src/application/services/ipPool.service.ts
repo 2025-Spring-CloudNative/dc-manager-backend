@@ -1,4 +1,5 @@
 import { IIPPool, IPPoolEntity } from "../../domain/ipPool"
+import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
 import { IIPPoolRepository } from "../../persistence/repositories/ipPool.repository"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
 import { SortOrder } from "../../types/common"
@@ -30,6 +31,21 @@ export async function getIPPoolById(
     const ipPool = await ipPoolRepo.getIPPoolById(id)
 
     return ipPool
+}
+
+export async function getIPPoolUtilization(
+    ipAddressRepo: IIPAddressRepository,
+    id: number
+) {
+    const ipAddresses = await ipAddressRepo.getIPAddressesByPoolId(id)
+    let ipAddressInUse: number = 0;
+    for (const ipAddress of ipAddresses) {
+        if (ipAddress.allocatedAt && !ipAddress.releasedAt) {
+            ipAddressInUse += 1
+        }
+    }
+    const utilization = ipAddressInUse / ipAddresses.length
+    return utilization
 }
 
 export async function createIPPool(

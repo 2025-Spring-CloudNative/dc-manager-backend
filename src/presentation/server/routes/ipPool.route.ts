@@ -40,6 +40,23 @@ router.get("/:id",
     */
     ipPoolController.getIPPoolById)
 
+router.get("/util/:id", 
+        /*
+        #swagger.tags = ['IP Pool']
+        #swagger.summary = 'getIPPoolUtilization'
+        #swagger.responses[200] = {
+            description: 'Get IP Pool utilization successfully',
+            schema: {
+                utilization: "number"
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */ 
+    ipPoolController.getIPPoolUtilization)
+
 router.post("/", 
     /*
         #swagger.tags = ['IP Pool']
