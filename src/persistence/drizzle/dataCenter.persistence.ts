@@ -16,7 +16,7 @@ function buildDataCenterQueryFilters(queryParams?: DataCenterQueryParams): SQL[]
     if (queryParams.location) {
         filters.push(ilike(dataCenterTable.location, `%${queryParams.location}%`))
     }
-    return filters;
+    return filters
 }
 
 function buildDataCenterQueryOrder(queryParams?: DataCenterQueryParams): SQL[] {
