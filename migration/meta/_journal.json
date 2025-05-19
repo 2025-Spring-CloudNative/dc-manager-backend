@@ -15,6 +15,13 @@
       "when": 1747204415779,
       "tag": "0001_perpetual_blazing_skull",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1747635767970,
+      "tag": "0002_green_vulcan",
+      "breakpoints": true
     }
   ]
 }

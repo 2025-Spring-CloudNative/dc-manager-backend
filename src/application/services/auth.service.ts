@@ -10,7 +10,6 @@ export type UserLoginInfo = {
     password: string
 }
 
-/* assume auto-login after register */
 export async function userRegister(
     userRepo: IUserRepository,
     passwordHasherRepo: IPasswordHasherRepository,
