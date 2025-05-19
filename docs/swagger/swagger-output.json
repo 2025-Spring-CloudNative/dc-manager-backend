@@ -4617,7 +4617,7 @@
         }
       }
     },
-    "/ip-poolutil/{id}": {
+    "/ip-pool/util/{id}": {
       "get": {
         "tags": [
           "IP Pool"
