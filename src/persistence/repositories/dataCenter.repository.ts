@@ -1,7 +1,8 @@
 import { IDataCenter } from "../../domain/dataCenter"
+import { DataCenterQueryParams } from "../../application/services/dataCenter.service"
 
 export interface IDataCenterRepository {
-    getDataCenters(): Promise<IDataCenter[]>
+    getDataCenters(queryParams?: DataCenterQueryParams): Promise<IDataCenter[]>
     getDataCentersWithSubnet(): Promise<Object[]>
     getDataCenterById(id: number): Promise<IDataCenter>
     getDataCenterByIdWithSubnet(id: number): Promise<Object>

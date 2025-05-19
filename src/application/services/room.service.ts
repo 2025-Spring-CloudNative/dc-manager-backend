@@ -1,8 +1,21 @@
 import { IRoom, RoomEntity } from "../../domain/room"
 import { IRoomRepository } from "../../persistence/repositories/room.repository"
+import { SortOrder } from "../../types/common"
 
-export async function getRooms(roomRepo: IRoomRepository) {
-    const rooms = await roomRepo.getRooms()
+export type RoomSortBy = 'name' | 'unit'
+
+export interface RoomQueryParams {
+    name?: string
+    sortBy?: RoomSortBy
+    sortOrder?: SortOrder
+}
+
+export async function getRooms(
+    roomRepo: IRoomRepository,
+    roomQueryParams: RoomQueryParams
+) {
+    
+    const rooms = await roomRepo.getRooms(roomQueryParams)
     
     return rooms
 }

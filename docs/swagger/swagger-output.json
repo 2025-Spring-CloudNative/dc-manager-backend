@@ -21,6 +21,736 @@
         }
       }
     },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User Registration",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Young"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "alice@example.com"
+                    },
+                    "passwordHash": {
+                      "type": "string",
+                      "example": "$2b$10$7YiJtNdp0f4jNb7L2wrBFOJhL6AnQU4zXOf9QdH1ACfXX.c0bmJxO"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "user"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Young"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "alice@example.com"
+                    },
+                    "passwordHash": {
+                      "type": "string",
+                      "example": "$2b$10$7YiJtNdp0f4jNb7L2wrBFOJhL6AnQU4zXOf9QdH1ACfXX.c0bmJxO"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "user"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Alice"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  },
+                  "passwordHash": {
+                    "type": "string",
+                    "example": "password123"
+                  },
+                  "role": {
+                    "type": "string",
+                    "example": "user"
+                  }
+                },
+                "required": [
+                  "email",
+                  "passwordHash",
+                  "name",
+                  "role"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User Login",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "refreshToken": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Alice"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "user@example.com"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "refreshToken": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Alice"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "user@example.com"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "delete": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User Logout",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "User logged out successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Logged out successfully"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Logged out successfully"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh Access Token",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Access token refreshed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Alice"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "alice@example.com"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Alice"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "alice@example.com"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/auth/session": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get Session",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Session retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Alice"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "alice@example.com"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Alice"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "alice@example.com"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/{id}": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "summary": "updateUser",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "update user successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "John"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "test@gmail.com"
+                  },
+                  "role": {
+                    "type": "string",
+                    "example": "user"
+                  }
+                },
+                "required": [
+                  "name",
+                  "email"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/reset-password/{id}": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "summary": "updateUserPassword",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "update user password successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "oldPassword": {
+                    "type": "string",
+                    "example": "oldpassword"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "example": "newpassword"
+                  }
+                },
+                "required": [
+                  "oldPassword",
+                  "newPassword"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "/data-center/": {
       "get": {
         "tags": [
@@ -28,6 +758,36 @@
         ],
         "summary": "getDataCenters",
         "description": "",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "An array of DataCenter objects",
@@ -125,14 +885,14 @@
                       }
                     }
                   },
-                  "subnetCidr": {
-                    "type": "string",
-                    "example": "192.168.1.0/24"
+                  "subnetId": {
+                    "type": "number",
+                    "example": "1"
                   }
                 },
                 "required": [
                   "dataCenter",
-                  "subnetCidr"
+                  "subnetId"
                 ]
               }
             }
@@ -485,6 +1245,29 @@
         ],
         "summary": "getRooms",
         "description": "",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "An array of Room objects",
@@ -915,6 +1698,36 @@
         ],
         "summary": "getRacks",
         "description": "",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "An array of Rack objects",
@@ -1333,6 +2146,43 @@
         ],
         "summary": "getMachines",
         "description": "",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "macAddress",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "An array of Machine objects",
@@ -2029,6 +2879,29 @@
         ],
         "summary": "getServices",
         "description": "",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "An array of Service objects",
@@ -2459,6 +3332,43 @@
         ],
         "summary": "getSubnets",
         "description": "",
+        "parameters": [
+          {
+            "name": "cidr",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "netmask",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gateway",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "An array of Subnet objects",
@@ -2639,6 +3549,41 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cidr",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "netmask",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gateway",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
             "schema": {
               "type": "string"
             }
@@ -3036,6 +3981,43 @@
         ],
         "summary": "getIPPools",
         "description": "",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cidr",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "An array of IPPool objects",
@@ -3635,6 +4617,76 @@
         }
       }
     },
+    "/ip-pool/util/{id}": {
+      "get": {
+        "tags": [
+          "IP Pool"
+        ],
+        "summary": "getIPPoolUtilization",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get IP Pool utilization successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "utilization": {
+                      "type": "number",
+                      "example": 0.75
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ip-pool/extend/{id}": {
       "patch": {
         "tags": [
@@ -3796,6 +4848,36 @@
         ],
         "summary": "getIPAddresses",
         "description": "",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "An array of IPAddress objects",
@@ -4464,6 +5546,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "DataCenter": {
         "type": "object",
@@ -4778,5 +5867,10 @@
         }
       }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

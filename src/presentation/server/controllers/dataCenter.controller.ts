@@ -2,13 +2,21 @@ import { Request, Response } from "express"
 import { DataCenterDrizzleRepository } from "../../../persistence/drizzle/dataCenter.persistence"
 import * as dataCenterService from "../../../application/services/dataCenter.service"
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
+import { SortOrder } from "../../../types/common"
 
 export async function getDataCenters(req: Request, res: Response) {
     const dataCenterRepo = new DataCenterDrizzleRepository()
+    const dataCenterQueryParams: dataCenterService.DataCenterQueryParams = {
+        name: req.query.name as string,
+        location: req.query.location as string,
+        sortBy: req.query.sortBy as dataCenterService.DataCenterSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
         const dataCenters = await dataCenterService.getDataCenters(
-            dataCenterRepo
+            dataCenterRepo,
+            dataCenterQueryParams
         )
         res.status(200).json(dataCenters)
     } catch (error: any) {
@@ -21,10 +29,7 @@ export async function getDataCenterById(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        const dataCenter = await dataCenterService.getDataCenterById(
-            dataCenterRepo, 
-            id
-        )
+        const dataCenter = await dataCenterService.getDataCenterById(dataCenterRepo, id)
         if (dataCenter) {
             res.status(200).json(dataCenter)
         } else {
@@ -39,12 +44,12 @@ export async function createDataCenter(req: Request, res: Response) {
     const dataCenterRepo = new DataCenterDrizzleRepository()
     const subnetRepo = new SubnetDrizzleRepository()
     try {
-        const { dataCenter, subnetCidr } = req.body
+        const { dataCenter, subnetId } = req.body
         const createdDataCenterId = await dataCenterService.createDataCenter(
             dataCenterRepo,
             subnetRepo,
             dataCenter,
-            subnetCidr
+            subnetId
         )
         res.status(200).json({ id: createdDataCenterId })
     } catch (error: any) {

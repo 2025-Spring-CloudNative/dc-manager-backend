@@ -2,9 +2,22 @@ import { IDataCenter, DataCenterEntity } from "../../domain/dataCenter"
 import { SubnetEntity } from "../../domain/subnet"
 import { IDataCenterRepository } from "../../persistence/repositories/dataCenter.repository"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
+import { SortOrder } from "../../types/common"
 
-export async function getDataCenters(dataCenterRepo: IDataCenterRepository) {
-    const dataCenters = await dataCenterRepo.getDataCenters()
+export type DataCenterSortBy = 'name' | 'location'
+
+export interface DataCenterQueryParams {
+    name?: string
+    location?: string
+    sortBy?: DataCenterSortBy
+    sortOrder?: SortOrder
+}
+
+export async function getDataCenters(
+    dataCenterRepo: IDataCenterRepository, 
+    dataCenterQueryParams: DataCenterQueryParams
+) {
+    const dataCenters = await dataCenterRepo.getDataCenters(dataCenterQueryParams)
 
     return dataCenters
 }
@@ -37,12 +50,11 @@ export async function createDataCenter(
     dataCenterRepo: IDataCenterRepository,
     subnetRepo: ISubnetRepository,
     dataCenter: IDataCenter,
-    subnetCidr?: string
+    subnetId?: number
 ) {
     const dataCenterEntity = new DataCenterEntity(dataCenter)
     // if the user selects a subnet, then assign the subnetId to the datacenter
-    if (subnetCidr) {
-        const subnetId = await subnetRepo.getSubnetIdByCidr(subnetCidr)
+    if (subnetId) {
         dataCenterEntity.subnetId = subnetId
     }else {
         const subnetEntity = new SubnetEntity({

@@ -1,7 +1,8 @@
 import { IIPAddress } from "../../domain/ipAddress"
+import { IPAddressQueryParams } from "../../application/services/ipAddress.service"
 
 export interface IIPAddressRepository {
-    getIPAddresses(): Promise<IIPAddress[]>
+    getIPAddresses(ipAddressQueryParams?: IPAddressQueryParams): Promise<IIPAddress[]>
     getIPAddressById(id: number): Promise<IIPAddress>
     getIPAddressByMachineId(machineId: number): Promise<IIPAddress>
     getIPAddressesByPoolId(poolId: number): Promise<IIPAddress[]>

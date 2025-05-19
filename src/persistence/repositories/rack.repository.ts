@@ -1,7 +1,8 @@
 import { IRack } from "../../domain/rack"
+import { RackQueryParams } from "../../application/services/rack.service"
 
 export interface IRackRepository {
-    getRacks(): Promise<IRack[]>
+    getRacks(rackQueryParams?: RackQueryParams): Promise<IRack[]>
     getRackById(id: number): Promise<IRack>
     getRacksByServiceId(serviceId: number): Promise<IRack[]>
     createRack(rack: IRack): Promise<number>

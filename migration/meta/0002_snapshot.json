@@ -1,6 +1,6 @@
 {
-  "id": "6e8b02ce-bc28-43f6-8fa3-98f5dfe2568a",
-  "prevId": "2ce4a6f3-d8e2-4392-8eb6-67c8bd9fefb7",
+  "id": "286cd651-0723-42bd-b440-88a8e32a8c05",
+  "prevId": "106d87f1-49e1-48ae-a8f9-4b218dc3a1d0",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -50,7 +50,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "data_center_subnet_id_unique": {
+          "name": "data_center_subnet_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "subnet_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -128,7 +136,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "ip_address_machine_id_machine_id_fk": {
@@ -388,6 +396,80 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.refresh_token": {
+      "name": "refresh_token",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expired_at": {
+          "name": "expired_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "token_idx": {
+          "name": "token_idx",
+          "columns": [
+            {
+              "expression": "token",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "refresh_token_user_id_user_id_fk": {
+          "name": "refresh_token_user_id_user_id_fk",
+          "tableFrom": "refresh_token",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.room": {
       "name": "room",
       "schema": "",
@@ -474,7 +556,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -534,6 +616,71 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "user_role",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -550,10 +697,16 @@
       "name": "machine_status",
       "schema": "public",
       "values": [
-        "created",
         "active",
-        "inactive",
-        "removed"
+        "inactive"
+      ]
+    },
+    "public.user_role": {
+      "name": "user_role",
+      "schema": "public",
+      "values": [
+        "user",
+        "admin"
       ]
     }
   },

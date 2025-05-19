@@ -1,14 +1,42 @@
-import { eq } from "drizzle-orm"
+import { eq, ilike, desc, asc, and, SQL } from "drizzle-orm"
 import { IRoom } from "../../domain/room"
 import { IRoomRepository } from "../repositories/room.repository"
 import { db } from "./index"
 import { roomTable } from "./schema/room.schema"
+import { RoomQueryParams } from "../../application/services/room.service"
+
+function buildRoomQueryFilters(queryParams?: RoomQueryParams): SQL[] {
+    if (!queryParams) {
+        return []
+    }
+    const filters: SQL[] = []
+    if (!queryParams.name) {
+        filters.push(ilike(roomTable.name, `%${queryParams.name}%`))
+    }
+    return filters
+}
+
+function buildRoomQueryOrder(queryParams: RoomQueryParams): SQL[] {
+    if (!queryParams || !queryParams.sortBy) {
+        return []
+    }
+    const column = queryParams.sortBy === 'name' ? roomTable.name
+        : queryParams.sortBy === 'unit' ? roomTable.unit
+        : roomTable.id
+    const orderFn = queryParams.sortOrder === 'desc' ? desc : asc
+    return [orderFn(column)]
+}
 
 export class RoomDrizzleRepository implements IRoomRepository {
-    async getRooms() {
+    async getRooms(roomQueryParams: RoomQueryParams) {
+        const filters = buildRoomQueryFilters(roomQueryParams)
+        const order = buildRoomQueryOrder(roomQueryParams)
+
         const rooms = await db
             .select()
             .from(roomTable)
+            .where(filters.length ? and(...filters) : undefined)
+            .orderBy(...order)
 
         return rooms
     }

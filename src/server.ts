@@ -7,6 +7,8 @@ import swaggerUi from "swagger-ui-express"
 import swaggerFile from "../docs/swagger/swagger-output.json"
 
 import express from "express"
+import cookieParser from "cookie-parser"
+
 import { db } from "./persistence/drizzle"
 import dataCenterRoute from "./presentation/server/routes/dataCenter.route"
 import roomRoute from "./presentation/server/routes/room.route"
@@ -16,6 +18,10 @@ import serviceRoute from "./presentation/server/routes/service.route"
 import subnetRoute from "./presentation/server/routes/subnet.route"
 import ipPoolRoute from "./presentation/server/routes/ipPool.route"
 import ipAddressRoute from "./presentation/server/routes/ipAddress.route"
+import userRoute from "./presentation/server/routes/user.route"
+import authRoute from "./presentation/server/routes/auth.route"
+import { authenticate } from "./presentation/server/middleware/auth.middleware"
+import { authorize } from "./presentation/server/middleware/auth.middleware"
 
 const PORT = process.env.PORT || 4000
 
@@ -32,6 +38,9 @@ const options: cors.CorsOptions = {
 
 server.use(cors(options))
 server.use(express.json())
+server.use(cookieParser())
+server.use(authenticate)
+server.use(authorize)
 
 // swagger-autogen + swagger-ui-express
 const swaggerUiOptions = {
@@ -42,19 +51,20 @@ const swaggerUiOptions = {
 //     swaggerUi.serve,
 //     swaggerUi.setup(swaggerFile, swaggerUiOptions)
 // )
-server.use(
-  "/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerFile)
-)
+server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile))
+server.use("/auth", authRoute)
+server.use("/user", userRoute)
+
 server.use("/data-center", dataCenterRoute)
 server.use("/room", roomRoute)
 server.use("/rack", rackRoute)
 server.use("/machine", machineRoute)
 server.use("/service", serviceRoute)
+
 server.use("/subnet", subnetRoute)
 server.use("/ip-pool", ipPoolRoute)
 server.use("/ip-address", ipAddressRoute)
+
 
 server.get("/", (req, res) => {
     console.log(process.env.DATABASE_URL, db)

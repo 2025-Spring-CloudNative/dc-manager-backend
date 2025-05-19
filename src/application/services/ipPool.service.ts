@@ -1,10 +1,25 @@
 import { IIPPool, IPPoolEntity } from "../../domain/ipPool"
+import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
 import { IIPPoolRepository } from "../../persistence/repositories/ipPool.repository"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
-import { NetUtils } from "../../domain/utils/net"
+import { SortOrder } from "../../types/common"
 
-export async function getIPPools(ipPoolRepo: IIPPoolRepository) {
-    const ipPools = await ipPoolRepo.getIPPools()
+export type IPPoolSortBy = 
+    'name' | 'type' | 'cidr' | 'createdAt' | 'updatedAt'
+
+export interface IPPoolQueryParams {
+    name?: string
+    type?: string
+    cidr?: string
+    sortBy?: IPPoolSortBy
+    sortOrder?: SortOrder
+}
+
+export async function getIPPools(
+    ipPoolRepo: IIPPoolRepository,
+    ipPoolQueryParams: IPPoolQueryParams
+) {
+    const ipPools = await ipPoolRepo.getIPPools(ipPoolQueryParams)
     
     return ipPools
 }
@@ -16,6 +31,23 @@ export async function getIPPoolById(
     const ipPool = await ipPoolRepo.getIPPoolById(id)
 
     return ipPool
+}
+
+export async function getIPPoolUtilization(
+    ipAddressRepo: IIPAddressRepository,
+    id: number
+) {
+    const ipAddresses = await ipAddressRepo.getIPAddressesByPoolId(id)
+    if (!ipAddresses.length) {
+        return 0;
+    }
+
+    const usedCount = ipAddresses.filter(
+        (ip) => ip.allocatedAt && !ip.releasedAt
+    ).length
+    
+    const utilization = usedCount / ipAddresses.length
+    return parseFloat(utilization.toFixed(4))
 }
 
 export async function createIPPool(
