@@ -3,6 +3,7 @@ import { IPPoolDrizzleRepository } from "../../../persistence/drizzle/ipPool.per
 import * as ipPoolService from "../../../application/services/ipPool.service"
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
 import { SortOrder } from "../../../types/common"
+import { IPAddressDrizzleRepository } from "../../../persistence/drizzle/ipAddress.persistence"
 
 export async function getIPPools(req: Request, res: Response) {
     const ipPoolRepo = new IPPoolDrizzleRepository()
@@ -29,6 +30,21 @@ export async function getIPPoolById(req: Request, res: Response) {
     try {
         const ipPool = await ipPoolService.getIPPoolById(ipPoolRepo, id)
         res.status(200).json(ipPool)
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function getIPPoolUtilization(req: Request, res: Response) {
+    const ipAddressRepo = new IPAddressDrizzleRepository()
+    const id = Number(req.params.id)
+    try {
+        
+        const utilization: number = await ipPoolService.getIPPoolUtilization(
+            ipAddressRepo,
+            id
+        )
+        res.status(200).json({ utilization })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

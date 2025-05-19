@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { RackDrizzleRepository } from "../../../persistence/drizzle/rack.persistence"
 import * as rackService from "../../../application/services/rack.service"
 import { SortOrder } from "../../../types/common"
+import { RoomDrizzleRepository } from "../../../persistence/drizzle/room.persistence"
 
 export async function getRacks(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
@@ -34,10 +35,12 @@ export async function getRackById(req: Request, res: Response) {
 
 export async function createRack(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
+    const roomRepo = new RoomDrizzleRepository()
 
     try {
         const createdRackId = await rackService.createRack(
             rackRepo,
+            roomRepo,
             req.body
         )
         res.status(200).json({ id: createdRackId })

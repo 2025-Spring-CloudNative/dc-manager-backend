@@ -1,5 +1,6 @@
 import { IRack, RackEntity } from "../../domain/rack"
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
+import { IRoomRepository } from "../../persistence/repositories/room.repository"
 import { SortOrder } from "../../types/common"
 
 export type RackSortBy = 
@@ -32,9 +33,14 @@ export async function getRackById(
 
 export async function createRack(
     rackRepo: IRackRepository,
+    roomRepo: IRoomRepository,
     rack: IRack
 ) {
     const rackEntity = new RackEntity(rack)
+    const room = await roomRepo.getRoomById(rackEntity.roomId)
+    if (rackEntity.height > room.unit) {
+        throw new Error("The rack height exceeds the room unit")
+    }
     const createdRackId = await rackRepo.createRack(rackEntity)
 
     return createdRackId
