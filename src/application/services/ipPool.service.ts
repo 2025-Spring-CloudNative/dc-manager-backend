@@ -38,14 +38,16 @@ export async function getIPPoolUtilization(
     id: number
 ) {
     const ipAddresses = await ipAddressRepo.getIPAddressesByPoolId(id)
-    let ipAddressInUse: number = 0;
-    for (const ipAddress of ipAddresses) {
-        if (ipAddress.allocatedAt && !ipAddress.releasedAt) {
-            ipAddressInUse += 1
-        }
+    if (!ipAddresses.length) {
+        return 0;
     }
-    const utilization = ipAddressInUse / ipAddresses.length
-    return utilization
+
+    const usedCount = ipAddresses.filter(
+        (ip) => ip.allocatedAt && !ip.releasedAt
+    ).length
+    
+    const utilization = usedCount / ipAddresses.length
+    return parseFloat(utilization.toFixed(4))
 }
 
 export async function createIPPool(
