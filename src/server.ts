@@ -39,8 +39,8 @@ const options: cors.CorsOptions = {
 server.use(cors(options))
 server.use(express.json())
 server.use(cookieParser())
-// server.use(authenticate)
-// server.use(authorize)
+server.use(authenticate)
+server.use(authorize)
 
 // swagger-autogen + swagger-ui-express
 const swaggerUiOptions = {
@@ -64,7 +64,6 @@ server.use("/service", serviceRoute)
 server.use("/subnet", subnetRoute)
 server.use("/ip-pool", ipPoolRoute)
 server.use("/ip-address", ipAddressRoute)
-
 
 server.get("/", (req, res) => {
     console.log(process.env.DATABASE_URL, db)
