@@ -1,14 +1,17 @@
 import { Request, Response } from "express"
 import { UserDrizzleRepository } from "../../../persistence/drizzle/user.persistence"
+import { IUser } from "../../../domain/user"
 import * as userService from "../../../application/services/user.service"
 import { PasswordHasherRepository } from "../../../persistence/repositories/hash.repository"
 
 export async function updateUser(req: Request, res: Response) {
+    const actor = res.locals.user as IUser
     const userRepo = new UserDrizzleRepository()
     const userId = Number(req.params.id)
 
     try {
         const updatedUser = await userService.updateUser(
+            actor,
             userRepo,
             userId,
             req.body
@@ -20,12 +23,14 @@ export async function updateUser(req: Request, res: Response) {
 }
 
 export async function updateUserPassword(req: Request, res: Response) {
+    const actor = res.locals.user as IUser
     const userRepo = new UserDrizzleRepository()
     const passwordHasherRepo = new PasswordHasherRepository()
     const userId = Number(req.params.id)
 
     try {
         await userService.updateUserPassword(
+            actor,
             userRepo,
             passwordHasherRepo,
             userId,

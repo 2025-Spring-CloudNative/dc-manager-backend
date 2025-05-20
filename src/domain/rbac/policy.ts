@@ -10,7 +10,8 @@ const resources = [
     "Rack",
     "Machine",
     "Service",
-    "Subnet"
+    "Subnet",
+    "User"
 ] as const
 export type Resource = (typeof resources)[number]
 
@@ -54,6 +55,10 @@ export const POLICY: RBACPolicy = {
         {
             resource: "Subnet",
             action: ["read"]
+        },
+        {
+            resource: "User",
+            action: ["*"]
         }
     ]
 } as const
