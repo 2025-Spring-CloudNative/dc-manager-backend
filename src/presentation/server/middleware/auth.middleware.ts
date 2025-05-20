@@ -64,7 +64,8 @@ const resourceToResourceMap: Record<string, Resource> = {
     machine: "Machine",
     service: "Service",
     subnet: "Subnet",
-    user: "User"
+    user: "User",
+    auth: "User"
 }
 
 export const authorize: RequestHandler = async function (req, res, next) {
