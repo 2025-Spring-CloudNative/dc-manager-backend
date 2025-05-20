@@ -8,6 +8,7 @@ export const authenticate: RequestHandler = async function (req, res, next) {
     if (
         req.path === "/auth/login" ||
         req.path === "/auth/register" ||
+        req.path === "/auth/refresh" ||
         req.path === "/docs/" ||
         req.path === "/docs/swagger-ui.css" ||
         req.path === "/docs/swagger-ui-bundle.js" ||
@@ -41,7 +42,8 @@ export const authenticate: RequestHandler = async function (req, res, next) {
         )
         res.locals.user = user
         return next()
-    } catch (error) {
+    } catch (error: any) {
+        // console.log(error.message)
         res.status(401).json({ message: "Unauthorized" })
         return
     }
@@ -73,6 +75,7 @@ export const authorize: RequestHandler = async function (req, res, next) {
     if (
         req.path === "/auth/login" ||
         req.path === "/auth/register" ||
+        req.path === "/auth/refresh" ||
         req.path === "/docs/" ||
         req.path === "/docs/swagger-ui.css" ||
         req.path === "/docs/swagger-ui-bundle.js" ||
@@ -90,8 +93,9 @@ export const authorize: RequestHandler = async function (req, res, next) {
             ? resourceToResourceMap[route as keyof typeof resourceToResourceMap]
             : undefined
 
-        console.log("action", action)
-        console.log("resource", resource)
+        // console.log("route", route)
+        // console.log("action", action)
+        // console.log("resource", resource)
 
         if (!action) {
             res.status(400).json({
@@ -116,7 +120,7 @@ export const authorize: RequestHandler = async function (req, res, next) {
             next()
         }
     } catch (error) {
-        res.status(401).json({ message: "error" })
+        res.status(401).json({ message: "Unauthorized" })
         return
     }
 }
