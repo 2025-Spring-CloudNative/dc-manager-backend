@@ -26,7 +26,7 @@ export async function userRegister(req: Request, res: Response) {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: false,
-            sameSite: 'lax'
+            sameSite: 'strict'
         })
 
         res.status(201).json({
@@ -60,7 +60,7 @@ export async function userLogin(req: Request, res: Response) {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: false,
-            sameSite: 'lax'
+            sameSite: 'strict'
         })
 
         res.status(200).json({
