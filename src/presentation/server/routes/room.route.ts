@@ -81,12 +81,11 @@ router.patch("/:id",
                     schema: {
                         type: "object",
                         properties: {
-                            id: { type: "number", example: 1 },
                             name: { type: "string", example: "Updated Room A" },
                             unit: { type: "number", example: 3 },
                             dataCenterId: { type: "number", example: 1 }
                         },
-                        required: ["id", "name", "unit", "dataCenterId"]
+                        required: ["name", "unit", "dataCenterId"]
                     }
                 }
             }

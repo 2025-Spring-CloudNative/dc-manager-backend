@@ -56,12 +56,12 @@ export async function createMachine(
     serviceRepo: IServiceRepository,
     machine: IMachine
 ) {
-    const createdMachineId = await machineRepo.createMachine(machine)
 
     const rack = await rackRepo.getRackById(machine.rackId)    
-
     const service = await serviceRepo.getServiceById(rack.serviceId as number)
     const ipAddresses = await ipAddressRepo.getIPAddressesByPoolId(service.poolId as number)
+    
+    const createdMachineId = await machineRepo.createMachine(machine)
 
     for (const ipAddress of ipAddresses) {
         // The ip address is created but not allocated or the ip address is released

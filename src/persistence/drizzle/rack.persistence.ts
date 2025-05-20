@@ -11,10 +11,10 @@ function buildRackQueryFilters(queryParams?: RackQueryParams): SQL[] {
         return []
     }
     const filters: SQL[] = []
-    if (!queryParams.name) {
+    if (queryParams.name) {
         filters.push(ilike(rackTable.name, `%${queryParams.name}%`))
     }
-    if (!queryParams.tag) {
+    if (queryParams.tag) {
         filters.push(ilike(rackTable.tag, `%${queryParams.tag}%`))
     }
     return filters
