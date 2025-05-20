@@ -5,12 +5,8 @@ import { IRackRepository } from "../../persistence/repositories/rack.repository"
 import { IServiceRepository } from "../../persistence/repositories/service.repository"
 import { SortOrder } from "../../types/common"
 
-export type MachineSortBy =
-    | "name"
-    | "unit"
-    | "macAddress"
-    | "status"
-    | "createdAt"
+export type MachineSortBy = 
+    "name" | "unit" | "macAddress" | "status" | "createdAt"
 
 export interface MachineQueryParams {
     name?: string
