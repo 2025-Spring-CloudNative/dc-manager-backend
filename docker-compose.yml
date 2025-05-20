@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: drizzle-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: postgres
+
+    ports:
+      - "5432:5432"
+    
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    
+  backend:
+    build: .
+    container_name: dc-manager-backend
+
+    ports:
+      - "4000:4000"
+    
+    depends_on: 
+      db:
+        condition: service_healthy
+    
+    volumes:
+      - ./.env:/app/.env
+
+volumes:
+  postgres_data:
+    driver: local

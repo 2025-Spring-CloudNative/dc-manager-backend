@@ -69,8 +69,6 @@ npm run local
 npm run build
 ```
 
-
-
 ## swagger
 
 ```shell
@@ -78,4 +76,52 @@ npm install swagger-autogen swagger-ui-express
 npm install --save-dev @types/swagger-ui-express
 npm run doc:generate
 npm run local
+```
+
+## Production Environment Setup
+
+Currently, the service is hosted on a server in PASLab, which requires NTU VPN to access.
+
+Please modify the `.env` file first
+
+```shell
+DATABASE_URL=postgres://postgres:mypassword@db:5432/postgres
+```
+
+### Start the Service
+Start the backend and database services using docker-compose in detached mode
+```shell
+docker-compose up -d
+```
+
+### Rebuild the service
+Stop the service before rebuilding:
+
+```shell
+docker-compose down
+docker-compose build --no-cache
+```
+
+### Verify the Service
+Check if the containers are running
+```shell
+docker-compose ps
+```
+
+View logs for trouble-shooting
+```shell
+docker-compose logs backend
+```
+
+### Accessing the Service
+
+* Connect to the **NTU VPN**.
+* The service should be accessible via the PASLab server's internal IP address and the port mapped in your `docker-compose.yml` (e.g., `http://140.112.90.37:4000`). 
+* Please don't attack the server :broken_heart:
+
+### Stopping the Service
+To stop the running services
+
+```shell
+docker-compose down # Or use 'docker compose down'
 ```
