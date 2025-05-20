@@ -22,7 +22,7 @@ describe("roomService - getRooms", () => {
         ]
         mockRoomRepo.getRooms.mockResolvedValue(rooms)
 
-        const result = await roomService.getRooms(mockRoomRepo)
+        const result = await roomService.getRooms(mockRoomRepo, {} as any)
 
         expect(mockRoomRepo.getRooms).toHaveBeenCalled()
         expect(result).toEqual(rooms)

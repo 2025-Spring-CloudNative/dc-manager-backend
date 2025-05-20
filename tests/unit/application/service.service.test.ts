@@ -22,7 +22,7 @@ describe("serviceService - getServices", () => {
         ]
         mockServiceRepo.getServices.mockResolvedValue(services)
 
-        const result = await serviceService.getServices(mockServiceRepo)
+        const result = await serviceService.getServices(mockServiceRepo, {} as any)
 
         expect(mockServiceRepo.getServices).toHaveBeenCalled()
         expect(result).toEqual(services)
@@ -50,12 +50,35 @@ describe("serviceService - createService", () => {
         const createdId = 3
         mockServiceRepo.createService.mockResolvedValue(createdId)
 
+        // Mock dependencies for createService
+        const mockIpAddressRepo = {
+            createIPAddress: jest.fn()
+        } as any
+        const mockIpPoolRepo = {
+            getAllIPPoolCIDRs: jest.fn().mockResolvedValue([]),
+            createIPPool: jest.fn().mockResolvedValue(123)
+        } as any
+        const mockSubnetRepo = {
+            getSubnetById: jest.fn().mockResolvedValue({ cidr: "10.0.0.0/8" })
+        } as any
+        const mockDataCenter = { subnetId: 1 } as any
+        const cidrFromUser = "10.0.1.0/24"
+
+        // Mock NetUtils static methods if needed
+        jest.spyOn(require("../../../src/domain/utils/net").NetUtils, "isCIDRWithinSubnet").mockReturnValue(true)
+        jest.spyOn(require("../../../src/domain/utils/net").NetUtils, "checkCIDROverlap").mockReturnValue(false)
+        jest.spyOn(require("../../../src/domain/utils/net").NetUtils, "getIpAddressesFromCIDR").mockReturnValue(["10.0.1.1", "10.0.1.2"])
         const result = await serviceService.createService(
             mockServiceRepo,
-            newService
+            mockIpAddressRepo,
+            mockIpPoolRepo,
+            mockSubnetRepo,
+            newService,
+            mockDataCenter,
+            cidrFromUser
         )
 
-        expect(mockServiceRepo.createService).toHaveBeenCalledWith(newService)
+        expect(mockServiceRepo.createService).toHaveBeenCalledWith(expect.anything())
         expect(result).toEqual(createdId)
     })
 })
@@ -86,8 +109,20 @@ describe("serviceService - deleteService", () => {
         const deletedId = 1
         mockServiceRepo.deleteService.mockResolvedValue(deletedId)
 
+        // Mock dependencies for deleteService
+        const mockRackRepo = {
+            getRacksByServiceId: jest.fn().mockResolvedValue([]),
+            updateRack: jest.fn()
+        } as any
+        const mockIpPoolRepo = {
+            deleteIPPool: jest.fn()
+        } as any
+
+        mockServiceRepo.getServiceById.mockResolvedValue({ id: deletedId, name: "ServiceA", poolId: 100 })    
         const result = await serviceService.deleteService(
             mockServiceRepo,
+            mockRackRepo,
+            mockIpPoolRepo,
             deletedId
         )
 

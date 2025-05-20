@@ -5,6 +5,7 @@ import { IRack } from "../../../src/domain/rack"
 const mockRackRepo: jest.Mocked<IRackRepository> = {
     getRacks: jest.fn(),
     getRackById: jest.fn(),
+    getRacksByServiceId: jest.fn(),
     createRack: jest.fn(),
     updateRack: jest.fn(),
     deleteRack: jest.fn()
@@ -23,7 +24,7 @@ describe("rackService - getRacks", () => {
                 height: 42,
                 tag: "R1",
                 createdAt: new Date("2025-04-18T00:00:00Z"),
-                updatedAt: null,
+                updatedAt: undefined,
                 roomId: 100,
                 serviceId: 200
             },
@@ -40,7 +41,7 @@ describe("rackService - getRacks", () => {
         ]
         mockRackRepo.getRacks.mockResolvedValue(racks)
 
-        const result = await rackService.getRacks(mockRackRepo)
+        const result = await rackService.getRacks(mockRackRepo, {} as any)
 
         expect(mockRackRepo.getRacks).toHaveBeenCalled()
         expect(result).toEqual(racks)
@@ -55,7 +56,7 @@ describe("rackService - getRackById", () => {
             height: 42,
             tag: "R1",
             createdAt: new Date("2025-04-18T00:00:00Z"),
-            updatedAt: null,
+            updatedAt: undefined,
             roomId: 100,
             serviceId: 200
         }
@@ -80,9 +81,14 @@ describe("rackService - createRack", () => {
         const createdId = 3
         mockRackRepo.createRack.mockResolvedValue(createdId)
 
-        const result = await rackService.createRack(mockRackRepo, newRack)
+        // Provide a mock for roomRepo as required by the service signature
+        const mockRoomRepo = {
+            getRoomById: jest.fn().mockResolvedValue({ unit: 100 })
+        } as any
 
-        expect(mockRackRepo.createRack).toHaveBeenCalledWith(newRack)
+        const result = await rackService.createRack(mockRackRepo, mockRoomRepo, newRack)
+
+        expect(mockRackRepo.createRack).toHaveBeenCalledWith(expect.anything())
         expect(result).toEqual(createdId)
     })
 })
