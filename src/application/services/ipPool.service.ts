@@ -11,6 +11,7 @@ export interface IPPoolQueryParams {
     name?: string
     type?: string
     cidr?: string
+    subnetId?: number
     sortBy?: IPPoolSortBy
     sortOrder?: SortOrder
 }

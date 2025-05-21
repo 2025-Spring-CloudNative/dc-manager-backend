@@ -3,12 +3,14 @@ import { RackDrizzleRepository } from "../../../persistence/drizzle/rack.persist
 import * as rackService from "../../../application/services/rack.service"
 import { SortOrder } from "../../../types/common"
 import { RoomDrizzleRepository } from "../../../persistence/drizzle/room.persistence"
+import { MachineDrizzleRepository } from "../../../persistence/drizzle/machine.persistence"
 
 export async function getRacks(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
     const rackQueryParams: rackService.RackQueryParams = {
         name: req.query.name as string,
         tag: req.query.tag as string,
+        roomId: Number(req.query.roomId),
         sortBy: req.query.sortBy as rackService.RackSortBy,
         sortOrder: req.query.sortOrder as SortOrder
     }
@@ -51,11 +53,15 @@ export async function createRack(req: Request, res: Response) {
 
 export async function updateRack(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
+    const machineRepo = new MachineDrizzleRepository()
+    const roomRepo = new RoomDrizzleRepository()
     const id = Number(req.params.id)
 
     try {
         const updatedRack = await rackService.updateRack(
             rackRepo,
+            machineRepo,
+            roomRepo,
             id,
             req.body
         )

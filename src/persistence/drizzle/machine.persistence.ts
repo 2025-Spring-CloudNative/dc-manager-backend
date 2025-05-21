@@ -21,6 +21,9 @@ function buildMachineQueryFilters(queryParams?: MachineQueryParams): SQL[] {
     if (queryParams.status) {
         filters.push(ilike(machineTable.status, `%${queryParams.status}%`))
     }
+    if (queryParams.rackId) {
+        filters.push(eq(machineTable.rackId, queryParams.rackId))
+    }
     return filters
 }
 

@@ -9,6 +9,7 @@ export async function getIPAddresses(req: Request, res: Response) {
     const ipAddressQueryParams: ipAddressService.IPAddressQueryParams = {
         address: req.query.address as string,
         status: req.query.status as IPAddressStatus,
+        poolId: Number(req.query.poolId),
         sortBy: req.query.sortBy as ipAddressService.IPAddressSortBy,
         sortOrder: req.query.sortOrder as SortOrder
     }

@@ -1,4 +1,5 @@
 import { IRack, RackEntity } from "../../domain/rack"
+import { IMachineRepository } from "../../persistence/repositories/machine.repository"
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
 import { IRoomRepository } from "../../persistence/repositories/room.repository"
 import { SortOrder } from "../../types/common"
@@ -9,6 +10,7 @@ export type RackSortBy =
 export interface RackQueryParams {
     name?: string
     tag?: string
+    roomId?: number
     sortBy?: RackSortBy
     sortOrder?: SortOrder
 }
@@ -48,9 +50,26 @@ export async function createRack(
 
 export async function updateRack(
     rackRepo: IRackRepository,
+    machineRepo: IMachineRepository,
+    roomRepo: IRoomRepository,
     id: number,
     rack: Partial<IRack>
 ) {
+    const prevRack = await rackRepo.getRackById(id)
+    if (rack.height && prevRack.height !== rack.height) {
+        const machines = await machineRepo.getMachines({
+            rackId: id
+        })
+        for (const machine of machines) {
+            if (machine.startUnit + machine.unit > rack.height) {
+                throw new Error("The updated height of rack is smaller than the machine height.")
+            }
+        }
+        const room = await roomRepo.getRoomById(prevRack.roomId);
+        if (rack.height > room.unit) {
+            throw new Error("The updated rack height exceeds the room unit.")
+        }
+    }
     const updatedRack = await rackRepo.updateRack(id, rack)
 
     return updatedRack

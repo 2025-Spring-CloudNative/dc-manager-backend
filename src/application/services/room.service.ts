@@ -1,4 +1,5 @@
 import { IRoom, RoomEntity } from "../../domain/room"
+import { IRackRepository } from "../../persistence/repositories/rack.repository"
 import { IRoomRepository } from "../../persistence/repositories/room.repository"
 import { SortOrder } from "../../types/common"
 
@@ -41,9 +42,22 @@ export async function createRoom(
 
 export async function updateRoom(
     roomRepo: IRoomRepository,
+    rackRepo: IRackRepository,
     id: number,
     room: Partial<IRoom>
 ) {
+    const prevRoom = await roomRepo.getRoomById(id)
+    // if the room unit is changed, then do the following check
+    if (room.unit && prevRoom.unit !== room.unit) {
+        const racks  = await rackRepo.getRacks({
+            roomId: id
+        })
+        for (const rack of racks) {
+            if (rack.height > room.unit) {
+                throw new Error("The updated unit of room is smaller than the rack height.")
+            }
+        }
+    }
     const updatedRoom = await roomRepo.updateRoom(id, room)
 
     return updatedRoom

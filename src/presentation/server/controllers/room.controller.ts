@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { RoomDrizzleRepository } from "../../../persistence/drizzle/room.persistence"
 import * as roomService from "../../../application/services/room.service"
 import { SortOrder } from "../../../types/common"
+import { RackDrizzleRepository } from "../../../persistence/drizzle/rack.persistence"
 
 export async function getRooms(req: Request, res: Response) {
     const roomRepo = new RoomDrizzleRepository()
@@ -47,11 +48,14 @@ export async function createRoom(req: Request, res: Response) {
 
 export async function updateRoom(req: Request, res: Response) {
     const roomRepo = new RoomDrizzleRepository()
+    const rackRepo = new RackDrizzleRepository()
+
     const id = Number(req.params.id)
 
     try {
         const updatedRoom = await roomService.updateRoom(
             roomRepo, 
+            rackRepo,
             id, 
             req.body
         )
