@@ -12,6 +12,7 @@ export interface MachineQueryParams {
     name?: string
     status?: MachineStatus
     macAddress?: string
+    rackId?: number
     sortBy?: MachineSortBy
     sortOrder?: SortOrder
 }

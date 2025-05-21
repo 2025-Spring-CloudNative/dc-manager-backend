@@ -17,6 +17,9 @@ function buildRackQueryFilters(queryParams?: RackQueryParams): SQL[] {
     if (queryParams.tag) {
         filters.push(ilike(rackTable.tag, `%${queryParams.tag}%`))
     }
+    if (queryParams.roomId) {
+        filters.push(eq(rackTable.roomId, queryParams.roomId))
+    }
     return filters
 }
 
