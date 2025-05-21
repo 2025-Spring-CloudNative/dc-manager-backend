@@ -8,6 +8,7 @@ export type IPAddressSortBy =
 export interface IPAddressQueryParams {
     address?: string,
     status?: IPAddressStatus,
+    poolId?: number,
     sortBy?: IPAddressSortBy,
     sortOrder?: SortOrder
 }
