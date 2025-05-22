@@ -70,7 +70,7 @@ usage:
     can(userObject, "create", "DataCenter") // false
 */
 export function can(user: IUser, action: Action, resource: Resource): boolean {
-    const permissions = POLICY[user.role]
+    const permissions = POLICY[user.role] ?? []
     for (const p of permissions) {
         if (
             p.resource === "*" ||
