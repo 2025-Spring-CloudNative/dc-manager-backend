@@ -16,6 +16,9 @@ function buildDataCenterQueryFilters(queryParams?: DataCenterQueryParams): SQL[]
     if (queryParams.location) {
         filters.push(ilike(dataCenterTable.location, `%${queryParams.location}%`))
     }
+    if (queryParams.subnetId) {
+        filters.push(eq(dataCenterTable.subnetId, queryParams.subnetId))
+    }
     return filters
 }
 
