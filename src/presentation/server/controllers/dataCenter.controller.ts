@@ -9,6 +9,7 @@ export async function getDataCenters(req: Request, res: Response) {
     const dataCenterQueryParams: dataCenterService.DataCenterQueryParams = {
         name: req.query.name as string,
         location: req.query.location as string,
+        subnetId: Number(req.query.subnetId),
         sortBy: req.query.sortBy as dataCenterService.DataCenterSortBy,
         sortOrder: req.query.sortOrder as SortOrder
     }

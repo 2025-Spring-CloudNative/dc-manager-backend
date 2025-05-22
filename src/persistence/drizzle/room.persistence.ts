@@ -10,7 +10,7 @@ function buildRoomQueryFilters(queryParams?: RoomQueryParams): SQL[] {
         return []
     }
     const filters: SQL[] = []
-    if (!queryParams.name) {
+    if (queryParams.name) {
         filters.push(ilike(roomTable.name, `%${queryParams.name}%`))
     }
     return filters

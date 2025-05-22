@@ -3,42 +3,58 @@ import { IUserRepository } from "../../persistence/repositories/user.repository"
 import { IPasswordHasherRepository } from "../../persistence/repositories/hash.repository"
 
 export async function updateUser(
+    actor: IUser,
     userRepo: IUserRepository,
     userId: number,
-    user: Partial<IUser>
+    data: Partial<IUser>
 ): Promise<SafeUser> {
     const prevUser = await userRepo.getUserById(userId)
     if (!prevUser) {
         throw new Error("User not found")
     }
-
-    // const prevUserEntity = new UserEntity(prevUser)
-    if (user.passwordHash) {
+    if (data.passwordHash) {
         throw new Error("Cannot update password using the updateUser api.")
     }
 
-    // TODO: check owner and role when updating role
+    const actorEntity = new UserEntity(actor)
+    const prevUserEntity = new UserEntity(prevUser)
 
-    const updatedUser = await userRepo.updateUser(userId, user)
+    // check owner and role
+    if (!actorEntity.canUpdateUser(prevUserEntity, data)) {
+        throw new Error("Forbidden")
+    }
+
+    const updatedUser = await userRepo.updateUser(userId, data)
     const { passwordHash, ...safeUser } = updatedUser
 
     return safeUser
 }
 
 export async function updateUserPassword(
+    actor: IUser,
     userRepo: IUserRepository,
     passwordHasherRepo: IPasswordHasherRepository,
     userId: number,
     oldPassword: string,
     newPassword: string
 ): Promise<void> {
-    // TODO: check owner and role
     const prevUser = await userRepo.getUserById(userId)
     if (!prevUser) {
         throw new Error("User not found")
     }
 
+    const actorEntity = new UserEntity(actor)
     const prevUserEntity = new UserEntity(prevUser)
+
+    // check owner and role
+    if (
+        !actorEntity.canUpdateUser(prevUserEntity, {
+            passwordHash: newPassword
+        })
+    ) {
+        throw new Error("Forbidden")
+    }
+
     const isValidPassword = await passwordHasherRepo.compare(
         oldPassword,
         prevUserEntity.passwordHash

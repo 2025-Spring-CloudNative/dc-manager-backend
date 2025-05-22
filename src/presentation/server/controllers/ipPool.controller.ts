@@ -11,6 +11,7 @@ export async function getIPPools(req: Request, res: Response) {
         name: req.query.name as string,
         type: req.query.type as string,
         cidr: req.query.cidr as string,
+        subnetId: Number(req.query.subnetId),
         sortBy: req.query.sortBy as ipPoolService.IPPoolSortBy,
         sortOrder: req.query.sortOrder as SortOrder
     }

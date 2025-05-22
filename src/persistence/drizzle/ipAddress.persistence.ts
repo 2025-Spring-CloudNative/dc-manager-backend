@@ -17,6 +17,9 @@ function buildIPAddressQueryFilters(queryParams?: IPAddressQueryParams): SQL[] {
     if (queryParams.status) {
         filters.push(ilike(ipAddressTable.status, `%${queryParams.status}%`))
     }
+    if (queryParams.poolId) {
+        filters.push(eq(ipAddressTable.poolId, queryParams.poolId))
+    }
     return filters
 }
 

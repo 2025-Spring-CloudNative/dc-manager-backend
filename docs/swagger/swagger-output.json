@@ -528,6 +528,117 @@
         ]
       }
     },
+    "/user/reset-password/{id}": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "summary": "updateUserPassword",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "update user password successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "oldPassword": {
+                    "type": "string",
+                    "example": "oldpassword"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "example": "newpassword"
+                  }
+                },
+                "required": [
+                  "oldPassword",
+                  "newPassword"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "/user/{id}": {
       "patch": {
         "tags": [
@@ -633,117 +744,6 @@
                 "required": [
                   "name",
                   "email"
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/reset-password/{id}": {
-      "patch": {
-        "tags": [
-          "User"
-        ],
-        "summary": "updateUserPassword",
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "update user password successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "string"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "string"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "string"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "string"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "oldPassword": {
-                    "type": "string",
-                    "example": "oldpassword"
-                  },
-                  "newPassword": {
-                    "type": "string",
-                    "example": "newpassword"
-                  }
-                },
-                "required": [
-                  "oldPassword",
-                  "newPassword"
                 ]
               }
             }
@@ -1095,10 +1095,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "name": {
                     "type": "string",
                     "example": "Updated DC"
@@ -1109,10 +1105,8 @@
                   }
                 },
                 "required": [
-                  "id",
                   "name",
-                  "location",
-                  "subnetId"
+                  "location"
                 ]
               }
             }
@@ -1577,10 +1571,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "name": {
                     "type": "string",
                     "example": "Updated Room A"
@@ -1595,7 +1585,6 @@
                   }
                 },
                 "required": [
-                  "id",
                   "name",
                   "unit",
                   "dataCenterId"
@@ -1708,6 +1697,13 @@
           },
           {
             "name": "tag",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "roomId",
             "in": "query",
             "schema": {
               "type": "string"
@@ -2050,10 +2046,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "name": {
                     "type": "string",
                     "example": "Updated Rack A"
@@ -2072,7 +2064,6 @@
                   }
                 },
                 "required": [
-                  "id",
                   "name",
                   "height",
                   "tag",
@@ -2163,6 +2154,13 @@
           },
           {
             "name": "macAddress",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rackId",
             "in": "query",
             "schema": {
               "type": "string"
@@ -4004,6 +4002,13 @@
             }
           },
           {
+            "name": "subnetId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "sortBy",
             "in": "query",
             "schema": {
@@ -4504,10 +4509,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "name": {
                     "type": "string",
                     "example": "Main IP Pool"
@@ -4864,6 +4865,13 @@
             }
           },
           {
+            "name": "poolId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "sortBy",
             "in": "query",
             "schema": {
@@ -5086,10 +5094,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "address": {
                     "type": "string",
                     "example": "192.168.0.10"
@@ -5108,7 +5112,6 @@
                   }
                 },
                 "required": [
-                  "id",
                   "address",
                   "status",
                   "poolId",
@@ -5425,10 +5428,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1
-                  },
                   "address": {
                     "type": "string",
                     "example": "192.168.0.11"
@@ -5447,7 +5446,6 @@
                   }
                 },
                 "required": [
-                  "id",
                   "address",
                   "status",
                   "poolId",

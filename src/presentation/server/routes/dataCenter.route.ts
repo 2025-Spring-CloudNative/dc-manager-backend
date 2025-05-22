@@ -78,11 +78,10 @@ router.patch("/:id",
                     schema: {
                         type: "object",
                         properties: {
-                            id: { type: "number", example: 1 },
                             name: { type: "string", example: "Updated DC" },
                             location: { type: "string", example: "Taipei" }
                         },
-                        required: ["id", "name", "location", "subnetId"]
+                        required: ["name", "location"]
                     }
                 }
             }

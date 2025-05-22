@@ -20,6 +20,9 @@ function buildIPPoolQueryFilters(queryParams?: IPPoolQueryParams): SQL[] {
     if (queryParams.cidr) {
         filters.push(ilike(ipPoolTable.cidr, `%${queryParams.cidr}%`))
     }
+    if (queryParams.subnetId) {
+        filters.push(eq(ipPoolTable.subnetId, queryParams.subnetId))
+    }
     return filters
 }
 

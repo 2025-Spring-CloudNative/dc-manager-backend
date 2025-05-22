@@ -54,13 +54,12 @@ router.post("/",
                     schema: {
                         type: "object",
                         properties: {
-                            id: { type: "number", example: 1 },
                             address: { type: "string", example: "192.168.0.10" },
                             status: { type: "string", example: "allocated" },
                             poolId: { type: "number", example: 100 },
                             machineId: { type: "number", example: 200 },
                         },
-                        required: ["id", "address", "status", "poolId", "machineId"]
+                        required: ["address", "status", "poolId", "machineId"]
                     }
                 }
             }
@@ -97,13 +96,12 @@ router.patch("/:id",
                     schema: {
                         type: "object",
                         properties: {
-                            id: { type: "number", example: 1 },
                             address: { type: "string", example: "192.168.0.11" },
                             status: { type: "string", example: "allocated" },
                             poolId: { type: "number", example: 101 },
                             machineId: { type: "number", example: 201 },
                         },
-                        required: ["id", "address", "status", "poolId", "machineId"]
+                        required: ["address", "status", "poolId", "machineId"]
                     }
                 }
             }

@@ -12,6 +12,7 @@ export interface MachineQueryParams {
     name?: string
     status?: MachineStatus
     macAddress?: string
+    rackId?: number
     sortBy?: MachineSortBy
     sortOrder?: SortOrder
 }
@@ -25,7 +26,9 @@ export async function getMachines(
     return machines
 }
 
-export async function getMachinesWithIPAddress(machineRepo: IMachineRepository) {
+export async function getMachinesWithIPAddress(
+    machineRepo: IMachineRepository
+) {
     const machinesWithIPAddress = await machineRepo.getMachinesWithIPAddress()
 
     return machinesWithIPAddress
@@ -44,8 +47,10 @@ export async function getMachinesByIdWithIPAddress(
     machineRepo: IMachineRepository,
     id: number
 ) {
-    const machineWithIPAddress = await machineRepo.getMachineByIdWithIPAddress(id)
-    
+    const machineWithIPAddress = await machineRepo.getMachineByIdWithIPAddress(
+        id
+    )
+
     return machineWithIPAddress
 }
 
@@ -56,18 +61,18 @@ export async function createMachine(
     serviceRepo: IServiceRepository,
     machine: IMachine
 ) {
-    const createdMachineId = await machineRepo.createMachine(machine)
-
-    const rack = await rackRepo.getRackById(machine.rackId)    
-
+    const rack = await rackRepo.getRackById(machine.rackId)
     const service = await serviceRepo.getServiceById(rack.serviceId as number)
-    const ipAddresses = await ipAddressRepo.getIPAddressesByPoolId(service.poolId as number)
+    const ipAddresses = await ipAddressRepo.getIPAddressesByPoolId(
+        service.poolId as number
+    )
+    const createdMachineId = await machineRepo.createMachine(machine)
 
     for (const ipAddress of ipAddresses) {
         // The ip address is created but not allocated or the ip address is released
         if (ipAddress.id && (!ipAddress.allocatedAt || ipAddress.releasedAt)) {
             await ipAddressRepo.updateIPAddress(ipAddress.id, {
-                machineId: createdMachineId, 
+                machineId: createdMachineId,
                 allocatedAt: new Date(),
                 releasedAt: null
             })
@@ -99,6 +104,6 @@ export async function deleteMachine(
         })
     }
     const deletedMachineId = await machineRepo.deleteMachine(id)
-    
+
     return deletedMachineId
 }

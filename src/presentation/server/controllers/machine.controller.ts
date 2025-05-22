@@ -13,6 +13,7 @@ export async function getMachines(req: Request, res: Response) {
         name: req.query.name as string,
         status: req.query.status as MachineStatus,
         macAddress: req.query.macAddress as string,
+        rackId: Number(req.query.rackId),
         sortBy: req.query.sortBy as machineService.MachineSortBy,
         sortOrder: req.query.sortOrder as SortOrder
     }
