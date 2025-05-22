@@ -1703,6 +1703,13 @@
             }
           },
           {
+            "name": "roomId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "sortBy",
             "in": "query",
             "schema": {
@@ -2147,6 +2154,13 @@
           },
           {
             "name": "macAddress",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rackId",
             "in": "query",
             "schema": {
               "type": "string"
@@ -3988,6 +4002,13 @@
             }
           },
           {
+            "name": "subnetId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "sortBy",
             "in": "query",
             "schema": {
@@ -4838,6 +4859,13 @@
           },
           {
             "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "poolId",
             "in": "query",
             "schema": {
               "type": "string"
