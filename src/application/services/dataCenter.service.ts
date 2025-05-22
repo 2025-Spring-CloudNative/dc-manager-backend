@@ -9,6 +9,7 @@ export type DataCenterSortBy = 'name' | 'location'
 export interface DataCenterQueryParams {
     name?: string
     location?: string
+    subnetId?: number
     sortBy?: DataCenterSortBy
     sortOrder?: SortOrder
 }
