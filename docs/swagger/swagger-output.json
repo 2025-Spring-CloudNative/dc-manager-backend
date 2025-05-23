@@ -774,6 +774,13 @@
             }
           },
           {
+            "name": "subnetId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "sortBy",
             "in": "query",
             "schema": {
@@ -1242,6 +1249,13 @@
         "parameters": [
           {
             "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dataCenterId",
             "in": "query",
             "schema": {
               "type": "string"
@@ -2886,6 +2900,13 @@
             }
           },
           {
+            "name": "poolId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "sortBy",
             "in": "query",
             "schema": {
@@ -3863,22 +3884,12 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "cidr": {
-                    "type": "string",
-                    "example": "192.168.1.0/24"
-                  },
-                  "netmask": {
-                    "type": "string",
-                    "example": "255.255.255.0"
-                  },
                   "gateway": {
                     "type": "string",
                     "example": "192.168.1.1"
                   }
                 },
                 "required": [
-                  "cidr",
-                  "netmask",
                   "gateway"
                 ]
               }
@@ -3966,6 +3977,232 @@
                     "name": "main"
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subnet/util/{id}": {
+      "get": {
+        "tags": [
+          "Subnet"
+        ],
+        "summary": "getSubnetIPUtilization",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get Subnet IP utilization successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "utilization": {
+                      "type": "number",
+                      "example": 0.75
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subnet/extend/{id}": {
+      "patch": {
+        "tags": [
+          "Subnet"
+        ],
+        "summary": "extendSubnet",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subnet extended successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "cidr": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "netmask": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "gateway": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "cidr": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "netmask": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "gateway": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cidr": {
+                    "type": "string",
+                    "example": "192.168.1.0/24"
+                  },
+                  "netmask": {
+                    "type": "string",
+                    "example": "255.255.255.0"
+                  },
+                  "gateway": {
+                    "type": "string",
+                    "example": "192.168.1.1"
+                  }
+                },
+                "required": [
+                  "cidr",
+                  "netmask",
+                  "gateway"
+                ]
               }
             }
           }

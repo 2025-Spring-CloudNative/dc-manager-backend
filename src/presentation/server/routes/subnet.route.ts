@@ -110,11 +110,9 @@ router.patch("/:id",
                     schema: {
                         type: "object",
                         properties: {
-                            cidr: { type: "string", example: "192.168.1.0/24" },
-                            netmask: { type: "string", example: "255.255.255.0" },
                             gateway: { type: "string", example: "192.168.1.1" }
                         },
-                        required: ["cidr", "netmask", "gateway"]
+                        required: ["gateway"]
                     }
                 }
             }
@@ -140,6 +138,44 @@ router.patch("/:id",
         }
     */
     subnetController.updateSubnet)
+
+router.patch("/extend/:id", 
+    /*
+        #swagger.tags = ['Subnet']
+        #swagger.summary = 'extendSubnet'
+        #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            cidr: { type: "string", example: "192.168.1.0/24" },
+                            netmask: { type: "string", example: "255.255.255.0" },
+                            gateway: { type: "string", example: "192.168.1.1" }
+                        },
+                        required: ["cidr", "netmask", "gateway"]
+                    }
+                }
+            }
+        }
+        #swagger.responses[200] = {
+            description: 'Subnet extended successfully',
+            schema: {
+                id: "number",
+                cidr: "string",
+                netmask: "string",
+                gateway: "string",
+                createdAt: "string",
+                updatedAt: "string"
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    subnetController.extendSubnet)
 
 router.delete("/:id",
     /*

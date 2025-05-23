@@ -60,6 +60,7 @@ export async function getSubnetIPUtilization(req: Request, res: Response) {
             ipAddressRepo,
             id
         )   
+        res.status(200).json({ utilization })
     } catch(error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -94,9 +95,29 @@ export async function updateSubnet(req: Request, res: Response) {
     }
 }
 
+export async function extendSubnet(req: Request, res: Response) {
+    const subnetRepo = new SubnetDrizzleRepository()
+    const id = Number(req.params.id)
+    const { cidr, netmask, gateway } = req.body
+
+    try {
+        const extendedSubnet = await subnetService.extendSubnet(
+            subnetRepo,
+            id,
+            cidr,
+            netmask,
+            gateway
+        ) 
+        res.status(200).json(extendedSubnet)
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export async function deleteSubnet(req: Request, res: Response) {
     const subnetRepo =  new SubnetDrizzleRepository()
     const id = Number(req.params.id)
+
     try {
         const deletedSubnetId = await subnetService.deleteSubnet(
             subnetRepo,

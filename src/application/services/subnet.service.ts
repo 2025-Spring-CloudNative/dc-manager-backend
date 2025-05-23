@@ -76,7 +76,7 @@ export async function updateSubnet(
     const prevSubnetEntity = new SubnetEntity(prevSubnet)
 
     const restrictedFields: (keyof ISubnet)[] = [
-        'createdAt', 'updatedAt'
+        'id', 'createdAt', 'updatedAt', 'cidr', 'netmask'
     ]
 
     for (const field of restrictedFields) {
@@ -85,9 +85,30 @@ export async function updateSubnet(
         }
     }
 
+    if (subnet.gateway && subnet.gateway !== prevSubnet.gateway) {
+        if (!NetUtils.isIPInsideCIDR(subnet.gateway, prevSubnetEntity.cidr)) {
+            throw new Error(`Cannot update gateway to ${subnet.gateway} since it is not the subnet's cidr.`)
+        }
+    }
+
     const updatedSubnet = await subnetRepo.updateSubnet(id, subnet)
 
     return updatedSubnet
+}
+
+export async function extendSubnet(
+    subnetRepo: ISubnetRepository,
+    id: number,
+    newCidr: string,
+    newNetmask: string,
+    newGateway: string
+) {
+    const subnetCidrs = await subnetRepo.getOtherSubnetCIDRs(id)
+    
+    const patch = await SubnetEntity.extend(newCidr, newNetmask, newGateway, subnetCidrs)
+    const extendedSubnet = await subnetRepo.updateSubnet(id, patch)
+    
+    return extendedSubnet
 }
 
 export async function deleteSubnet(subnetRepo: ISubnetRepository, id: number) {
