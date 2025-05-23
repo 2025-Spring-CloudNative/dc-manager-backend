@@ -56,7 +56,9 @@ export async function updateRack(
     rack: Partial<IRack>
 ) {
     const prevRack = await rackRepo.getRackById(id)
-    if (rack.height && prevRack.height !== rack.height) {
+    const prevRackEntity = new RackEntity(prevRack)
+
+    if (rack.height && prevRackEntity.height !== rack.height) {
         const machines = await machineRepo.getMachines({
             rackId: id
         })
@@ -65,9 +67,18 @@ export async function updateRack(
                 throw new Error("The updated height of rack is smaller than the machine height.")
             }
         }
-        const room = await roomRepo.getRoomById(prevRack.roomId);
+        const room = await roomRepo.getRoomById(prevRackEntity.roomId)
         if (rack.height > room.unit) {
             throw new Error("The updated rack height exceeds the room unit.")
+        }
+    }
+
+    const restrictedFields: (keyof IRack)[] = [
+        'id', 'createdAt', 'updatedAt'
+    ]
+    for (const field of restrictedFields) {
+        if (rack[field] && rack[field] !== prevRackEntity[field]) {
+            throw new Error(`Cannot update restricted field: ${field}`)
         }
     }
     const updatedRack = await rackRepo.updateRack(id, rack)

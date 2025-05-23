@@ -76,6 +76,14 @@ export async function updateDataCenter(
     id: number,
     dataCenter: Partial<IDataCenter>
 ) {
+    const prevDataCenter = await dataCenterRepo.getDataCenterById(id)
+    const prevDataCenterEntity = new DataCenterEntity(prevDataCenter)
+
+    const restrictedField: (keyof IDataCenter) = 'id'
+    if (dataCenter[restrictedField] && dataCenter[restrictedField] !== prevDataCenterEntity[restrictedField]) {
+        throw new Error(`Cannot update restricted field: ${restrictedField}`)
+    }
+    
     const updatedDataCenter = await dataCenterRepo.updateDataCenter(id, dataCenter)
 
     return updatedDataCenter

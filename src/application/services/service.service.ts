@@ -94,6 +94,13 @@ export async function updateService(
     id: number,
     service: Partial<IService>
 ) {
+    const prevService = await serviceRepo.getServiceById(id)
+    const prevServiceEntity = new ServiceEntity(prevService)
+
+    const restrictedField: (keyof IService) = 'id'
+    if (service[restrictedField] && service[restrictedField] !== prevServiceEntity[restrictedField]) {
+        throw new Error(`Cannot update restricted field: ${restrictedField}`)
+    }
     const updatedService = await serviceRepo.updateService(id, service)
 
     return updatedService

@@ -45,6 +45,19 @@ export async function updateSubnet(
     id: number,
     subnet: Partial<ISubnet>
 ) {
+    const prevSubnet = await subnetRepo.getSubnetById(id)
+    const prevSubnetEntity = new SubnetEntity(prevSubnet)
+
+    const restrictedFields: (keyof ISubnet)[] = [
+        'createdAt', 'updatedAt'
+    ]
+
+    for (const field of restrictedFields) {
+        if (subnet[field] && subnet[field] !== prevSubnetEntity[field]) {
+            throw new Error(`Cannot update restricted field: ${field}`)
+        }
+    }
+
     const updatedSubnet = await subnetRepo.updateSubnet(id, subnet)
 
     return updatedSubnet

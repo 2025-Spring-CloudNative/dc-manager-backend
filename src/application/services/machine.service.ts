@@ -1,5 +1,5 @@
 import { IPAddressStatus } from "../../domain/ipAddress"
-import { IMachine, MachineStatus } from "../../domain/machine"
+import { IMachine, MachineEntity, MachineStatus } from "../../domain/machine"
 import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
 import { IMachineRepository } from "../../persistence/repositories/machine.repository"
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
@@ -89,6 +89,19 @@ export async function updateMachine(
     id: number,
     machine: Partial<IMachine>
 ) {
+
+    const prevMachine = await machineRepo.getMachineById(id)
+    const prevMachineEntity = new MachineEntity(prevMachine)
+    
+    const restrictedFields: (keyof IMachine)[] = [
+        'id', 'createdAt'
+    ]
+    for (const field of restrictedFields) {
+        if (machine[field] && machine[field] !== prevMachineEntity[field]) {
+            throw new Error(`Cannot update restricted field: ${field}`)
+        }
+    }
+
     const updatedMachine = await machineRepo.updateMachine(id, machine)
 
     return updatedMachine

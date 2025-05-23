@@ -47,8 +47,10 @@ export async function updateRoom(
     room: Partial<IRoom>
 ) {
     const prevRoom = await roomRepo.getRoomById(id)
+    const prevRoomEntity = new RoomEntity(prevRoom)
+
     // if the room unit is changed, then do the following check
-    if (room.unit && prevRoom.unit !== room.unit) {
+    if (room.unit && prevRoomEntity.unit !== room.unit) {
         const racks  = await rackRepo.getRacks({
             roomId: id
         })
@@ -58,6 +60,13 @@ export async function updateRoom(
             }
         }
     }
+
+    const restrictedField: (keyof IRoom) = 'id'
+    if (room[restrictedField] && room[restrictedField] !== prevRoomEntity[restrictedField]) {
+        throw new Error(`Cannot update restricted field: ${restrictedField}`)
+    }
+
+
     const updatedRoom = await roomRepo.updateRoom(id, room)
 
     return updatedRoom
