@@ -40,7 +40,6 @@ export async function getIPPoolUtilization(req: Request, res: Response) {
     const ipAddressRepo = new IPAddressDrizzleRepository()
     const id = Number(req.params.id)
     try {
-        
         const utilization: number = await ipPoolService.getIPPoolUtilization(
             ipAddressRepo,
             id

@@ -40,6 +40,33 @@ router.get("/:id",
     */
     subnetController.getSubnetById)
 
+router.get("/util/:id", 
+    /*
+        #swagger.tags = ['Subnet']
+        #swagger.summary = 'getSubnetIPUtilization'
+        #swagger.responses[200] = {
+            description: 'Get Subnet IP utilization successfully',
+            content: {
+                "application/json": {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            utilization: {
+                                type: 'number',
+                                example: 0.75
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    subnetController.getSubnetIPUtilization)
+
 router.post("/",
     /*
         #swagger.tags = ['Subnet']

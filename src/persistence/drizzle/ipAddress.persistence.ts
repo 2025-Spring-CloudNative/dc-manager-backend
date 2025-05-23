@@ -87,15 +87,6 @@ export class IPAddressDrizzleRepository implements IIPAddressRepository {
         return ipAddress as IIPAddress
     }
 
-    async getIPAddressesByPoolId(poolId: number) {
-        const ipAddresses = await db
-            .select()
-            .from(ipAddressTable)
-            .where(eq(ipAddressTable.poolId, poolId))
-
-        return ipAddresses
-    }
-
     async createIPAddress(ipAddress: IIPAddress) {
         const [createdIPAddress] = await db
             .insert(ipAddressTable)

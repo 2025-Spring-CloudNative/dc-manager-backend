@@ -1,6 +1,9 @@
 import { ISubnet, SubnetEntity } from "../../domain/subnet"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
 import { SortOrder } from "../../types/common"
+import { NetUtils } from "../../domain/utils/net"
+import { IIPPoolRepository } from "../../persistence/repositories/ipPool.repository"
+import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
 
 export type SubnetSortBy = 'cidr' | 'createdAt' | 'updatedAt'
 
@@ -28,6 +31,30 @@ export async function getSubnetById(
     const subnet = await subnetRepo.getSubnetById(id)
 
     return subnet
+}
+
+export async function getSubnetIPUtilization(
+    subnetRepo: ISubnetRepository,
+    ipPoolRepo: IIPPoolRepository,
+    ipAddressRepo: IIPAddressRepository,
+    id: number
+) {
+    const subnet = await subnetRepo.getSubnetById(id)
+    const allIPAddresses: string[] = NetUtils.getIpAddressesFromCIDR(subnet.cidr)
+    const ipPools = await ipPoolRepo.getIPPools({
+        subnetId: id
+    })
+    let allocatedIPs = 0
+    for (const ipPool of ipPools) {
+        const ipAddresses = await ipAddressRepo.getIPAddresses({
+            poolId: ipPool.id
+        })
+        allocatedIPs += ipAddresses.filter(
+            (ip) => ip.allocatedAt && !ip.releasedAt
+        ).length
+    }
+    const utilization = allocatedIPs / allIPAddresses.length
+    return parseFloat(utilization.toFixed(3))
 }
 
 export async function createSubnet(

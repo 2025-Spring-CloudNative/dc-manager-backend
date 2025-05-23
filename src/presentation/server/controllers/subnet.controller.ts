@@ -2,6 +2,8 @@ import { Request, Response } from "express"
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
 import * as subnetService from "../../../application/services/subnet.service"
 import { SortOrder } from "../../../types/common"
+import { IPPoolDrizzleRepository } from "../../../persistence/drizzle/ipPool.persistence"
+import { IPAddressDrizzleRepository } from "../../../persistence/drizzle/ipAddress.persistence"
 
 export async function getSubnets(req: Request, res: Response) {
     const subnetRepo =  new SubnetDrizzleRepository()
@@ -41,6 +43,24 @@ export async function getSubnetById(req: Request, res: Response) {
         }
         
     } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function getSubnetIPUtilization(req: Request, res: Response) {
+    const subnetRepo = new SubnetDrizzleRepository()
+    const ipPoolRepo = new IPPoolDrizzleRepository()
+    const ipAddressRepo = new IPAddressDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        const utilization: number = await subnetService.getSubnetIPUtilization(
+            subnetRepo,
+            ipPoolRepo,
+            ipAddressRepo,
+            id
+        )   
+    } catch(error: any) {
         res.status(500).json({ message: error.message })
     }
 }
