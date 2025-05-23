@@ -1,3 +1,4 @@
+import { IPAddressStatus } from "../../domain/ipAddress"
 import { IMachine, MachineStatus } from "../../domain/machine"
 import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
 import { IMachineRepository } from "../../persistence/repositories/machine.repository"
@@ -73,6 +74,7 @@ export async function createMachine(
         if (ipAddress.id && (!ipAddress.allocatedAt || ipAddress.releasedAt)) {
             await ipAddressRepo.updateIPAddress(ipAddress.id, {
                 machineId: createdMachineId,
+                status: IPAddressStatus.Allocated,
                 allocatedAt: new Date(),
                 releasedAt: null
             })
@@ -100,6 +102,7 @@ export async function deleteMachine(
     const ipAddress = await ipAddressRepo.getIPAddressByMachineId(id)
     if (ipAddress.id) {
         await ipAddressRepo.updateIPAddress(ipAddress.id, {
+            status: IPAddressStatus.Released,
             releasedAt: new Date()
         })
     }
