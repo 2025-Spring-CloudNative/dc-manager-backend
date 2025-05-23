@@ -14,6 +14,7 @@ export type ServiceSortBy = 'name'
 
 export interface ServiceQueryParams {
     name?: string
+    poolId?: number
     sortBy?: ServiceSortBy
     sortOrder?: SortOrder
 }

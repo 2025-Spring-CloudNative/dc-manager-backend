@@ -12,6 +12,7 @@ export async function getServices(req: Request, res: Response) {
     const serviceRepo = new ServiceDrizzleRepository()
     const serviceQueryParams: serviceService.ServiceQueryParams = {
         name: req.query.name as string,
+        poolId: Number(req.query.poolId),
         sortBy: req.query.sortBy as serviceService.ServiceSortBy,
         sortOrder: req.query.sortOrder as SortOrder
     }

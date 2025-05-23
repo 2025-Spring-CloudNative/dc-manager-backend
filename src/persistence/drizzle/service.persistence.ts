@@ -13,6 +13,9 @@ function buildServiceQueryFilters(queryParams?: ServiceQueryParams): SQL[] {
     if (queryParams.name) {
         filters.push(ilike(serviceTable.name, `%${queryParams.name}%`))
     }
+    if (queryParams.poolId) {
+        filters.push(eq(serviceTable.poolId, queryParams.poolId))
+    }
     return filters
 }
 

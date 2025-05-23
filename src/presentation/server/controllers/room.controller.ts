@@ -8,6 +8,7 @@ export async function getRooms(req: Request, res: Response) {
     const roomRepo = new RoomDrizzleRepository()
     const roomQueryParams : roomService.RoomQueryParams = {
         name: req.query.name as string,
+        dataCenterId: Number(req.query.dataCenterId),
         sortBy: req.query.sortBy as roomService.RoomSortBy,
         sortOrder: req.query.sortOrder as SortOrder
     }

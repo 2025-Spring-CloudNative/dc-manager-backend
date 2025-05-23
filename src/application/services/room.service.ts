@@ -7,6 +7,7 @@ export type RoomSortBy = 'name' | 'unit'
 
 export interface RoomQueryParams {
     name?: string
+    dataCenterId?: number
     sortBy?: RoomSortBy
     sortOrder?: SortOrder
 }
@@ -15,7 +16,6 @@ export async function getRooms(
     roomRepo: IRoomRepository,
     roomQueryParams: RoomQueryParams
 ) {
-    
     const rooms = await roomRepo.getRooms(roomQueryParams)
     
     return rooms

@@ -13,6 +13,9 @@ function buildRoomQueryFilters(queryParams?: RoomQueryParams): SQL[] {
     if (queryParams.name) {
         filters.push(ilike(roomTable.name, `%${queryParams.name}%`))
     }
+    if (queryParams.dataCenterId) {
+        filters.push(eq(roomTable.dataCenterId, queryParams.dataCenterId))
+    }
     return filters
 }
 
