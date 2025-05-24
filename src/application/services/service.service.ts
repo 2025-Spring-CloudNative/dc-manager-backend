@@ -29,6 +29,29 @@ export async function getServices(
     return services
 }
 
+export async function getServicesByMachineIP(
+    serviceRepo: IServiceRepository,
+    ipPoolRepo: IIPPoolRepository,
+    ipAddressRepo: IIPAddressRepository,
+    machineIP: string
+) {
+    const ipAddresses = await ipAddressRepo.getIPAddresses({
+        address: machineIP 
+    })
+
+    let services: IService[] = []
+    for (const ipAddress of ipAddresses) {
+        const ipPool = await ipPoolRepo.getIPPoolById(ipAddress.poolId!)
+
+        const [service] = await serviceRepo.getServices({
+            poolId: ipPool.id!
+        })
+        services.push(service!)
+    }
+
+    return services
+}
+
 export async function getServiceById(
     serviceRepo: IServiceRepository,
     id: number

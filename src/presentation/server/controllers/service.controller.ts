@@ -19,8 +19,20 @@ export async function getServices(req: Request, res: Response) {
     }
 
     try {
-        const services = await serviceService.getServices(serviceRepo, serviceQueryParams)
-        res.status(200).json(services)
+        if (req.query.machineIP) {
+            const ipPoolRepo = new IPPoolDrizzleRepository()
+            const ipAddressRepo = new IPAddressDrizzleRepository()
+            const services = await serviceService.getServicesByMachineIP(
+                serviceRepo,
+                ipPoolRepo,
+                ipAddressRepo,
+                req.query.machineIP as string
+            )
+            res.status(200).json(services)
+        }else {
+            const services = await serviceService.getServices(serviceRepo, serviceQueryParams)
+            res.status(200).json(services)
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
