@@ -64,6 +64,33 @@ router.get("/util/:id",
     */
     serviceController.getServiceRackUtilization)
 
+router.get("/faultRate/:id",
+    /*
+        #swagger.tags = ['Service']
+        #swagger.summary = 'getServiceFaultRate'
+        #swagger.responses[200] = {
+            description: 'Get service fault rate successfully',
+            content: {
+                "application/json": {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            faultRate: {
+                                type: 'number',
+                                example: 0.05
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    serviceController.getServiceFaultRate)
+
 router.post("/",
     /*
         #swagger.tags = ['Services']
