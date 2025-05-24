@@ -117,12 +117,12 @@ export async function deleteService(
 
     const racks = await rackRepo.getRacksByServiceId(deletedServiceId)
     for (const rack of racks) {
-        await rackRepo.updateRack(rack.id as number, {
+        await rackRepo.updateRack(rack.id!, {
             serviceId: null,
         })
     }
 
-    await ipPoolRepo.deleteIPPool(poolId as number)
+    await ipPoolRepo.deleteIPPool(poolId!)
 
     return deletedServiceId
 }

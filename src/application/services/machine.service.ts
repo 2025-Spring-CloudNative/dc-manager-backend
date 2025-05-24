@@ -63,9 +63,9 @@ export async function createMachine(
     machine: IMachine
 ) {
     const rack = await rackRepo.getRackById(machine.rackId)
-    const service = await serviceRepo.getServiceById(rack.serviceId as number)
+    const service = await serviceRepo.getServiceById(rack.serviceId!)
     const ipAddresses = await ipAddressRepo.getIPAddresses({
-        poolId: service.poolId as number
+        poolId: service.poolId!
     })
     const createdMachineId = await machineRepo.createMachine(machine)
 
