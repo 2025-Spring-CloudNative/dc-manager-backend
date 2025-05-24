@@ -12,11 +12,12 @@ import { SortOrder } from "../../types/common"
 import { IMachineRepository } from "../../persistence/repositories/machine.repository"
 import { MachineStatus } from "../../domain/machine"
 
-export type ServiceSortBy = 'name'
+export type ServiceSortBy = 'name' | 'faultRate'
 
 export interface ServiceQueryParams {
     name?: string
     poolId?: number
+    machineIP?: string
     sortBy?: ServiceSortBy
     sortOrder?: SortOrder
 }
@@ -30,28 +31,6 @@ export async function getServices(
     return services
 }
 
-export async function getServicesByMachineIP(
-    serviceRepo: IServiceRepository,
-    ipPoolRepo: IIPPoolRepository,
-    ipAddressRepo: IIPAddressRepository,
-    machineIP: string
-) {
-    const ipAddresses = await ipAddressRepo.getIPAddresses({
-        address: machineIP 
-    })
-
-    let services: IService[] = []
-    for (const ipAddress of ipAddresses) {
-        const ipPool = await ipPoolRepo.getIPPoolById(ipAddress.poolId!)
-
-        const [service] = await serviceRepo.getServices({
-            poolId: ipPool.id!
-        })
-        services.push(service!)
-    }
-
-    return services
-}
 
 export async function getServiceById(
     serviceRepo: IServiceRepository,
@@ -127,7 +106,7 @@ export async function createService(
         throw new Error(`The cidr ${cidrFromUser} is not in the subnet range.`)
     }
 
-    const existingIPPoolCIDRs = await ipPoolRepo.getAllIPPoolCIDRs()
+    const existingIPPoolCIDRs = await ipPoolRepo.getAllIPPoolCIDRs(subnetId)
     if (NetUtils.checkCIDROverlap(cidrFromUser, existingIPPoolCIDRs)) {
         throw new Error(`The cidr ${cidrFromUser} overlaps with other ip-pools.`)
     }   

@@ -14,25 +14,14 @@ export async function getServices(req: Request, res: Response) {
     const serviceQueryParams: serviceService.ServiceQueryParams = {
         name: req.query.name as string,
         poolId: Number(req.query.poolId),
+        machineIP: req.query.machineIP as string,
         sortBy: req.query.sortBy as serviceService.ServiceSortBy,
         sortOrder: req.query.sortOrder as SortOrder
     }
 
     try {
-        if (req.query.machineIP) {
-            const ipPoolRepo = new IPPoolDrizzleRepository()
-            const ipAddressRepo = new IPAddressDrizzleRepository()
-            const services = await serviceService.getServicesByMachineIP(
-                serviceRepo,
-                ipPoolRepo,
-                ipAddressRepo,
-                req.query.machineIP as string
-            )
-            res.status(200).json(services)
-        }else {
-            const services = await serviceService.getServices(serviceRepo, serviceQueryParams)
-            res.status(200).json(services)
-        }
+        const services = await serviceService.getServices(serviceRepo, serviceQueryParams)
+        res.status(200).json(services)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
