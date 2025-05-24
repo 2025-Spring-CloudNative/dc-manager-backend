@@ -87,6 +87,45 @@ export async function getServiceFaultRate(
     return parseFloat(faultRate.toFixed(3))
 }
 
+export async function getServicesFaultRateSorted(
+    serviceRepo: IServiceRepository,
+    rackRepo: IRackRepository,
+    machineRepo: IMachineRepository,
+    serviceQueryParams: ServiceQueryParams
+) {
+    const services = await serviceRepo.getServices()
+    const servicesFaultRate = []
+
+    for (const service of services) {
+        const racks = await rackRepo.getRacksByServiceId(service.id!)
+
+        let totalMachines = 0, totalMalfunctionMachines = 0
+        for (const rack of racks) {
+            const machines = await machineRepo.getMachines({
+                rackId: rack.id!
+            })
+            const malfunctionMachines = machines.filter(
+                (machine) => machine.status === MachineStatus.Malfunction
+            )
+            totalMalfunctionMachines += malfunctionMachines.length
+            totalMachines += machines.length
+        }
+        const faultRate = totalMalfunctionMachines / totalMachines
+
+        servicesFaultRate.push({
+            service,
+            faultRate: parseFloat(faultRate.toFixed(3))
+        })
+    }
+    
+    if (serviceQueryParams.sortOrder === 'desc') {
+        servicesFaultRate.sort((a, b) => b.faultRate - a.faultRate)
+    } else if (serviceQueryParams.sortOrder === 'asc') {
+        servicesFaultRate.sort((a, b) => a.faultRate - b.faultRate)
+    }
+    return servicesFaultRate
+}
+
 export async function createService(
     serviceRepo: IServiceRepository,
     ipAddressRepo: IIPAddressRepository,

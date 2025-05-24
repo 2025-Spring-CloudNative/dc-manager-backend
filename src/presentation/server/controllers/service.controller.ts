@@ -20,8 +20,20 @@ export async function getServices(req: Request, res: Response) {
     }
 
     try {
-        const services = await serviceService.getServices(serviceRepo, serviceQueryParams)
-        res.status(200).json(services)
+        if (serviceQueryParams.sortBy === 'faultRate') {
+            const rackRepo = new RackDrizzleRepository()
+            const machineRepo = new MachineDrizzleRepository()
+            const servicesFaultRate = await serviceService.getServicesFaultRateSorted(
+                serviceRepo,
+                rackRepo,
+                machineRepo,
+                serviceQueryParams
+            )
+            res.status(200).json(servicesFaultRate)
+        }else {
+            const services = await serviceService.getServices(serviceRepo, serviceQueryParams)
+            res.status(200).json(services)
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
