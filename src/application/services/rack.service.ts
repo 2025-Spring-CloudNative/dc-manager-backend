@@ -33,6 +33,24 @@ export async function getRackById(
     return rack
 }
 
+export async function getRackUtilization(
+    rackRepo: IRackRepository,
+    machineRepo: IMachineRepository,
+    id: number
+) {
+    const rack = await rackRepo.getRackById(id)
+    const machines = await machineRepo.getMachines({
+        rackId: id
+    })
+
+    const occupiedHeight = machines.reduce(
+        (total, machine) => total + machine.unit, 0
+    )
+    
+    const utilization = occupiedHeight / rack.height
+    return parseFloat(utilization.toFixed(3))
+}
+
 export async function createRack(
     rackRepo: IRackRepository,
     roomRepo: IRoomRepository,

@@ -35,6 +35,23 @@ export async function getRackById(req: Request, res: Response) {
     }
 }
 
+export async function getRackUtilization(req: Request, res: Response) {
+    const rackRepo = new RackDrizzleRepository()
+    const machineRepo = new MachineDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        const utilization = await rackService.getRackUtilization(
+            rackRepo,
+            machineRepo,
+            id
+        )
+        res.status(200).json({ utilization })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export async function createRack(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
     const roomRepo = new RoomDrizzleRepository()

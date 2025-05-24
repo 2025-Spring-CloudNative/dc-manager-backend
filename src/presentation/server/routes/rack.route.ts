@@ -39,6 +39,33 @@ router.get("/:id",
     */
     rackController.getRackById)
 
+router.post("/util/:id",
+    /*
+        #swagger.tags = ['Rack']
+        #swagger.summary = 'getRackUtilization'
+        #swagger.responses[200] = {
+            description: 'Get Rack utilization successfully',
+            content: {
+                "application/json": {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            utilization: {
+                                type: 'number',
+                                example: 0.75
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    rackController.getRackUtilization)
+
 router.post("/", 
     /*
         #swagger.tags = ['Rack']

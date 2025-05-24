@@ -39,7 +39,6 @@ export async function getServiceById(req: Request, res: Response) {
 }
 
 export async function getServiceRackUtilization(req: Request, res: Response) {
-    const serviceRepo = new ServiceDrizzleRepository()
     const rackRepo = new RackDrizzleRepository()
     const machineRepo = new MachineDrizzleRepository()
 
@@ -47,7 +46,6 @@ export async function getServiceRackUtilization(req: Request, res: Response) {
 
     try {
         const utilization = await serviceService.getServiceRackUtilization(
-            serviceRepo,
             rackRepo,
             machineRepo,
             id

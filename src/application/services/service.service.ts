@@ -39,22 +39,21 @@ export async function getServiceById(
 }
 
 export async function getServiceRackUtilization(
-    serviceRepo: IServiceRepository,
     rackRepo: IRackRepository,
     machineRepo: IMachineRepository,
     id: number
 ) {
-    const service = await serviceRepo.getServiceById(id)
-    const racks = await rackRepo.getRacksByServiceId(service.id!)
+    const racks = await rackRepo.getRacksByServiceId(id)
 
     let totalRackUnits = 0, occupiedRackUnits = 0
     for (const rack of racks) {
         const machines = await machineRepo.getMachines({
             rackId: rack.id!
         })
-        for (const machine of machines) {
-            occupiedRackUnits += machine.unit
-        }
+        const totalMachineUnits = machines.reduce(
+            (total, machine) => total + machine.unit, 0
+        )
+        occupiedRackUnits += totalMachineUnits
         totalRackUnits += rack.height
     }
     
