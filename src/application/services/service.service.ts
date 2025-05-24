@@ -10,6 +10,7 @@ import { ISubnetRepository } from "../../persistence/repositories/subnet.reposit
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
 import { SortOrder } from "../../types/common"
 import { IMachineRepository } from "../../persistence/repositories/machine.repository"
+import { MachineStatus } from "../../domain/machine"
 
 export type ServiceSortBy = 'name'
 
@@ -82,6 +83,29 @@ export async function getServiceRackUtilization(
     
     const utilization = occupiedRackUnits / totalRackUnits
     return parseFloat(utilization.toFixed(3))
+}
+
+export async function getServiceFaultRate(
+    rackRepo: IRackRepository,
+    machineRepo: IMachineRepository,
+    id: number
+) {
+    const racks = await rackRepo.getRacksByServiceId(id)
+
+    let totalMachines = 0, totalMalfunctionMachines = 0
+    for (const rack of racks) {
+        const machines = await machineRepo.getMachines({
+            rackId: rack.id
+        })
+        const malfunctionMachines = machines.filter(
+            (machine) => machine.status === MachineStatus.Malfunction
+        )
+        totalMalfunctionMachines += malfunctionMachines.length
+        totalMachines += machines.length
+    }
+
+    const faultRate = totalMalfunctionMachines / totalMachines
+    return parseFloat(faultRate.toFixed(3))
 }
 
 export async function createService(

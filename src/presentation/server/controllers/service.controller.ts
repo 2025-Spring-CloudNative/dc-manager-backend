@@ -53,7 +53,6 @@ export async function getServiceById(req: Request, res: Response) {
 export async function getServiceRackUtilization(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
     const machineRepo = new MachineDrizzleRepository()
-
     const id = Number(req.params.id)
 
     try {
@@ -63,6 +62,23 @@ export async function getServiceRackUtilization(req: Request, res: Response) {
             id
         )
         res.status(200).json({ utilization })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function getServiceFaultRate(req: Request, res: Response) {
+    const rackRepo = new RackDrizzleRepository()
+    const machineRepo = new MachineDrizzleRepository()
+    const id = Number(req.params.id)
+    
+    try {
+        const faultRate = await serviceService.getServiceFaultRate(
+            rackRepo,
+            machineRepo,
+            id
+        )
+        res.status(200).json({ faultRate })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
