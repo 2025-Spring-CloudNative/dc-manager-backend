@@ -108,7 +108,21 @@ describe("rackService - updateRack", () => {
         }
         mockRackRepo.updateRack.mockResolvedValue(updatedRack)
 
-        const result = await rackService.updateRack(mockRackRepo, 1, updates)
+        // Provide mocks for machineRepo and roomRepo as required by the service signature
+        const mockMachineRepo = {
+            getMachines: jest.fn().mockResolvedValue([])
+        } as any
+        const mockRoomRepo = {
+            getRoomById: jest.fn().mockResolvedValue({ unit: 100 })
+        } as any
+
+        const result = await rackService.updateRack(
+            mockRackRepo,
+            mockMachineRepo,
+            mockRoomRepo,
+            1,
+            updates
+        )
 
         expect(mockRackRepo.updateRack).toHaveBeenCalledWith(1, updates)
         expect(result).toEqual(updatedRack)

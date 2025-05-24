@@ -63,9 +63,17 @@ describe("roomService - updateRoom", () => {
             unit: 15,
             dataCenterId: 1
         }
+        mockRoomRepo.getRoomById.mockResolvedValue({
+            id: 1,
+            name: "RoomA",
+            unit: 10,
+            dataCenterId: 1
+        })
         mockRoomRepo.updateRoom.mockResolvedValue(updatedRoom)
 
-        const result = await roomService.updateRoom(mockRoomRepo, 1, updates)
+        const mockRackRepo = { getRacks: jest.fn().mockResolvedValue([{ unit: 5 }]) } as any
+
+        const result = await roomService.updateRoom(mockRoomRepo, mockRackRepo, 1, updates)
 
         expect(mockRoomRepo.updateRoom).toHaveBeenCalledWith(1, updates)
         expect(result).toEqual(updatedRoom)
