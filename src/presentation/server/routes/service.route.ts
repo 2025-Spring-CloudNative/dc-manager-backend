@@ -64,7 +64,7 @@ router.get("/util/:id",
     */
     serviceController.getServiceRackUtilization)
 
-router.get("/faultRate/:id",
+router.get("/fault/:id",
     /*
         #swagger.tags = ['Service']
         #swagger.summary = 'getServiceFaultRate'
