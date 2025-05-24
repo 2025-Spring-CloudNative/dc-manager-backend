@@ -1,6 +1,6 @@
 import * as ipaddr from "ipaddr.js"
 import IPCIDR from "ip-cidr"
-import { IPv4CidrRange } from "ip-num"
+import { overlapCidr, containsCidr } from "cidr-tools"
 // https://www.npmjs.com/package/ipaddr.js/v/2.2.0
 
 export class NetUtils {
@@ -47,8 +47,8 @@ export class NetUtils {
 
     static getIpAddressesFromCIDR(cidr: string, options = { includeNetworkAndBroadcast: false }): string[] {
         const cidrInstance = new IPCIDR(cidr);
-        if (!IPCIDR.isValidCIDR(cidr)) {
-            throw new Error("Invalid CIDR")
+        if (!this.isValidIPv4CIDR(cidr)) {
+            throw new Error(`Invalid CIDR format ${cidr}`)
         }
         const total = Number(cidrInstance.size)
         if (total <= 2 && !options.includeNetworkAndBroadcast) {
@@ -64,19 +64,24 @@ export class NetUtils {
     }
     
     static isCIDRWithinSubnet(ipPoolCidr: string, subnetCidr: string): boolean {
-        const ipPoolRange = IPv4CidrRange.fromCidr(ipPoolCidr)
-        const subnetRange = IPv4CidrRange.fromCidr(subnetCidr)
-
-        return (
-            subnetRange.contains(ipPoolRange)
-        )
+        if (!this.isValidIPv4CIDR(ipPoolCidr)) {
+            throw new Error(`Invalid ipPool CIDR format ${ipPoolCidr}`)
+        }                  
+        if (!this.isValidIPv4CIDR(subnetCidr)) {
+            throw new Error(`Invalid subnet CIDR format ${subnetCidr}`)
+        }
+        return containsCidr(subnetCidr, ipPoolCidr)
     }
 
     static checkCIDROverlap(newCidr: string, existingCidrs: string[]): boolean {
-        const newRange = IPv4CidrRange.fromCidr(newCidr)
+        if (!this.isValidIPv4CIDR(newCidr)) {
+            throw new Error(`Invalid CIDR format ${newCidr}`)
+        }
         for (const existing of existingCidrs) {
-            const existingRange = IPv4CidrRange.fromCidr(existing)
-            if (newRange.isOverlapping(existingRange)) {
+            if (!this.isValidIPv4CIDR(existing)) {
+                throw new Error(`Invalid CIDR format ${newCidr}`)
+            }
+            if (overlapCidr(newCidr, existing)) {
                 return true
             }
         }

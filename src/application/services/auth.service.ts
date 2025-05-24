@@ -29,10 +29,11 @@ export async function userRegister(
     const accessToken = JWTRepo.signAccess(userEntity)
     const refreshToken = JWTRepo.signRefresh(userEntity)
 
+    const exp = (JWTRepo.decode(refreshToken).exp!) * 1000
     const refreshTokenEntity = new RefreshTokenEntity({
         userId: createdUserId,
         token: refreshToken,
-        expiredAt: new Date(JWTRepo.decode(refreshToken).exp as number)
+        expiredAt: new Date(exp)
     })
     /* store refreshToken to database */
     const createdRefreshTokenId = await refreshTokenRepo.createRefreshToken(
@@ -77,9 +78,9 @@ export async function userLogin(
     // Note:
     // exp in jwt is in seconds, but Date constructor expects milliseconds
     // so we need to multiply it by 1000
-    const exp = (JWTRepo.decode(refreshToken).exp as number) * 1000
+    const exp = (JWTRepo.decode(refreshToken).exp!) * 1000
     const refreshTokenEntity = new RefreshTokenEntity({
-        userId: user.id as number,
+        userId: user.id!,
         token: refreshToken,
         expiredAt: new Date(exp)
     })

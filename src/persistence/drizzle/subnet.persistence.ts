@@ -1,4 +1,4 @@
-import { eq, ilike, desc, asc, and, SQL } from "drizzle-orm"
+import { eq, ne, ilike, desc, asc, and, SQL } from "drizzle-orm"
 import { PgColumn } from "drizzle-orm/pg-core"
 import { ISubnet } from "../../domain/subnet"
 import { ISubnetRepository } from "../repositories/subnet.repository"
@@ -58,6 +58,15 @@ export class SubnetDrizzleRepository implements ISubnetRepository {
             .orderBy(...order)
 
         return subnets
+    }
+
+    async getOtherSubnetCIDRs(id: number) {
+        const subnetCidrs = await db
+            .select({ cidr: subnetTable.cidr })
+            .from(subnetTable)
+            .where(ne(subnetTable.id, id))
+
+        return subnetCidrs.map(subnet => subnet.cidr)
     }
 
     async getSubnetById(id: number) {

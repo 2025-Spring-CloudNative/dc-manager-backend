@@ -4,6 +4,7 @@ import { IServiceRepository } from "../repositories/service.repository"
 import { db } from "./index"
 import { serviceTable } from "./schema/service.schema"
 import { ServiceQueryParams } from "../../application/services/service.service"
+import { ipAddressTable } from "./schema/ipAddress.schema"
 
 function buildServiceQueryFilters(queryParams?: ServiceQueryParams): SQL[] {
     if (!queryParams) {
@@ -15,6 +16,9 @@ function buildServiceQueryFilters(queryParams?: ServiceQueryParams): SQL[] {
     }
     if (queryParams.poolId) {
         filters.push(eq(serviceTable.poolId, queryParams.poolId))
+    }
+    if (queryParams.machineIP) {
+        filters.push(ilike(ipAddressTable.address, `%${queryParams.machineIP}%`))
     }
     return filters
 }
@@ -32,6 +36,16 @@ export class ServiceDrizzleRepository implements IServiceRepository {
     async getServices(serviceQueryParams?: ServiceQueryParams) {
         const filters = buildServiceQueryFilters(serviceQueryParams)
         const order = buildServiceQueryOrder(serviceQueryParams)
+
+        if (serviceQueryParams?.machineIP) {
+            const services = await db
+                .select()
+                .from(serviceTable)
+                .innerJoin(ipAddressTable, eq(ipAddressTable.poolId, serviceTable.poolId))
+                .where(filters.length ? and(...filters) : undefined)
+                .orderBy(...order)
+            return services.map((service) => service.service)
+        }
 
         const services = await db
             .select()
