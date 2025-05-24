@@ -5,6 +5,7 @@ import { IPAddressDrizzleRepository } from "../../../persistence/drizzle/ipAddre
 import { IPPoolDrizzleRepository } from "../../../persistence/drizzle/ipPool.persistence"
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
 import { RackDrizzleRepository } from '../../../persistence/drizzle/rack.persistence'
+import { MachineDrizzleRepository } from '../../../persistence/drizzle/machine.persistence'
 import { SortOrder } from '../../../types/common'
 
 
@@ -37,11 +38,32 @@ export async function getServiceById(req: Request, res: Response) {
     }
 }
 
+export async function getServiceRackUtilization(req: Request, res: Response) {
+    const serviceRepo = new ServiceDrizzleRepository()
+    const rackRepo = new RackDrizzleRepository()
+    const machineRepo = new MachineDrizzleRepository()
+
+    const id = Number(req.params.id)
+
+    try {
+        const utilization = await serviceService.getServiceRackUtilization(
+            serviceRepo,
+            rackRepo,
+            machineRepo,
+            id
+        )
+        res.status(200).json({ utilization })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export async function createService(req: Request, res: Response) {
     const serviceRepo = new ServiceDrizzleRepository()
     const ipAddressRepo = new IPAddressDrizzleRepository()
     const ipPoolRepo = new IPPoolDrizzleRepository()
     const subnetRepo =  new SubnetDrizzleRepository()
+
     try {
         const { service, dataCenter, cidrFromUser } = req.body
         const createdServiceId = await serviceService.createService(
@@ -79,7 +101,6 @@ export async function deleteService(req: Request, res: Response) {
     const serviceRepo = new ServiceDrizzleRepository()
     const rackRepo = new RackDrizzleRepository()
     const ipPoolRepo = new IPPoolDrizzleRepository()
-    
     const id = Number(req.params.id)
 
     try {

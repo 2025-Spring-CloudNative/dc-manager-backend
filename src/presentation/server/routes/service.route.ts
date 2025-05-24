@@ -37,6 +37,33 @@ router.get("/:id",
     */
     serviceController.getServiceById)   
     
+router.get("/util/:id",
+    /*
+        #swagger.tags = ['Service']
+        #swagger.summary = 'getServiceRackUtilization'
+        #swagger.responses[200] = {
+            description: 'Get service rack utilization successfully',
+            content: {
+                "application/json": {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            utilization: {
+                                type: 'number',
+                                example: 0.75
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    serviceController.getServiceRackUtilization)
+
 router.post("/",
     /*
         #swagger.tags = ['Services']

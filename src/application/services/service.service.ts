@@ -9,6 +9,7 @@ import { IPAddressEntity, IPAddressStatus } from "../../domain/ipAddress"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
 import { SortOrder } from "../../types/common"
+import { IMachineRepository } from "../../persistence/repositories/machine.repository"
 
 export type ServiceSortBy = 'name'
 
@@ -35,6 +36,30 @@ export async function getServiceById(
     const service = await serviceRepo.getServiceById(id)
 
     return service
+}
+
+export async function getServiceRackUtilization(
+    serviceRepo: IServiceRepository,
+    rackRepo: IRackRepository,
+    machineRepo: IMachineRepository,
+    id: number
+) {
+    const service = await serviceRepo.getServiceById(id)
+    const racks = await rackRepo.getRacksByServiceId(service.id!)
+
+    let totalRackUnits = 0, occupiedRackUnits = 0
+    for (const rack of racks) {
+        const machines = await machineRepo.getMachines({
+            rackId: rack.id!
+        })
+        for (const machine of machines) {
+            occupiedRackUnits += machine.unit
+        }
+        totalRackUnits += rack.height
+    }
+    
+    const utilization = occupiedRackUnits / totalRackUnits
+    return parseFloat(utilization.toFixed(3))
 }
 
 export async function createService(
