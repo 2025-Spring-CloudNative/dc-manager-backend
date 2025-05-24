@@ -39,7 +39,7 @@ router.get("/:id",
     
 router.get("/util/:id",
     /*
-        #swagger.tags = ['Service']
+        #swagger.tags = ['Services']
         #swagger.summary = 'getServiceRackUtilization'
         #swagger.responses[200] = {
             description: 'Get service rack utilization successfully',
@@ -66,7 +66,7 @@ router.get("/util/:id",
 
 router.get("/fault/:id",
     /*
-        #swagger.tags = ['Service']
+        #swagger.tags = ['Services']
         #swagger.summary = 'getServiceFaultRateById'
         #swagger.responses[200] = {
             description: 'Get service fault rate successfully',

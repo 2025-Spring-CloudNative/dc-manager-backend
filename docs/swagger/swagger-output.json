@@ -3494,7 +3494,7 @@
     "/service/util/{id}": {
       "get": {
         "tags": [
-          "Service"
+          "Services"
         ],
         "summary": "getServiceRackUtilization",
         "description": "",
@@ -3564,7 +3564,7 @@
     "/service/fault/{id}": {
       "get": {
         "tags": [
-          "Service"
+          "Services"
         ],
         "summary": "getServiceFaultRateById",
         "description": "",
