@@ -64,7 +64,7 @@ export async function getServiceRackUtilization(
     return parseFloat(utilization.toFixed(3))
 }
 
-export async function getServiceFaultRate(
+export async function getServiceFaultRateById(
     rackRepo: IRackRepository,
     machineRepo: IMachineRepository,
     id: number
@@ -117,7 +117,7 @@ export async function getServicesFaultRateSorted(
             faultRate: parseFloat(faultRate.toFixed(3))
         })
     }
-    
+
     if (serviceQueryParams.sortOrder === 'desc') {
         servicesFaultRate.sort((a, b) => b.faultRate - a.faultRate)
     } else if (serviceQueryParams.sortOrder === 'asc') {

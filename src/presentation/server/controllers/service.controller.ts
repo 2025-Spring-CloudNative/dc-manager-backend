@@ -68,13 +68,13 @@ export async function getServiceRackUtilization(req: Request, res: Response) {
     }
 }
 
-export async function getServiceFaultRate(req: Request, res: Response) {
+export async function getServiceFaultRateById(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
     const machineRepo = new MachineDrizzleRepository()
     const id = Number(req.params.id)
     
     try {
-        const faultRate = await serviceService.getServiceFaultRate(
+        const faultRate = await serviceService.getServiceFaultRateById(
             rackRepo,
             machineRepo,
             id

@@ -66,6 +66,35 @@ router.post("/util/:id",
     */
     rackController.getRackUtilization)
 
+
+router.get("/fault/:id",
+    /*
+        #swagger.tags = ['Rack']
+        #swagger.summary = 'getRackFaultRateById'
+        #swagger.responses[200] = {
+            description: 'Get rack fault rate successfully',
+            content: {
+                "application/json": {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            faultRate: {
+                                type: 'number',
+                                example: 0.05
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    rackController.getRackFaultRateById)
+
+
 router.post("/", 
     /*
         #swagger.tags = ['Rack']

@@ -52,6 +52,21 @@ export async function getRackUtilization(req: Request, res: Response) {
     }
 }
 
+export async function getRackFaultRateById(req: Request, res: Response) {
+    const machineRepo = new MachineDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        const faultRate = await rackService.getRackFaultRateById(
+            machineRepo,
+            id
+        )
+        res.status(200).json({ faultRate })
+    } catch(error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export async function createRack(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
     const roomRepo = new RoomDrizzleRepository()

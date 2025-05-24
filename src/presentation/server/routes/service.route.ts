@@ -67,7 +67,7 @@ router.get("/util/:id",
 router.get("/fault/:id",
     /*
         #swagger.tags = ['Service']
-        #swagger.summary = 'getServiceFaultRate'
+        #swagger.summary = 'getServiceFaultRateById'
         #swagger.responses[200] = {
             description: 'Get service fault rate successfully',
             content: {
@@ -89,7 +89,7 @@ router.get("/fault/:id",
             schema: { message: 'string' }
         }
     */
-    serviceController.getServiceFaultRate)
+    serviceController.getServiceFaultRateById)
 
 router.post("/",
     /*
