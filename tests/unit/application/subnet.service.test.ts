@@ -36,7 +36,7 @@ describe("subnetService - getSubnets", () => {
         ]
         mockSubnetRepo.getSubnets.mockResolvedValue(subnets)
 
-        const result = await subnetService.getSubnets(mockSubnetRepo)
+        const result = await subnetService.getSubnets(mockSubnetRepo, {} as any)
 
         expect(mockSubnetRepo.getSubnets).toHaveBeenCalled()
         expect(result).toEqual(subnets)
