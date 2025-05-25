@@ -69,19 +69,24 @@ export class IPPoolDrizzleRepository implements IIPPoolRepository {
         return ipPools
     }
 
-    async getAllIPPoolCIDRs() {
+    async getAllIPPoolCIDRs(subnetId: number) {
         const ipPoolCidrs = await db
             .select({ cidr: ipPoolTable.cidr })
             .from(ipPoolTable)
+            .where(eq(ipPoolTable.subnetId, subnetId))
         
         return ipPoolCidrs.map(pool => pool.cidr)
     }
 
-    async getOtherIPPoolCIDRs(id: number) {
+    async getOtherIPPoolCIDRs(id: number, subnetId: number) {
         const ipPoolCidrs = await db
             .select({ cidr: ipPoolTable.cidr })
             .from(ipPoolTable)
-            .where(ne(ipPoolTable.id, id))
+            .where(and(
+                eq(ipPoolTable.subnetId, subnetId),
+                ne(ipPoolTable.id, id)
+            ))
+
 
         return ipPoolCidrs.map(pool => pool.cidr)
     }

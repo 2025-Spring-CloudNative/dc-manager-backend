@@ -40,7 +40,6 @@ export async function getIPPoolUtilization(req: Request, res: Response) {
     const ipAddressRepo = new IPAddressDrizzleRepository()
     const id = Number(req.params.id)
     try {
-        
         const utilization: number = await ipPoolService.getIPPoolUtilization(
             ipAddressRepo,
             id
@@ -85,13 +84,13 @@ export async function extendIPPool(req: Request, res: Response) {
     const ipPoolRepo = new IPPoolDrizzleRepository()
     const subnetRepo = new SubnetDrizzleRepository()
     const id = Number(req.params.id)
-
+    const { cidr } = req.body
     try {
         const extendedIPPool = await ipPoolService.extendIPPool(
             ipPoolRepo,
             subnetRepo,
             id,
-            req.body
+            cidr
         )
         res.status(200).json(extendedIPPool)
     } catch (error: any) {
@@ -104,11 +103,11 @@ export async function deleteIPPool(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        await ipPoolService.deleteIPPool(
+        const deletedIPPoolId = await ipPoolService.deleteIPPool(
             ipPoolRepo,
             id
         )
-        res.status(200).json({ message: "IP Pool deleted successfully" })
+        res.status(200).json({ id: deletedIPPoolId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

@@ -1,6 +1,7 @@
 export enum MachineStatus {
     Active = "active",
-    Inactive = "inactive"
+    Inactive = "inactive",
+    Malfunction = "malfunction"
 }
 
 export interface IMachine {

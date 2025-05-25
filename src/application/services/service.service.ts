@@ -9,11 +9,15 @@ import { IPAddressEntity, IPAddressStatus } from "../../domain/ipAddress"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
 import { SortOrder } from "../../types/common"
+import { IMachineRepository } from "../../persistence/repositories/machine.repository"
+import { MachineStatus } from "../../domain/machine"
 
-export type ServiceSortBy = 'name'
+export type ServiceSortBy = 'name' | 'faultRate'
 
 export interface ServiceQueryParams {
     name?: string
+    poolId?: number
+    machineIP?: string
     sortBy?: ServiceSortBy
     sortOrder?: SortOrder
 }
@@ -27,6 +31,7 @@ export async function getServices(
     return services
 }
 
+
 export async function getServiceById(
     serviceRepo: IServiceRepository,
     id: number
@@ -34,6 +39,91 @@ export async function getServiceById(
     const service = await serviceRepo.getServiceById(id)
 
     return service
+}
+
+export async function getServiceRackUtilization(
+    rackRepo: IRackRepository,
+    machineRepo: IMachineRepository,
+    id: number
+) {
+    const racks = await rackRepo.getRacksByServiceId(id)
+
+    let totalRackUnits = 0, occupiedRackUnits = 0
+    for (const rack of racks) {
+        const machines = await machineRepo.getMachines({
+            rackId: rack.id!
+        })
+        const totalMachineUnits = machines.reduce(
+            (total, machine) => total + machine.unit, 0
+        )
+        occupiedRackUnits += totalMachineUnits
+        totalRackUnits += rack.height
+    }
+    
+    const utilization = occupiedRackUnits / totalRackUnits
+    return parseFloat(utilization.toFixed(3))
+}
+
+export async function getServiceFaultRateById(
+    rackRepo: IRackRepository,
+    machineRepo: IMachineRepository,
+    id: number
+) {
+    const racks = await rackRepo.getRacksByServiceId(id)
+
+    let totalMachines = 0, totalMalfunctionMachines = 0
+    for (const rack of racks) {
+        const machines = await machineRepo.getMachines({
+            rackId: rack.id
+        })
+        const malfunctionMachines = machines.filter(
+            (machine) => machine.status === MachineStatus.Malfunction
+        )
+        totalMalfunctionMachines += malfunctionMachines.length
+        totalMachines += machines.length
+    }
+
+    const faultRate = totalMalfunctionMachines / totalMachines
+    return parseFloat(faultRate.toFixed(3))
+}
+
+export async function getServicesFaultRateSorted(
+    serviceRepo: IServiceRepository,
+    rackRepo: IRackRepository,
+    machineRepo: IMachineRepository,
+    serviceQueryParams: ServiceQueryParams
+) {
+    const services = await serviceRepo.getServices()
+    const servicesFaultRate = []
+
+    for (const service of services) {
+        const racks = await rackRepo.getRacksByServiceId(service.id!)
+
+        let totalMachines = 0, totalMalfunctionMachines = 0
+        for (const rack of racks) {
+            const machines = await machineRepo.getMachines({
+                rackId: rack.id!
+            })
+            const malfunctionMachines = machines.filter(
+                (machine) => machine.status === MachineStatus.Malfunction
+            )
+            totalMalfunctionMachines += malfunctionMachines.length
+            totalMachines += machines.length
+        }
+        const faultRate = totalMalfunctionMachines / totalMachines
+
+        servicesFaultRate.push({
+            service,
+            faultRate: parseFloat(faultRate.toFixed(3))
+        })
+    }
+
+    if (serviceQueryParams.sortOrder === 'desc') {
+        servicesFaultRate.sort((a, b) => b.faultRate - a.faultRate)
+    } else if (serviceQueryParams.sortOrder === 'asc') {
+        servicesFaultRate.sort((a, b) => a.faultRate - b.faultRate)
+    }
+    return servicesFaultRate
 }
 
 export async function createService(
@@ -55,7 +145,7 @@ export async function createService(
         throw new Error(`The cidr ${cidrFromUser} is not in the subnet range.`)
     }
 
-    const existingIPPoolCIDRs = await ipPoolRepo.getAllIPPoolCIDRs()
+    const existingIPPoolCIDRs = await ipPoolRepo.getAllIPPoolCIDRs(subnetId)
     if (NetUtils.checkCIDROverlap(cidrFromUser, existingIPPoolCIDRs)) {
         throw new Error(`The cidr ${cidrFromUser} overlaps with other ip-pools.`)
     }   
@@ -93,6 +183,13 @@ export async function updateService(
     id: number,
     service: Partial<IService>
 ) {
+    const prevService = await serviceRepo.getServiceById(id)
+    const prevServiceEntity = new ServiceEntity(prevService)
+
+    const restrictedField: (keyof IService) = 'id'
+    if (service[restrictedField] && service[restrictedField] !== prevServiceEntity[restrictedField]) {
+        throw new Error(`Cannot update restricted field: ${restrictedField}`)
+    }
     const updatedService = await serviceRepo.updateService(id, service)
 
     return updatedService
@@ -109,12 +206,12 @@ export async function deleteService(
 
     const racks = await rackRepo.getRacksByServiceId(deletedServiceId)
     for (const rack of racks) {
-        await rackRepo.updateRack(rack.id as number, {
+        await rackRepo.updateRack(rack.id!, {
             serviceId: null,
         })
     }
 
-    await ipPoolRepo.deleteIPPool(poolId as number)
+    await ipPoolRepo.deleteIPPool(poolId!)
 
     return deletedServiceId
 }

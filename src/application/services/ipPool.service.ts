@@ -38,17 +38,19 @@ export async function getIPPoolUtilization(
     ipAddressRepo: IIPAddressRepository,
     id: number
 ) {
-    const ipAddresses = await ipAddressRepo.getIPAddressesByPoolId(id)
+    const ipAddresses = await ipAddressRepo.getIPAddresses({
+        poolId: id
+    })
     if (!ipAddresses.length) {
         return 0;
     }
 
-    const usedCount = ipAddresses.filter(
+    const allocatedIPs = ipAddresses.filter(
         (ip) => ip.allocatedAt && !ip.releasedAt
     ).length
     
-    const utilization = usedCount / ipAddresses.length
-    return parseFloat(utilization.toFixed(4))
+    const utilization = allocatedIPs / ipAddresses.length
+    return parseFloat(utilization.toFixed(3))
 }
 
 export async function createIPPool(
@@ -67,8 +69,14 @@ export async function updateIPPool(
 ) {
     const prevIPPool = await ipPoolRepo.getIPPoolById(id)
     const prevIPPoolEntity = new IPPoolEntity(prevIPPool)
-    if (ipPool.cidr && (ipPool.cidr !== prevIPPoolEntity.cidr)) {
-        throw new Error("Cannot extend IPPool using the updateIPPool api.")
+
+    const restrictedFields: (keyof IIPPool)[] = [
+        'id', 'createdAt', 'updatedAt', 'cidr'
+    ]
+    for (const field of restrictedFields) {
+        if (ipPool[field] && ipPool[field] !== prevIPPoolEntity[field]) {
+            throw new Error(`Cannot update restricted field: ${field}`)
+        }
     }
 
     const updatedIPPool = await ipPoolRepo.updateIPPool(id, ipPool)
@@ -87,10 +95,10 @@ export async function extendIPPool(
     const subnet = await subnetRepo.getSubnetById(subnetId)
     const subnetCidr = subnet.cidr
     
-    const ipPoolCidrs = await ipPoolRepo.getOtherIPPoolCIDRs(id)
+    const ipPoolCidrs = await ipPoolRepo.getOtherIPPoolCIDRs(id, subnetId)
 
     const patch = IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)
-    let extendedIPPool = await ipPoolRepo.updateIPPool(id, patch)
+    const extendedIPPool = await ipPoolRepo.updateIPPool(id, patch)
 
     return extendedIPPool
 }

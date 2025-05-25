@@ -67,8 +67,11 @@ export async function deleteIPAddress(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        await ipAddressService.deleteIPAddress(ipAddressRepo, id)
-        res.status(200).json({ message: "IP Address deleted successfully" })
+        const deletedIPAddressId = await ipAddressService.deleteIPAddress(
+            ipAddressRepo, 
+            id
+        )
+        res.status(200).json({ id: deletedIPAddressId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

@@ -73,7 +73,7 @@ export class DataCenterDrizzleRepository implements IDataCenterRepository {
             where: eq(dataCenterTable.id, id)
         })
         
-        return dataCenterWithSubnet as Object
+        return dataCenterWithSubnet as any
     }
 
     async createDataCenter(dataCenter: IDataCenter) {

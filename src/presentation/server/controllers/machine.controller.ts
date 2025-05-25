@@ -81,12 +81,12 @@ export async function deleteMachine(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        await machineService.deleteMachine(
+        const deletedMachineId = await machineService.deleteMachine(
             machineRepo,
             ipAddressRepo,
             id
         )
-        res.status(200).json({ message: "Machine deleted successfully" })
+        res.status(200).json({ id: deletedMachineId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

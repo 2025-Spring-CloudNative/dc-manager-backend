@@ -39,8 +39,8 @@ const options: cors.CorsOptions = {
 server.use(cors(options))
 server.use(express.json())
 server.use(cookieParser())
-server.use(authenticate)
-server.use(authorize)
+// server.use(authenticate)
+// server.use(authorize)
 
 // swagger-autogen + swagger-ui-express
 const swaggerUiOptions = {

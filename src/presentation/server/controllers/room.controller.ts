@@ -8,6 +8,7 @@ export async function getRooms(req: Request, res: Response) {
     const roomRepo = new RoomDrizzleRepository()
     const roomQueryParams : roomService.RoomQueryParams = {
         name: req.query.name as string,
+        dataCenterId: Number(req.query.dataCenterId),
         sortBy: req.query.sortBy as roomService.RoomSortBy,
         sortOrder: req.query.sortOrder as SortOrder
     }
@@ -70,11 +71,11 @@ export async function deleteRoom(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        await roomService.deleteRoom(
+        const deletedRoomId = await roomService.deleteRoom(
             roomRepo, 
             id
         )
-        res.status(200).json({ message: "Room deleted successfully" })
+        res.status(200).json({ id: deletedRoomId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

@@ -43,7 +43,7 @@ export class IPPoolEntity implements IIPPool {
         if (!NetUtils.isCIDRWithinSubnet(newCidr, subnetCidr)) {
             throw new Error(`The CIDR ${newCidr} is not in the range of subnet ${subnetCidr}.`)
         }
-        if (!NetUtils.checkCIDROverlap(newCidr, ipPoolCidrs)) {
+        if (NetUtils.checkCIDROverlap(newCidr, ipPoolCidrs)) {
             throw new Error(`The CIDR ${newCidr} overlaps with other ipPools.`)
         }
         return {cidr: newCidr};
