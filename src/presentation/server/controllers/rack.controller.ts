@@ -108,11 +108,11 @@ export async function deleteRack(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        await rackService.deleteRack(
+        const deletedRackId = await rackService.deleteRack(
             rackRepo,
             id
         )
-        res.status(200).json({ message: "Rack deleted successfully" })
+        res.status(200).json({ id: deletedRackId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

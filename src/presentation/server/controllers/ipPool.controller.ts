@@ -103,11 +103,11 @@ export async function deleteIPPool(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        await ipPoolService.deleteIPPool(
+        const deletedIPPoolId = await ipPoolService.deleteIPPool(
             ipPoolRepo,
             id
         )
-        res.status(200).json({ message: "IP Pool deleted successfully" })
+        res.status(200).json({ id: deletedIPPoolId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

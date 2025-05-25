@@ -3,6 +3,8 @@ import { DataCenterDrizzleRepository } from "../../../persistence/drizzle/dataCe
 import * as dataCenterService from "../../../application/services/dataCenter.service"
 import { SubnetDrizzleRepository } from "../../../persistence/drizzle/subnet.persistence"
 import { SortOrder } from "../../../types/common"
+import { IPPoolDrizzleRepository } from "../../../persistence/drizzle/ipPool.persistence"
+import { ServiceDrizzleRepository } from "../../../persistence/drizzle/service.persistence"
 
 export async function getDataCenters(req: Request, res: Response) {
     const dataCenterRepo = new DataCenterDrizzleRepository()
@@ -76,15 +78,21 @@ export async function updateDataCenter(req: Request, res: Response) {
 
 export async function deleteDataCenter(req: Request, res: Response) {
     const dataCenterRepo = new DataCenterDrizzleRepository()
+    const subnetRepo = new SubnetDrizzleRepository()
+    const ipPoolRepo = new IPPoolDrizzleRepository()
+    const serviceRepo = new ServiceDrizzleRepository()
     const id = Number(req.params.id)
 
     try {
-        const deletedId = await dataCenterService.deleteDataCenter(
+        const deletedDataCenterId = await dataCenterService.deleteDataCenter(
             dataCenterRepo, 
+            subnetRepo,
+            ipPoolRepo,
+            serviceRepo,
             id
         )
-        if (deletedId) {
-            res.status(200).json({ id: deletedId })
+        if (deletedDataCenterId) {
+            res.status(200).json({ id: deletedDataCenterId })
         } else {
             res.status(404).json({ message: "Data center not found" })
         }
