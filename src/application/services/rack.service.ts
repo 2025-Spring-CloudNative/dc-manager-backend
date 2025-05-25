@@ -1,3 +1,4 @@
+import { MachineStatus } from "../../domain/machine"
 import { IRack, RackEntity } from "../../domain/rack"
 import { IMachineRepository } from "../../persistence/repositories/machine.repository"
 import { IRackRepository } from "../../persistence/repositories/rack.repository"
@@ -31,6 +32,41 @@ export async function getRackById(
     const rack = await rackRepo.getRackById(id)
 
     return rack
+}
+
+export async function getRackUtilization(
+    rackRepo: IRackRepository,
+    machineRepo: IMachineRepository,
+    id: number
+) {
+    const rack = await rackRepo.getRackById(id)
+    const machines = await machineRepo.getMachines({
+        rackId: id
+    })
+
+    const occupiedHeight = machines.reduce(
+        (total, machine) => total + machine.unit, 0
+    )
+    
+    const utilization = occupiedHeight / rack.height
+    return parseFloat(utilization.toFixed(3))
+}
+
+export async function getRackFaultRateById(
+    machineRepo: IMachineRepository,
+    id: number
+) {
+    const machines = await machineRepo.getMachines({
+        rackId: id
+    })
+    const malfunctionMachines = machines.filter(
+        (machine) => machine.status === MachineStatus.Malfunction
+    )
+    const totalMachines = machines.length
+    const totalMalfunctionMachines = malfunctionMachines.length
+    
+    const faultRate = totalMalfunctionMachines / totalMachines
+    return parseFloat(faultRate.toFixed(3))
 }
 
 export async function createRack(

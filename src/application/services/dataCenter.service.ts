@@ -2,6 +2,8 @@ import { IDataCenter, DataCenterEntity } from "../../domain/dataCenter"
 import { SubnetEntity } from "../../domain/subnet"
 import { IDataCenterRepository } from "../../persistence/repositories/dataCenter.repository"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
+import { IIPPoolRepository } from "../../persistence/repositories/ipPool.repository"
+import { IServiceRepository } from "../../persistence/repositories/service.repository"
 import { SortOrder } from "../../types/common"
 
 export type DataCenterSortBy = 'name' | 'location'
@@ -23,12 +25,6 @@ export async function getDataCenters(
     return dataCenters
 }
 
-export async function getDataCentersWithSubnet(dataCenterRepo: IDataCenterRepository) {
-    const dataCentersWithSubnet = await dataCenterRepo.getDataCentersWithSubnet()
-
-    return dataCentersWithSubnet
-}
-
 export async function getDataCenterById(
     dataCenterRepo: IDataCenterRepository,
     id: number
@@ -36,15 +32,6 @@ export async function getDataCenterById(
     const dataCenter = await dataCenterRepo.getDataCenterById(id)
 
     return dataCenter
-}
-
-export async function getDataCenterByIdWithSubnet(
-    dataCenterRepo: IDataCenterRepository,
-    id: number
-) {
-    const dataCenterWithSubnet = await dataCenterRepo.getDataCenterByIdWithSubnet(id)
-
-    return dataCenterWithSubnet
 }
 
 export async function createDataCenter(
@@ -91,9 +78,24 @@ export async function updateDataCenter(
 
 export async function deleteDataCenter(
     dataCenterRepo: IDataCenterRepository,
+    subnetRepo: ISubnetRepository,
+    ipPoolRepo: IIPPoolRepository,
+    serviceRepo: IServiceRepository,
     id: number
 ) {
-    const deletedDataCenterId  = await dataCenterRepo.deleteDataCenter(id)
+    const dataCenter = await dataCenterRepo.getDataCenterById(id)
+    const subnet = await subnetRepo.getSubnetById(dataCenter.subnetId!)
+    const ipPools = await ipPoolRepo.getIPPools({
+        subnetId: subnet.id!
+    })
+    for (const ipPool of ipPools) {
+        const [service] = await serviceRepo.getServices({
+            poolId: ipPool.id!
+        })
+        await serviceRepo.deleteService(service?.id!)
+        await ipPoolRepo.deleteIPPool(ipPool.id!)
+    }
 
+    const deletedDataCenterId  = await dataCenterRepo.deleteDataCenter(id)
     return deletedDataCenterId
 }

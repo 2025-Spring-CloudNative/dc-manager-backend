@@ -35,6 +35,38 @@ export async function getRackById(req: Request, res: Response) {
     }
 }
 
+export async function getRackUtilization(req: Request, res: Response) {
+    const rackRepo = new RackDrizzleRepository()
+    const machineRepo = new MachineDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        const utilization = await rackService.getRackUtilization(
+            rackRepo,
+            machineRepo,
+            id
+        )
+        res.status(200).json({ utilization })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function getRackFaultRateById(req: Request, res: Response) {
+    const machineRepo = new MachineDrizzleRepository()
+    const id = Number(req.params.id)
+
+    try {
+        const faultRate = await rackService.getRackFaultRateById(
+            machineRepo,
+            id
+        )
+        res.status(200).json({ faultRate })
+    } catch(error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export async function createRack(req: Request, res: Response) {
     const rackRepo = new RackDrizzleRepository()
     const roomRepo = new RoomDrizzleRepository()
@@ -76,11 +108,11 @@ export async function deleteRack(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        await rackService.deleteRack(
+        const deletedRackId = await rackService.deleteRack(
             rackRepo,
             id
         )
-        res.status(200).json({ message: "Rack deleted successfully" })
+        res.status(200).json({ id: deletedRackId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
