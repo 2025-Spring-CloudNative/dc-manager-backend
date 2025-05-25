@@ -52,8 +52,7 @@ export class SubnetEntity implements ISubnet {
     static extend(
         newCidr: string,
         newNetmask: string,
-        newGateway: string,
-        subnetCidrs: string[]
+        newGateway: string
     ): Partial<SubnetEntity> {
         if (!NetUtils.isValidIPv4CIDR(newCidr)) {
             throw new Error(`Invalid CIDR format ${newCidr}.`)
@@ -76,12 +75,10 @@ export class SubnetEntity implements ISubnet {
                 `Netmask ${newNetmask} does not match prefix length of ${newCidr}`
             )
         }
-        if (!NetUtils.checkCIDROverlap(newCidr, subnetCidrs)) {
-            throw new Error(`The CIDR ${newCidr} overlaps with other subnets.`)
-        }
         return {
             cidr: newCidr,
-            netmask: newNetmask
+            netmask: newNetmask,
+            gateway: newGateway
         }
     }
 }
