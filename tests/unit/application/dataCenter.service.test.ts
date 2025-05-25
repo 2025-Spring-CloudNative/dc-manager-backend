@@ -3,7 +3,9 @@ import { IDataCenterRepository } from "../../../src/persistence/repositories/dat
 
 const mockDataCenterRepo: jest.Mocked<IDataCenterRepository> = {
     getDataCenters: jest.fn(),
+    getDataCentersWithSubnet: jest.fn(),
     getDataCenterById: jest.fn(),
+    getDataCenterByIdWithSubnet: jest.fn(),
     createDataCenter: jest.fn(),
     updateDataCenter: jest.fn(),
     deleteDataCenter: jest.fn()
@@ -22,7 +24,8 @@ describe("dataCenterService - getDataCenters", () => {
         mockDataCenterRepo.getDataCenters.mockResolvedValue(dataCenters)
 
         const result = await dataCenterService.getDataCenters(
-            mockDataCenterRepo
+            mockDataCenterRepo,
+            {} as any // Provide an empty object or appropriate mock for DataCenterQueryParams
         )
 
         expect(mockDataCenterRepo.getDataCenters).toHaveBeenCalled()
@@ -55,8 +58,14 @@ describe("dataCenterService - createDataCenter", () => {
         const createdId = 1
         mockDataCenterRepo.createDataCenter.mockResolvedValue(createdId)
 
+        // Provide a mock for subnetRepo as required by the service signature
+        const mockSubnetRepo = {
+            createSubnet: jest.fn().mockResolvedValue(1)
+        } as any
+
         const result = await dataCenterService.createDataCenter(
             mockDataCenterRepo,
+            mockSubnetRepo,
             dataCenter
         )
 
