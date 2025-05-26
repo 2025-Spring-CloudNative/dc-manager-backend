@@ -67,6 +67,8 @@ const resourceToResourceMap: Record<string, Resource> = {
     machine: "Machine",
     service: "Service",
     subnet: "Subnet",
+    "ip-pool": "IPPool",
+    "ip-address": "IPAddress",
     user: "User",
     auth: "User"
 }

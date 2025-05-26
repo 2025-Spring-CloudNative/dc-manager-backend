@@ -25,8 +25,8 @@ export async function userRegister(req: Request, res: Response) {
         )
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict'
+            secure: process.env.NODE_ENV === 'prod',
+            sameSite: process.env.NODE_ENV === 'prod' ? 'none' : 'strict'
         })
 
         res.status(201).json({
@@ -59,8 +59,8 @@ export async function userLogin(req: Request, res: Response) {
         )
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict'
+            secure: process.env.NODE_ENV === 'prod',
+            sameSite: process.env.NODE_ENV === 'prod' ? 'none' : 'strict'
         })
 
         res.status(200).json({

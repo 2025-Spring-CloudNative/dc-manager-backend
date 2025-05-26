@@ -29,7 +29,14 @@ jobs:
 
             - name: Run Tests
               run: npm run test
+    deploy:
+        needs: test
+        runs-on: ubuntu-latest
 
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+              
             - name: Authenticate to Google Cloud
               uses: google-github-actions/auth@v2
               with:
@@ -57,3 +64,10 @@ jobs:
                 service: dc-manager-backend
                 image: asia-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dc-manager-backend/dc-manager-backend-cloud:${{ github.sha }}
                 region: asia-east1
+                flags: --port=4000 --allow-unauthenticated --add-cloudsql-instances=${{ secrets.CLOUD_SQL_INSTANCE }}
+                env_vars: |
+                  NODE_ENV=prod
+                  DATABASE_URL=postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@/\
+                  ${{ secrets.DB_NAME }}?host=/cloudsql/${{ secrets.CLOUD_SQL_INSTANCE }}
+                  ACCESS_SECRET=${{ secrets.ACCESS_SECRET }}
+                  REFRESH_SECRET=${{ secrets.REFRESH_SECRET }}
