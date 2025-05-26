@@ -29,3 +29,31 @@ jobs:
 
             - name: Run Tests
               run: npm run test
+
+            - name: Authenticate to Google Cloud
+              uses: google-github-actions/auth@v2
+              with:
+                credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+            - name: Set up gcloud CLI
+              uses: google-github-actions/setup-gcloud@v2
+              with:
+                project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+            - name: Configure Docker to use gcloud
+              run: gcloud auth configure-docker asia-east1-docker.pkg.dev
+
+            - name: Build Docker Image
+              run: |
+                docker build -t asia-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dc-manager-backend/dc-manager-backend-cloud:${{ github.sha }} .
+
+            - name: Push to Artifact Registry
+              run: |
+                docker push asia-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dc-manager-backend/dc-manager-backend-cloud:${{ github.sha }}
+
+            - name: Deploy to Cloud Run
+              uses: google-github-actions/deploy-cloudrun@v2
+              with:
+                service: dc-manager-backend
+                image: asia-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dc-manager-backend/dc-manager-backend-cloud:${{ github.sha }}
+                region: asia-east1
