@@ -97,7 +97,7 @@ export async function extendIPPool(
     
     const ipPoolCidrs = await ipPoolRepo.getOtherIPPoolCIDRs(id, subnetId)
 
-    const patch = IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)
+    const patch = IPPoolEntity.extend(ipPool.cidr, newCidr, subnetCidr, ipPoolCidrs)
     const extendedIPPool = await ipPoolRepo.updateIPPool(id, patch)
 
     return extendedIPPool
