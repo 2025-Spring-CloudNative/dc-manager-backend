@@ -32,7 +32,7 @@ const server = express()
 const allowedOrigins = [
     "http://localhost:3000", 
     "http://127.0.0.1:3000",
-    "https://dc-manager-frontend-703684363125.asia-east1.run.app/"
+    "https://dc-manager-frontend-703684363125.asia-east1.run.app"
 ]
 
 const options: cors.CorsOptions = {
