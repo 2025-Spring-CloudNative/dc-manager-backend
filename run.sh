@@ -5,5 +5,5 @@ set -e
 npm run db:migrate & PID=$!
 wait $PID
 
-npm run local & PID=$!
+node ./build/server.js & PID=$!
 wait $PID
