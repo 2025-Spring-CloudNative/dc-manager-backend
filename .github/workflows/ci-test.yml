@@ -57,4 +57,7 @@ jobs:
                 service: dc-manager-backend
                 image: asia-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dc-manager-backend/dc-manager-backend-cloud:${{ github.sha }}
                 region: asia-east1
-                flags: --port=4000
+                flags: --port=4000,--add-cloudsql-instances=${{ secrets.CLOUD_SQL_INSTANCE }}
+                env_vars: |
+                  DATABASE_URL=postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@/\
+                  ${{ secrets.DB_NAME }}?host=/cloudsql/${{ secrets.CLOUD_SQL_INSTANCE }}
