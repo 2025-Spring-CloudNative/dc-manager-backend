@@ -8,7 +8,6 @@ const mockIpAddressRepo: jest.Mocked<IIPAddressRepository> = {
     createIPAddress: jest.fn(),
     updateIPAddress: jest.fn(),
     deleteIPAddress: jest.fn(),
-    getIPAddressByMachineId: jest.fn()
 }
 
 beforeEach(() => {
