@@ -11,6 +11,8 @@ const resources = [
     "Machine",
     "Service",
     "Subnet",
+    "IPPool",
+    "IPAddress"
     "User"
 ] as const
 export type Resource = (typeof resources)[number]
@@ -54,6 +56,14 @@ export const POLICY: RBACPolicy = {
         },
         {
             resource: "Subnet",
+            action: ["read"]
+        },
+        {
+            resource: "IPPool",
+            action: ["read"]
+        },
+        {
+            resource: "IPAddress",
             action: ["read"]
         },
         {
