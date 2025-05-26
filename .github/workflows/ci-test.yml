@@ -29,7 +29,11 @@ jobs:
 
             - name: Run Tests
               run: npm run test
-
+    deploy:
+        needs: test
+        runs-on: ubuntu-latest
+        
+        steps:
             - name: Authenticate to Google Cloud
               uses: google-github-actions/auth@v2
               with:
