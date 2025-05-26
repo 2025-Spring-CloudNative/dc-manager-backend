@@ -1,6 +1,8 @@
 import * as machineService from "../../../src/application/services/machine.service"
 import { IMachineRepository } from "../../../src/persistence/repositories/machine.repository"
 import { IMachine, MachineStatus } from "../../../src/domain/machine"
+import { getIPAddresses } from "../../../src/application/services/ipAddress.service"
+import { IPAddressStatus } from "../../../src/domain/ipAddress"
 
 const mockMachineRepo: jest.Mocked<IMachineRepository> = {
     getMachines: jest.fn(),
@@ -154,7 +156,11 @@ describe("machineService - deleteMachine", () => {
 
         // Mock ipAddressRepo with required methods
         const mockIpAddressRepo = {
-            getIPAddressByMachineId: jest.fn().mockResolvedValue({}),
+            getIPAddresses: jest.fn().mockResolvedValue([{
+                id: 123,
+                machineId: 1,
+                status: IPAddressStatus.Allocated
+            }]),
             updateIPAddress: jest.fn()
         } as any
 

@@ -112,9 +112,11 @@ export async function deleteMachine(
     ipAddressRepo: IIPAddressRepository,
     id: number
 ) {
-    const ipAddress = await ipAddressRepo.getIPAddressByMachineId(id)
-    if (ipAddress.id) {
-        await ipAddressRepo.updateIPAddress(ipAddress.id, {
+    const [ipAddress] = await ipAddressRepo.getIPAddresses({
+        machineId: id
+    })
+    if (ipAddress!.id) {
+        await ipAddressRepo.updateIPAddress(ipAddress!.id, {
             status: IPAddressStatus.Released,
             releasedAt: new Date()
         })
