@@ -1,8 +1,6 @@
 import { IPPoolEntity, IIPPool } from "../../../src/domain/ipPool"
 import { NetUtils } from "../../../src/domain/utils/net"
 
-// Remove jest.mock and use jest.spyOn for each method in beforeEach
-
 describe("IPPoolEntity", () => {
     const validIPPool: IIPPool = {
         id: 1,
@@ -22,8 +20,6 @@ describe("IPPoolEntity", () => {
         beforeEach(() => {
             jest.clearAllMocks()
             jest.spyOn(NetUtils, "isValidIPv4CIDR").mockImplementation(() => true)
-            jest.spyOn(NetUtils, "isCIDRWithinSubnet").mockImplementation(() => true)
-            jest.spyOn(NetUtils, "checkCIDROverlap").mockImplementation(() => true)
         })
 
         it("should create an instance when CIDR is valid", () => {
@@ -34,6 +30,17 @@ describe("IPPoolEntity", () => {
             const isValidIPv4CIDRSpy = jest.spyOn(NetUtils, "isValidIPv4CIDR").mockReturnValue(false)
             expect(() => new IPPoolEntity(validIPPool)).toThrow(`Invalid CIDR format ${validIPPool.cidr}`)
             isValidIPv4CIDRSpy.mockRestore()
+        })
+
+        it("should assign all properties correctly", () => {
+            const entity = new IPPoolEntity(validIPPool)
+            expect(entity.id).toBe(validIPPool.id)
+            expect(entity.name).toBe(validIPPool.name)
+            expect(entity.type).toBe(validIPPool.type)
+            expect(entity.cidr).toBe(validIPPool.cidr)
+            expect(entity.subnetId).toBe(validIPPool.subnetId)
+            expect(entity.createdAt).toBe(validIPPool.createdAt)
+            expect(entity.updatedAt).toBe(validIPPool.updatedAt)
         })
     })
 
@@ -49,7 +56,7 @@ describe("IPPoolEntity", () => {
         beforeEach(() => {
             isValidIPv4CIDRSpy = jest.spyOn(NetUtils, "isValidIPv4CIDR").mockImplementation(() => true)
             isCIDRWithinSubnetSpy = jest.spyOn(NetUtils, "isCIDRWithinSubnet").mockImplementation(() => true)
-            checkCIDROverlapSpy = jest.spyOn(NetUtils, "checkCIDROverlap").mockImplementation(() => true)
+            checkCIDROverlapSpy = jest.spyOn(NetUtils, "checkCIDROverlap").mockImplementation(() => false)
         })
 
         afterEach(() => {
@@ -59,7 +66,7 @@ describe("IPPoolEntity", () => {
         it("should return new CIDR when all checks pass", () => {
             isValidIPv4CIDRSpy.mockReturnValue(true)
             isCIDRWithinSubnetSpy.mockReturnValue(true)
-            checkCIDROverlapSpy.mockReturnValue(true)
+            checkCIDROverlapSpy.mockReturnValue(false)
             expect(IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)).toEqual({ cidr: newCidr })
         })
 
@@ -81,10 +88,25 @@ describe("IPPoolEntity", () => {
         it("should throw error if overlaps with other ipPools", () => {
             isValidIPv4CIDRSpy.mockReturnValue(true)
             isCIDRWithinSubnetSpy.mockReturnValue(true)
-            checkCIDROverlapSpy.mockReturnValue(false)
+            checkCIDROverlapSpy.mockReturnValue(true)
             expect(() => IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)).toThrow(
                 `The CIDR ${newCidr} overlaps with other ipPools.`
             )
+        })
+
+        it("should call NetUtils.isValidIPv4CIDR with correct arguments", () => {
+            IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)
+            expect(NetUtils.isValidIPv4CIDR).toHaveBeenCalledWith(newCidr)
+        })
+
+        it("should call NetUtils.isCIDRWithinSubnet with correct arguments", () => {
+            IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)
+            expect(NetUtils.isCIDRWithinSubnet).toHaveBeenCalledWith(newCidr, subnetCidr)
+        })
+
+        it("should call NetUtils.checkCIDROverlap with correct arguments", () => {
+            IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)
+            expect(NetUtils.checkCIDROverlap).toHaveBeenCalledWith(newCidr, ipPoolCidrs)
         })
     })
 })

@@ -4,6 +4,7 @@ import { ISubnet } from "../../../src/domain/subnet"
 
 const mockSubnetRepo: jest.Mocked<ISubnetRepository> = {
     getSubnets: jest.fn(),
+    getOtherSubnetCIDRs: jest.fn(),
     getSubnetById: jest.fn(),
     createSubnet: jest.fn(),
     updateSubnet: jest.fn(),
@@ -96,6 +97,14 @@ describe("subnetService - updateSubnet", () => {
             createdAt: new Date("2025-04-18T00:00:00Z"),
             updatedAt: new Date("2025-04-18T03:00:00Z")
         }
+        mockSubnetRepo.getSubnetById.mockResolvedValue({
+            id: 1,
+            cidr: "192.168.0.0/24",
+            netmask: "255.255.255.0",
+            gateway: "192.168.0.1",
+            createdAt: new Date("2025-04-18T00:00:00Z"),
+            updatedAt: new Date("2025-04-18T00:00:00Z")
+        })
         mockSubnetRepo.updateSubnet.mockResolvedValue(updatedSubnet)
 
         const result = await subnetService.updateSubnet(

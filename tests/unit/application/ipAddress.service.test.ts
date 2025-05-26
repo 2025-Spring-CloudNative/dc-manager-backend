@@ -8,8 +8,7 @@ const mockIpAddressRepo: jest.Mocked<IIPAddressRepository> = {
     createIPAddress: jest.fn(),
     updateIPAddress: jest.fn(),
     deleteIPAddress: jest.fn(),
-    getIPAddressByMachineId: jest.fn(),
-    getIPAddressesByPoolId: jest.fn()
+    getIPAddressByMachineId: jest.fn()
 }
 
 beforeEach(() => {
@@ -114,6 +113,17 @@ describe("ipAddressService - updateIPAddress", () => {
             allocatedAt: new Date("2025-04-18T07:00:00Z"),
             releasedAt: null
         }
+        mockIpAddressRepo.getIPAddressById.mockResolvedValue({
+            id: 1,
+            address: "10.0.0.1",
+            status: IPAddressStatus.Allocated,
+            poolId: 200,
+            machineId: 300,
+            createdAt: new Date("2025-04-18T00:00:00Z"),
+            updatedAt: new Date("2025-04-18T06:00:00Z"),
+            allocatedAt: new Date("2025-04-18T07:00:00Z"),
+            releasedAt: null
+        })
         mockIpAddressRepo.updateIPAddress.mockResolvedValue(updatedIp)
 
         const result = await ipAddressService.updateIPAddress(
