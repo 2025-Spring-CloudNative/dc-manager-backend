@@ -20,6 +20,9 @@ function buildIPAddressQueryFilters(queryParams?: IPAddressQueryParams): SQL[] {
     if (queryParams.poolId) {
         filters.push(eq(ipAddressTable.poolId, queryParams.poolId))
     }
+    if (queryParams.machineId) {
+        filters.push(eq(ipAddressTable.machineId, queryParams.machineId))
+    }
     return filters
 }
 
@@ -75,15 +78,6 @@ export class IPAddressDrizzleRepository implements IIPAddressRepository {
             .from(ipAddressTable)
             .where(eq(ipAddressTable.id, id))
             
-        return ipAddress as IIPAddress
-    }
-
-    async getIPAddressByMachineId(machineId: number) {
-        const [ipAddress] = await db
-            .select()
-            .from(ipAddressTable)
-            .where(eq(ipAddressTable.machineId, machineId))
-
         return ipAddress as IIPAddress
     }
 

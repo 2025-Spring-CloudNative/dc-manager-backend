@@ -88,7 +88,7 @@ describe("machineService - createMachine", () => {
 
         // Mock dependencies required by createMachine
         const mockIpAddressRepo = {
-            getIPAddresses: jest.fn().mockResolvedValue([]), // 新增这一行
+            getIPAddresses: jest.fn().mockResolvedValue([]),
             getIPAddressesByPoolId: jest.fn().mockResolvedValue([]),
             updateIPAddress: jest.fn()
         } as any
