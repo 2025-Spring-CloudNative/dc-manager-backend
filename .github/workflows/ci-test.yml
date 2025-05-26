@@ -57,3 +57,4 @@ jobs:
                 service: dc-manager-backend
                 image: asia-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/dc-manager-backend/dc-manager-backend-cloud:${{ github.sha }}
                 region: asia-east1
+                env_vars: PORT=4000
