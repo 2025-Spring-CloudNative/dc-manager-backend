@@ -8,6 +8,20 @@ const doc = {
     },
     host: "localhost:4000",
     schemes: ["http"],
+    components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: "http",
+                scheme: "bearer",
+                bearerFormat: "JWT"
+            }
+        }
+    },
+    security: [
+        {
+            bearerAuth: []
+        }
+    ],
     definitions: {
         DataCenter: {
             id: 1,
@@ -88,7 +102,7 @@ const doc = {
             subnetId: 1
         }
     }
-}
+};
 
 const outputFile = "./docs/swagger/swagger-output.json"
 const endpointFiles = ["./src/server.ts"]

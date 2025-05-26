@@ -40,6 +40,33 @@ router.get("/:id",
     */
     ipPoolController.getIPPoolById)
 
+router.get("/util/:id", 
+    /*
+        #swagger.tags = ['IP Pool']
+        #swagger.summary = 'getIPPoolUtilization'
+        #swagger.responses[200] = {
+            description: 'Get IP Pool utilization successfully',
+            content: {
+                "application/json": {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            utilization: {
+                                type: 'number',
+                                example: 0.75
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error',
+            schema: { message: 'string' }
+        }
+    */
+    ipPoolController.getIPPoolUtilization)
+
 router.post("/", 
     /*
         #swagger.tags = ['IP Pool']
@@ -61,18 +88,18 @@ router.post("/",
                 }
             }
         }
-    #swagger.responses[200] = {
-        description: 'IP Pool created successfully',
-        schema: {
-            id: "number",
-            name: "string",
-            type: "string",
-            cidr: "string",
-            subnetId: "number",
-            createdAt: "string",
-            updatedAt: "string"
+        #swagger.responses[200] = {
+            description: 'IP Pool created successfully',
+            schema: {
+                id: "number",
+                name: "string",
+                type: "string",
+                cidr: "string",
+                subnetId: "number",
+                createdAt: "string",
+                updatedAt: "string"
+            }
         }
-    }
         #swagger.responses[500] = {
             description: 'Internal Server Error',
             schema: { message: 'string' }
@@ -91,7 +118,6 @@ router.patch("/:id",
                     schema: {
                         type: "object",
                         properties: {
-                            id: { type: "number", example: 1 },
                             name: { type: "string", example: "Main IP Pool" },
                             type: { type: "string", example: "dynamic" },
                             subnetId: { type: "number", example: 1}

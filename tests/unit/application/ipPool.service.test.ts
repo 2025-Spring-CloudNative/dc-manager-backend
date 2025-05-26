@@ -7,7 +7,9 @@ const mockIpPoolRepo: jest.Mocked<IIPPoolRepository> = {
     getIPPoolById: jest.fn(),
     createIPPool: jest.fn(),
     updateIPPool: jest.fn(),
-    deleteIPPool: jest.fn()
+    deleteIPPool: jest.fn(),
+    getAllIPPoolCIDRs: jest.fn(),
+    getOtherIPPoolCIDRs: jest.fn()
 }
 
 beforeEach(() => {
@@ -18,29 +20,27 @@ describe("ipPoolService - getIPPools", () => {
     it("should fetch and return all IP pools", async () => {
         const ipPools: IIPPool[] = [
             {
-                id: 1,
-                name: "Pool1",
-                type: "static",
-                startIp: "192.168.0.100",
-                endIp: "192.168.0.200",
-                subnetId: 1,
-                createdAt: new Date("2025-04-18T00:00:00Z"),
-                updatedAt: null
+            id: 1,
+            name: "Pool1",
+            type: "static",
+            cidr: "192.168.0.0/24",
+            subnetId: 1,
+            createdAt: new Date("2025-04-18T00:00:00Z"),
+            updatedAt: undefined
             },
             {
-                id: 2,
-                name: "Pool2",
-                type: "dynamic",
-                startIp: "10.0.0.10",
-                endIp: "10.0.0.50",
-                subnetId: 2,
-                createdAt: new Date("2025-04-18T01:00:00Z"),
-                updatedAt: new Date("2025-04-18T02:00:00Z")
+            id: 2,
+            name: "Pool2",
+            type: "dynamic",
+            cidr: "10.0.0.0/16",
+            subnetId: 2,
+            createdAt: new Date("2025-04-18T01:00:00Z"),
+            updatedAt: new Date("2025-04-18T02:00:00Z")
             }
         ]
         mockIpPoolRepo.getIPPools.mockResolvedValue(ipPools)
 
-        const result = await ipPoolService.getIPPools(mockIpPoolRepo)
+        const result = await ipPoolService.getIPPools(mockIpPoolRepo, {} as any)
 
         expect(mockIpPoolRepo.getIPPools).toHaveBeenCalled()
         expect(result).toEqual(ipPools)
@@ -53,11 +53,10 @@ describe("ipPoolService - getIPPoolById", () => {
             id: 1,
             name: "Pool1",
             type: "static",
-            startIp: "192.168.0.100",
-            endIp: "192.168.0.200",
+            cidr: "192.168.0.0/24",
             subnetId: 1,
             createdAt: new Date("2025-04-18T00:00:00Z"),
-            updatedAt: null
+            updatedAt: undefined
         }
         mockIpPoolRepo.getIPPoolById.mockResolvedValue(ipPool)
 
@@ -76,8 +75,7 @@ describe("ipPoolService - createIPPool", () => {
         const newPool: IIPPool = {
             name: "NewPool",
             type: "static",
-            startIp: "172.16.0.1",
-            endIp: "172.16.0.254",
+            cidr: "172.16.0.0/24",
             subnetId: 3
         }
         const createdId = 3
@@ -92,17 +90,25 @@ describe("ipPoolService - createIPPool", () => {
 
 describe("ipPoolService - updateIPPool", () => {
     it("should update and return the updated IP pool", async () => {
-        const updates: Partial<IIPPool> = { type: "dynamic" }
+        const updates: Partial<IIPPool> = { type: "dynamic", cidr: "10.0.0.0/24" }
         const updatedPool: IIPPool = {
             id: 1,
             name: "Pool1",
             type: "dynamic",
-            startIp: "192.168.0.100",
-            endIp: "192.168.0.200",
+            cidr: "10.0.0.0/24",
             subnetId: 1,
             createdAt: new Date("2025-04-18T00:00:00Z"),
             updatedAt: new Date("2025-04-18T03:00:00Z")
         }
+        mockIpPoolRepo.getIPPoolById.mockResolvedValue({
+            id: 1,
+            name: "Pool1",
+            type: "static",
+            cidr: "10.0.0.0/24", // 和 updates.cidr 保持一致
+            subnetId: 1,
+            createdAt: new Date("2025-04-18T00:00:00Z"),
+            updatedAt: undefined
+        })
         mockIpPoolRepo.updateIPPool.mockResolvedValue(updatedPool)
 
         const result = await ipPoolService.updateIPPool(

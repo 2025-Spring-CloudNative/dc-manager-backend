@@ -1,8 +1,23 @@
-import { IIPAddress } from "../../domain/ipAddress"
+import { IIPAddress, IPAddressEntity, IPAddressStatus } from "../../domain/ipAddress"
 import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.repository"
+import { SortOrder } from "../../types/common"
 
-export async function getIPAddresses(ipAddressRepo: IIPAddressRepository) {
-    const ipAddresses = await ipAddressRepo.getIPAddresses()
+export type IPAddressSortBy = 
+    'address' | 'status' | 'createdAt' | 'updatedAt' | 'allocatedAt' | 'releasedAt'
+
+export interface IPAddressQueryParams {
+    address?: string,
+    status?: IPAddressStatus,
+    poolId?: number,
+    sortBy?: IPAddressSortBy,
+    sortOrder?: SortOrder
+}
+
+export async function getIPAddresses(
+    ipAddressRepo: IIPAddressRepository,
+    ipAddressQueryParams: IPAddressQueryParams
+) {
+    const ipAddresses = await ipAddressRepo.getIPAddresses(ipAddressQueryParams)
 
     return ipAddresses
 }
@@ -30,6 +45,19 @@ export async function updateIPAddress(
     id: number,
     ipAddress: Partial<IIPAddress>
 ) {
+    const prevIPAddress = await ipAddressRepo.getIPAddressById(id)
+    const prevIPAddressEntity = new IPAddressEntity(prevIPAddress)
+
+    const restrictedFields: (keyof IIPAddress)[] = [
+        'id', 'createdAt', 'updatedAt', 'allocatedAt', 'releasedAt'
+    ]
+
+    for (const field of restrictedFields) {
+        if (ipAddress[field] && ipAddress[field] !== prevIPAddressEntity[field]) {
+            throw new Error(`Cannot update restricted field: ${field}`)
+        }
+    }
+
     const updatedIPAddress = await ipAddressRepo.updateIPAddress(id, ipAddress)
 
     return updatedIPAddress

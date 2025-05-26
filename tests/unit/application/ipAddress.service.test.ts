@@ -1,13 +1,14 @@
 import * as ipAddressService from "../../../src/application/services/ipAddress.service"
 import { IIPAddressRepository } from "../../../src/persistence/repositories/ipAddress.repository"
-import { IIPAddress } from "../../../src/domain/ipAddress"
+import { IIPAddress, IPAddressStatus } from "../../../src/domain/ipAddress"
 
 const mockIpAddressRepo: jest.Mocked<IIPAddressRepository> = {
     getIPAddresses: jest.fn(),
     getIPAddressById: jest.fn(),
     createIPAddress: jest.fn(),
     updateIPAddress: jest.fn(),
-    deleteIPAddress: jest.fn()
+    deleteIPAddress: jest.fn(),
+    getIPAddressByMachineId: jest.fn()
 }
 
 beforeEach(() => {
@@ -20,18 +21,18 @@ describe("ipAddressService - getIPAddresses", () => {
             {
                 id: 1,
                 address: "192.168.0.10",
-                status: "allocated",
+                status: IPAddressStatus.Allocated,
                 poolId: 100,
                 machineId: 200,
                 createdAt: new Date("2025-04-18T00:00:00Z"),
-                updatedAt: null,
+                updatedAt: undefined,
                 allocatedAt: new Date("2025-04-18T01:00:00Z"),
                 releasedAt: null
             },
             {
                 id: 2,
                 address: "192.168.0.11",
-                status: "released",
+                status: IPAddressStatus.Released,
                 poolId: 100,
                 machineId: 201,
                 createdAt: new Date("2025-04-18T02:00:00Z"),
@@ -42,7 +43,7 @@ describe("ipAddressService - getIPAddresses", () => {
         ]
         mockIpAddressRepo.getIPAddresses.mockResolvedValue(ipAddresses)
 
-        const result = await ipAddressService.getIPAddresses(mockIpAddressRepo)
+        const result = await ipAddressService.getIPAddresses(mockIpAddressRepo, {} as any)
 
         expect(mockIpAddressRepo.getIPAddresses).toHaveBeenCalled()
         expect(result).toEqual(ipAddresses)
@@ -54,11 +55,11 @@ describe("ipAddressService - getIPAddressById", () => {
         const ip: IIPAddress = {
             id: 1,
             address: "192.168.0.10",
-            status: "allocated",
+            status: IPAddressStatus.Allocated,
             poolId: 100,
             machineId: 200,
             createdAt: new Date("2025-04-18T00:00:00Z"),
-            updatedAt: null,
+            updatedAt: undefined,
             allocatedAt: new Date("2025-04-18T01:00:00Z"),
             releasedAt: null
         }
@@ -78,7 +79,7 @@ describe("ipAddressService - createIPAddress", () => {
     it("should create an IP address and return its id", async () => {
         const newIp: IIPAddress = {
             address: "10.0.0.1",
-            status: "free",
+            status: IPAddressStatus.Allocated,
             poolId: 200,
             machineId: 0
         }
@@ -98,13 +99,13 @@ describe("ipAddressService - createIPAddress", () => {
 describe("ipAddressService - updateIPAddress", () => {
     it("should update and return the updated IP address", async () => {
         const updates: Partial<IIPAddress> = {
-            status: "allocated",
+            status: IPAddressStatus.Allocated,
             machineId: 300
         }
         const updatedIp: IIPAddress = {
             id: 1,
             address: "10.0.0.1",
-            status: "allocated",
+            status: IPAddressStatus.Allocated,
             poolId: 200,
             machineId: 300,
             createdAt: new Date("2025-04-18T00:00:00Z"),
@@ -112,6 +113,17 @@ describe("ipAddressService - updateIPAddress", () => {
             allocatedAt: new Date("2025-04-18T07:00:00Z"),
             releasedAt: null
         }
+        mockIpAddressRepo.getIPAddressById.mockResolvedValue({
+            id: 1,
+            address: "10.0.0.1",
+            status: IPAddressStatus.Allocated,
+            poolId: 200,
+            machineId: 300,
+            createdAt: new Date("2025-04-18T00:00:00Z"),
+            updatedAt: new Date("2025-04-18T06:00:00Z"),
+            allocatedAt: new Date("2025-04-18T07:00:00Z"),
+            releasedAt: null
+        })
         mockIpAddressRepo.updateIPAddress.mockResolvedValue(updatedIp)
 
         const result = await ipAddressService.updateIPAddress(

@@ -2,17 +2,27 @@ import { IDataCenter, DataCenterEntity } from "../../domain/dataCenter"
 import { SubnetEntity } from "../../domain/subnet"
 import { IDataCenterRepository } from "../../persistence/repositories/dataCenter.repository"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
+import { IIPPoolRepository } from "../../persistence/repositories/ipPool.repository"
+import { IServiceRepository } from "../../persistence/repositories/service.repository"
+import { SortOrder } from "../../types/common"
 
-export async function getDataCenters(dataCenterRepo: IDataCenterRepository) {
-    const dataCenters = await dataCenterRepo.getDataCenters()
+export type DataCenterSortBy = 'name' | 'location'
 
-    return dataCenters
+export interface DataCenterQueryParams {
+    name?: string
+    location?: string
+    subnetId?: number
+    sortBy?: DataCenterSortBy
+    sortOrder?: SortOrder
 }
 
-export async function getDataCentersWithSubnet(dataCenterRepo: IDataCenterRepository) {
-    const dataCentersWithSubnet = await dataCenterRepo.getDataCentersWithSubnet()
+export async function getDataCenters(
+    dataCenterRepo: IDataCenterRepository, 
+    dataCenterQueryParams: DataCenterQueryParams
+) {
+    const dataCenters = await dataCenterRepo.getDataCenters(dataCenterQueryParams)
 
-    return dataCentersWithSubnet
+    return dataCenters
 }
 
 export async function getDataCenterById(
@@ -24,25 +34,15 @@ export async function getDataCenterById(
     return dataCenter
 }
 
-export async function getDataCenterByIdWithSubnet(
-    dataCenterRepo: IDataCenterRepository,
-    id: number
-) {
-    const dataCenterWithSubnet = await dataCenterRepo.getDataCenterByIdWithSubnet(id)
-
-    return dataCenterWithSubnet
-}
-
 export async function createDataCenter(
     dataCenterRepo: IDataCenterRepository,
     subnetRepo: ISubnetRepository,
     dataCenter: IDataCenter,
-    subnetCidr?: string
+    subnetId?: number
 ) {
     const dataCenterEntity = new DataCenterEntity(dataCenter)
     // if the user selects a subnet, then assign the subnetId to the datacenter
-    if (subnetCidr) {
-        const subnetId = await subnetRepo.getSubnetIdByCidr(subnetCidr)
+    if (subnetId) {
         dataCenterEntity.subnetId = subnetId
     }else {
         const subnetEntity = new SubnetEntity({
@@ -63,6 +63,14 @@ export async function updateDataCenter(
     id: number,
     dataCenter: Partial<IDataCenter>
 ) {
+    const prevDataCenter = await dataCenterRepo.getDataCenterById(id)
+    const prevDataCenterEntity = new DataCenterEntity(prevDataCenter)
+
+    const restrictedField: (keyof IDataCenter) = 'id'
+    if (dataCenter[restrictedField] && dataCenter[restrictedField] !== prevDataCenterEntity[restrictedField]) {
+        throw new Error(`Cannot update restricted field: ${restrictedField}`)
+    }
+    
     const updatedDataCenter = await dataCenterRepo.updateDataCenter(id, dataCenter)
 
     return updatedDataCenter
@@ -70,9 +78,24 @@ export async function updateDataCenter(
 
 export async function deleteDataCenter(
     dataCenterRepo: IDataCenterRepository,
+    subnetRepo: ISubnetRepository,
+    ipPoolRepo: IIPPoolRepository,
+    serviceRepo: IServiceRepository,
     id: number
 ) {
-    const deletedDataCenterId  = await dataCenterRepo.deleteDataCenter(id)
+    const dataCenter = await dataCenterRepo.getDataCenterById(id)
+    const subnet = await subnetRepo.getSubnetById(dataCenter.subnetId!)
+    const ipPools = await ipPoolRepo.getIPPools({
+        subnetId: subnet.id!
+    })
+    for (const ipPool of ipPools) {
+        const [service] = await serviceRepo.getServices({
+            poolId: ipPool.id!
+        })
+        await serviceRepo.deleteService(service?.id!)
+        await ipPoolRepo.deleteIPPool(ipPool.id!)
+    }
 
+    const deletedDataCenterId  = await dataCenterRepo.deleteDataCenter(id)
     return deletedDataCenterId
 }

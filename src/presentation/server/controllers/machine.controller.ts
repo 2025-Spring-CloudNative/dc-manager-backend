@@ -4,12 +4,22 @@ import * as machineService from "../../../application/services/machine.service"
 import { IPAddressDrizzleRepository } from "../../../persistence/drizzle/ipAddress.persistence"
 import { RackDrizzleRepository } from "../../../persistence/drizzle/rack.persistence"
 import { ServiceDrizzleRepository } from "../../../persistence/drizzle/service.persistence"
+import { MachineStatus } from "../../../domain/machine"
+import { SortOrder } from "../../../types/common"
 
 export async function getMachines(req: Request, res: Response) {
     const machineRepo = new MachineDrizzleRepository()
+    const machineQueryParams: machineService.MachineQueryParams = {
+        name: req.query.name as string,
+        status: req.query.status as MachineStatus,
+        macAddress: req.query.macAddress as string,
+        rackId: Number(req.query.rackId),
+        sortBy: req.query.sortBy as machineService.MachineSortBy,
+        sortOrder: req.query.sortOrder as SortOrder
+    }
 
     try {
-        const machines = await machineService.getMachines(machineRepo)
+        const machines = await machineService.getMachines(machineRepo, machineQueryParams)
         res.status(200).json(machines)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -21,11 +31,12 @@ export async function getMachineById(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        const machine = await machineService.getMachineById(
-            machineRepo,
-            id
-        )
-        res.status(200).json(machine)
+        const machine = await machineService.getMachineById(machineRepo, id)
+        if (machine) {
+            res.status(200).json(machine)
+        }else {
+            res.status(404).json({ message: "Machine not found." })
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -45,7 +56,7 @@ export async function createMachine(req: Request, res: Response) {
             serviceRepo,
             req.body
         )
-        res.status(200).json({ id: createdMachineId })
+        res.status(201).json({ id: createdMachineId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -74,12 +85,12 @@ export async function deleteMachine(req: Request, res: Response) {
     const id = Number(req.params.id)
 
     try {
-        await machineService.deleteMachine(
+        const deletedMachineId = await machineService.deleteMachine(
             machineRepo,
             ipAddressRepo,
             id
         )
-        res.status(200).json({ message: "Machine deleted successfully" })
+        res.status(200).json({ id: deletedMachineId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

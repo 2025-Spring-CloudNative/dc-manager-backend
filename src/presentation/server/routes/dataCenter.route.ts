@@ -57,9 +57,9 @@ router.post("/",
                                 location: { type: "string", example: "Taipei" }
                             }
                         },
-                        subnetCidr: { type: "string", example: "192.168.1.0/24" }
+                        subnetId: { type: "number", example: "1" }
                     },
-                    required: ["dataCenter", "subnetCidr"]
+                    required: ["dataCenter", "subnetId"]
                 }
             }
         }
@@ -78,11 +78,10 @@ router.patch("/:id",
                     schema: {
                         type: "object",
                         properties: {
-                            id: { type: "number", example: 1 },
                             name: { type: "string", example: "Updated DC" },
                             location: { type: "string", example: "Taipei" }
                         },
-                        required: ["id", "name", "location", "subnetId"]
+                        required: ["name", "location"]
                     }
                 }
             }

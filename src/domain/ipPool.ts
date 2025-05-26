@@ -20,6 +20,9 @@ export class IPPoolEntity implements IIPPool {
     updatedAt?: Date
 
     constructor(ipPool: IIPPool) {
+        if (!NetUtils.isValidIPv4CIDR(ipPool.cidr)) {
+            throw new Error(`Invalid CIDR format ${ipPool.cidr}`)
+        }
         this.id = ipPool.id
         this.name = ipPool.name
         this.type = ipPool.type
@@ -30,6 +33,7 @@ export class IPPoolEntity implements IIPPool {
     }
 
     static extend(
+        oldCidr: string,
         newCidr: string,
         subnetCidr: string, 
         ipPoolCidrs: string[]
@@ -40,8 +44,11 @@ export class IPPoolEntity implements IIPPool {
         if (!NetUtils.isCIDRWithinSubnet(newCidr, subnetCidr)) {
             throw new Error(`The CIDR ${newCidr} is not in the range of subnet ${subnetCidr}.`)
         }
-        if (!NetUtils.checkCIDROverlap(newCidr, ipPoolCidrs)) {
+        if (NetUtils.checkCIDROverlap(newCidr, ipPoolCidrs)) {
             throw new Error(`The CIDR ${newCidr} overlaps with other ipPools.`)
+        }
+        if (!NetUtils.isNewCIDRLarger(oldCidr, newCidr)) {
+            throw new Error(`The new CIDR ${newCidr} must be larger than the old CIDR ${oldCidr}.`)
         }
         return {cidr: newCidr};
     } 

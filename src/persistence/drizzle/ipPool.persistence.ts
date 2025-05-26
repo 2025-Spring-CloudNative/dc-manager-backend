@@ -1,31 +1,92 @@
-import { eq, ne } from "drizzle-orm"
+import { eq, ne, ilike, desc, asc, and, SQL } from "drizzle-orm"
+import { PgColumn } from "drizzle-orm/pg-core"
 import { IIPPool } from "../../domain/ipPool"
 import { IIPPoolRepository } from "../repositories/ipPool.repository"
 import { db } from "./index"
 import { ipPoolTable } from "./schema/ipPool.schema"
+import { IPPoolQueryParams } from "../../application/services/ipPool.service"
+
+function buildIPPoolQueryFilters(queryParams?: IPPoolQueryParams): SQL[] {
+    if (!queryParams) {
+        return []
+    }
+    const filters: SQL[] = []
+    if (queryParams.name) {
+        filters.push(ilike(ipPoolTable.name, `%${queryParams.name}%`))
+    }
+    if (queryParams.type) {
+        filters.push(ilike(ipPoolTable.type, `%${queryParams.type}%`))
+    }
+    if (queryParams.cidr) {
+        filters.push(ilike(ipPoolTable.cidr, `%${queryParams.cidr}%`))
+    }
+    if (queryParams.subnetId) {
+        filters.push(eq(ipPoolTable.subnetId, queryParams.subnetId))
+    }
+    return filters
+}
+
+function buildIPPoolQueryOrder(queryParams?: IPPoolQueryParams): SQL[] {
+    if (!queryParams || !queryParams.sortBy) {
+        return []
+    }
+    let column: PgColumn
+    switch(queryParams.sortBy) {
+        case 'name':
+            column = ipPoolTable.name
+            break
+        case 'type':
+            column = ipPoolTable.type
+            break
+        case 'cidr':
+            column = ipPoolTable.cidr
+            break
+        case 'createdAt':
+            column = ipPoolTable.createdAt
+            break
+        case 'updatedAt':
+            column = ipPoolTable.updatedAt
+            break
+        default:
+            column = ipPoolTable.id
+            break
+    }
+    const orderFn = queryParams.sortOrder === 'desc' ? desc : asc
+    return [orderFn(column)]
+}
 
 export class IPPoolDrizzleRepository implements IIPPoolRepository {
-    async getIPPools() {
+    async getIPPools(ipPoolQueryParams?: IPPoolQueryParams) {
+        const filters = buildIPPoolQueryFilters(ipPoolQueryParams)
+        const order = buildIPPoolQueryOrder(ipPoolQueryParams)
+
         const ipPools = await db
             .select()
             .from(ipPoolTable)
-        
+            .where(filters.length ? and(...filters) : undefined)
+            .orderBy(...order)
+
         return ipPools
     }
 
-    async getAllIPPoolCIDRs() {
+    async getAllIPPoolCIDRs(subnetId: number) {
         const ipPoolCidrs = await db
             .select({ cidr: ipPoolTable.cidr })
             .from(ipPoolTable)
+            .where(eq(ipPoolTable.subnetId, subnetId))
         
         return ipPoolCidrs.map(pool => pool.cidr)
     }
 
-    async getOtherIPPoolCIDRs(id: number) {
+    async getOtherIPPoolCIDRs(id: number, subnetId: number) {
         const ipPoolCidrs = await db
             .select({ cidr: ipPoolTable.cidr })
             .from(ipPoolTable)
-            .where(ne(ipPoolTable.id, id))
+            .where(and(
+                eq(ipPoolTable.subnetId, subnetId),
+                ne(ipPoolTable.id, id)
+            ))
+
 
         return ipPoolCidrs.map(pool => pool.cidr)
     }
