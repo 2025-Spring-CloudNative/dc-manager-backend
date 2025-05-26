@@ -12,7 +12,7 @@ const resources = [
     "Service",
     "Subnet",
     "IPPool",
-    "IPAddress"
+    "IPAddress",
     "User"
 ] as const
 export type Resource = (typeof resources)[number]
