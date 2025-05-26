@@ -30,7 +30,11 @@ export async function getIPPoolById(req: Request, res: Response) {
 
     try {
         const ipPool = await ipPoolService.getIPPoolById(ipPoolRepo, id)
-        res.status(200).json(ipPool)
+        if (ipPool) {
+            res.status(200).json(ipPool)
+        }else {
+            res.status(404).json({ message: "IP Pool not found." })
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -58,7 +62,7 @@ export async function createIPPool(req: Request, res: Response) {
             ipPoolRepo,
             req.body
         )
-        res.status(200).json({ id: createdIPPoolId })
+        res.status(201).json({ id: createdIPPoolId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
