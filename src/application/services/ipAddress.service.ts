@@ -9,6 +9,7 @@ export interface IPAddressQueryParams {
     address?: string,
     status?: IPAddressStatus,
     poolId?: number,
+    machineId?: number,
     sortBy?: IPAddressSortBy,
     sortOrder?: SortOrder
 }
