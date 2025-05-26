@@ -41,6 +41,12 @@ export class NetUtils {
         return cidrInstance.toArray({ from, limit })
     }
 
+    static isNewCIDRLarger(oldCidr: string, newCidr: string): boolean {
+        const [oldAddr, oldPrefix] = ipaddr.parseCIDR(oldCidr)
+        const [newAddr, newPrefix] = ipaddr.parseCIDR(newCidr)
+        return newPrefix < oldPrefix
+    }
+
     static isCIDRWithinSubnet(ipPoolCidr: string, subnetCidr: string): boolean {
         if (!this.isValidIPv4CIDR(ipPoolCidr)) {
             throw new Error(`Invalid ipPool CIDR format ${ipPoolCidr}`)

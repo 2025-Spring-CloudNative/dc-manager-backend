@@ -45,6 +45,7 @@ describe("IPPoolEntity", () => {
     })
 
     describe("extend", () => {
+        const oldCidr = "192.168.2.0/25"
         const newCidr = "192.168.2.0/24"
         const subnetCidr = "192.168.0.0/16"
         const ipPoolCidrs = ["192.168.1.0/24"]
@@ -52,11 +53,13 @@ describe("IPPoolEntity", () => {
         let isValidIPv4CIDRSpy: jest.SpyInstance
         let isCIDRWithinSubnetSpy: jest.SpyInstance
         let checkCIDROverlapSpy: jest.SpyInstance
+        let isNewCIDRLargerSpy: jest.SpyInstance
 
         beforeEach(() => {
             isValidIPv4CIDRSpy = jest.spyOn(NetUtils, "isValidIPv4CIDR").mockImplementation(() => true)
             isCIDRWithinSubnetSpy = jest.spyOn(NetUtils, "isCIDRWithinSubnet").mockImplementation(() => true)
             checkCIDROverlapSpy = jest.spyOn(NetUtils, "checkCIDROverlap").mockImplementation(() => false)
+            isNewCIDRLargerSpy = jest.spyOn(NetUtils, "isNewCIDRLarger").mockImplementation(() => true)
         })
 
         afterEach(() => {
@@ -67,46 +70,55 @@ describe("IPPoolEntity", () => {
             isValidIPv4CIDRSpy.mockReturnValue(true)
             isCIDRWithinSubnetSpy.mockReturnValue(true)
             checkCIDROverlapSpy.mockReturnValue(false)
-            expect(IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)).toEqual({ cidr: newCidr })
+            expect(IPPoolEntity.extend(oldCidr, newCidr, subnetCidr, ipPoolCidrs)).toEqual({ cidr: newCidr })
         })
 
         it("should throw error if newCidr is invalid", () => {
             isValidIPv4CIDRSpy.mockReturnValue(false)
-            expect(() => IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)).toThrow(
+            expect(() => IPPoolEntity.extend(oldCidr, newCidr, subnetCidr, ipPoolCidrs)).toThrow(
                 `Invalid CIDR format ${newCidr}.`
             )
         })
 
         it("should throw error if not within subnet", () => {
-            isValidIPv4CIDRSpy.mockReturnValue(true)
             isCIDRWithinSubnetSpy.mockReturnValue(false)
-            expect(() => IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)).toThrow(
+            expect(() => IPPoolEntity.extend(oldCidr, newCidr, subnetCidr, ipPoolCidrs)).toThrow(
                 `The CIDR ${newCidr} is not in the range of subnet ${subnetCidr}.`
             )
         })
 
         it("should throw error if overlaps with other ipPools", () => {
-            isValidIPv4CIDRSpy.mockReturnValue(true)
-            isCIDRWithinSubnetSpy.mockReturnValue(true)
             checkCIDROverlapSpy.mockReturnValue(true)
-            expect(() => IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)).toThrow(
+            expect(() => IPPoolEntity.extend(oldCidr, newCidr, subnetCidr, ipPoolCidrs)).toThrow(
                 `The CIDR ${newCidr} overlaps with other ipPools.`
             )
         })
 
+        it("should throw error if the new CIDR is smaller than the old CIDR", () => {
+            isNewCIDRLargerSpy.mockReturnValue(false)
+            expect(() => IPPoolEntity.extend(oldCidr, newCidr, subnetCidr, ipPoolCidrs)).toThrow(
+                `The new CIDR ${newCidr} must be larger than the old CIDR ${oldCidr}.`
+            )
+        })
+
         it("should call NetUtils.isValidIPv4CIDR with correct arguments", () => {
-            IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)
+            IPPoolEntity.extend(oldCidr, newCidr, subnetCidr, ipPoolCidrs)
             expect(NetUtils.isValidIPv4CIDR).toHaveBeenCalledWith(newCidr)
         })
 
         it("should call NetUtils.isCIDRWithinSubnet with correct arguments", () => {
-            IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)
+            IPPoolEntity.extend(oldCidr, newCidr, subnetCidr, ipPoolCidrs)
             expect(NetUtils.isCIDRWithinSubnet).toHaveBeenCalledWith(newCidr, subnetCidr)
         })
 
         it("should call NetUtils.checkCIDROverlap with correct arguments", () => {
-            IPPoolEntity.extend(newCidr, subnetCidr, ipPoolCidrs)
+            IPPoolEntity.extend(oldCidr, newCidr, subnetCidr, ipPoolCidrs)
             expect(NetUtils.checkCIDROverlap).toHaveBeenCalledWith(newCidr, ipPoolCidrs)
+        })
+
+        it("should call NetUtils.isNewCIDRLarger with correct arguments", () => {
+            IPPoolEntity.extend(oldCidr, newCidr, subnetCidr, ipPoolCidrs)
+            expect(NetUtils.isNewCIDRLarger).toHaveBeenCalledWith(oldCidr, newCidr)
         })
     })
 })

@@ -129,4 +129,14 @@ describe("NetUtils", () => {
             expect(NetUtils.checkCIDROverlap("192.168.2.0/24", ["192.168.1.0/24", "10.0.0.0/8"])).toBe(false);
         });
     });
+
+    describe("isNewCIDRLarger", () => {
+        it("returns true when newCidr is larger than the oldCidr", () => {
+            expect(NetUtils.isNewCIDRLarger("192.168.0.0/25", "192.168.0.0/24")).toBe(true);
+        });
+        
+        it("returns false when newCidr is smaller than the oldCidr", () => {
+            expect(NetUtils.isNewCIDRLarger("192.168.0.0/16", "192.168.0.0/24")).toBe(false);
+        })
+    });
 })
