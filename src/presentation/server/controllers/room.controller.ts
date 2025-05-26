@@ -27,7 +27,11 @@ export async function getRoomById(req: Request, res: Response) {
 
     try {
         const room = await roomService.getRoomById(roomRepo, id)
-        res.status(200).json(room)
+        if (room) {
+            res.status(200).json(room)
+        }else {
+            res.status(404).json({ message: "Room not found." })
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -41,7 +45,7 @@ export async function createRoom(req: Request, res: Response) {
             roomRepo,
             req.body
         )
-        res.status(200).json({ id: createdRoomId })
+        res.status(201).json({ id: createdRoomId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

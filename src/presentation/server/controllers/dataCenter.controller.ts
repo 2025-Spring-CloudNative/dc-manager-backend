@@ -36,7 +36,7 @@ export async function getDataCenterById(req: Request, res: Response) {
         if (dataCenter) {
             res.status(200).json(dataCenter)
         } else {
-            res.status(404).json({ message: "Data center not found" })
+            res.status(404).json({ message: "DataCenter not found." })
         }
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -54,7 +54,7 @@ export async function createDataCenter(req: Request, res: Response) {
             dataCenter,
             subnetId
         )
-        res.status(200).json({ id: createdDataCenterId })
+        res.status(201).json({ id: createdDataCenterId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

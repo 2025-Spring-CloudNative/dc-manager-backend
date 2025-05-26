@@ -32,7 +32,11 @@ export async function getMachineById(req: Request, res: Response) {
 
     try {
         const machine = await machineService.getMachineById(machineRepo, id)
-        res.status(200).json(machine)
+        if (machine) {
+            res.status(200).json(machine)
+        }else {
+            res.status(404).json({ message: "Machine not found." })
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -52,7 +56,7 @@ export async function createMachine(req: Request, res: Response) {
             serviceRepo,
             req.body
         )
-        res.status(200).json({ id: createdMachineId })
+        res.status(201).json({ id: createdMachineId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

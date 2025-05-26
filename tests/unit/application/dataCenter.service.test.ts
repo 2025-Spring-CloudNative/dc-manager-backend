@@ -85,6 +85,12 @@ describe("dataCenterService - updateDataCenter", () => {
             location: "NewLoc",
             subnetId: 10
         }
+        mockDataCenterRepo.getDataCenterById.mockResolvedValue({
+            id: 1,
+            name: "DC1",
+            location: "Loc1",
+            subnetId: 10
+        })
         mockDataCenterRepo.updateDataCenter.mockResolvedValue(updatedDC)
 
         const result = await dataCenterService.updateDataCenter(
@@ -106,8 +112,31 @@ describe("dataCenterService - deleteDataCenter", () => {
         const deletedId = 1
         mockDataCenterRepo.deleteDataCenter.mockResolvedValue(deletedId)
 
+        // Mock dependencies required by deleteDataCenter
+        const mockSubnetRepo = {
+            getSubnetById: jest.fn().mockResolvedValue({ id: 1 })
+        } as any
+        const mockIpPoolRepo = {
+            getIPPools: jest.fn().mockResolvedValue([]),
+            deleteIPPool: jest.fn()
+        } as any
+        const mockServiceRepo = {
+            getServices: jest.fn().mockResolvedValue([{}]),
+            deleteService: jest.fn()
+        } as any
+
+        mockDataCenterRepo.getDataCenterById.mockResolvedValue({
+            id: 1,
+            name: "DC1",
+            location: "Loc1",
+            subnetId: 1
+        })
+
         const result = await dataCenterService.deleteDataCenter(
             mockDataCenterRepo,
+            mockSubnetRepo,
+            mockIpPoolRepo,
+            mockServiceRepo,
             deletedId
         )
 

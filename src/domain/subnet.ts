@@ -20,7 +20,7 @@ export class SubnetEntity implements ISubnet {
     constructor(subnet: ISubnet) {
         // validate
         if (!NetUtils.isValidIPv4CIDR(subnet.cidr)) {
-            throw new Error(`Invalid CIDR notation: ${subnet.cidr}`)
+            throw new Error(`Invalid CIDR format: ${subnet.cidr}`)
         }
         if (!NetUtils.isValidIPv4Netmask(subnet.netmask)) {
             throw new Error(`Invalid netmask: ${subnet.netmask}`)
@@ -50,6 +50,7 @@ export class SubnetEntity implements ISubnet {
     }
 
     static extend(
+        oldCidr: string,
         newCidr: string,
         newNetmask: string,
         newGateway: string
@@ -74,6 +75,9 @@ export class SubnetEntity implements ISubnet {
             throw new Error(
                 `Netmask ${newNetmask} does not match prefix length of ${newCidr}`
             )
+        }
+        if (!NetUtils.isNewCIDRLarger(oldCidr, newCidr)) {
+            throw new Error(`The new CIDR must be larger than the old CIDR.`)
         }
         return {
             cidr: newCidr,

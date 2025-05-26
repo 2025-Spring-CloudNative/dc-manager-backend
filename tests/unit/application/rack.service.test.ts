@@ -106,6 +106,16 @@ describe("rackService - updateRack", () => {
             roomId: 100,
             serviceId: 200
         }
+        mockRackRepo.getRackById.mockResolvedValue({
+            id: 1,
+            name: "Rack1",
+            height: 42,
+            tag: "R1",
+            createdAt: new Date("2025-04-18T00:00:00Z"),
+            updatedAt: undefined,
+            roomId: 100,
+            serviceId: 200
+        })
         mockRackRepo.updateRack.mockResolvedValue(updatedRack)
 
         // Provide mocks for machineRepo and roomRepo as required by the service signature

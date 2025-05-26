@@ -103,7 +103,7 @@ export async function extendSubnet(
     newNetmask: string,
     newGateway: string
 ) {    
-    const patch = await SubnetEntity.extend(newCidr, newNetmask, newGateway)
+    const patch = SubnetEntity.extend(newCidr, newNetmask, newGateway)
     const extendedSubnet = await subnetRepo.updateSubnet(id, patch)
     
     return extendedSubnet

@@ -91,6 +91,11 @@ describe("serviceService - updateService", () => {
             name: "UpdatedService",
             poolId: 100
         }
+        mockServiceRepo.getServiceById.mockResolvedValue({
+            id: 1,
+            name: "ServiceA",
+            poolId: 100
+        })
         mockServiceRepo.updateService.mockResolvedValue(updatedSvc)
 
         const result = await serviceService.updateService(

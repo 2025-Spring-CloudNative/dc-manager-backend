@@ -88,6 +88,7 @@ describe("machineService - createMachine", () => {
 
         // Mock dependencies required by createMachine
         const mockIpAddressRepo = {
+            getIPAddresses: jest.fn().mockResolvedValue([]), // 新增这一行
             getIPAddressesByPoolId: jest.fn().mockResolvedValue([]),
             updateIPAddress: jest.fn()
         } as any
@@ -97,7 +98,6 @@ describe("machineService - createMachine", () => {
         const mockServiceRepo = {
             getServiceById: jest.fn().mockResolvedValue({ poolId: 1 })
         } as any
-
         const result = await machineService.createMachine(
             mockMachineRepo,
             mockIpAddressRepo,
@@ -124,6 +124,16 @@ describe("machineService - updateMachine", () => {
             rackId: 10,
             status: MachineStatus.Inactive
         }
+        mockMachineRepo.getMachineById.mockResolvedValue({
+            id: 1,
+            name: "Machine1",
+            startUnit: 101,
+            unit: 101,
+            macAddress: "AA:BB:CC:DD:EE:FF",
+            createdAt: new Date("2025-04-18T00:00:00Z"),
+            rackId: 10,
+            status: MachineStatus.Active
+        })
         mockMachineRepo.updateMachine.mockResolvedValue(updatedMachine)
 
         const result = await machineService.updateMachine(

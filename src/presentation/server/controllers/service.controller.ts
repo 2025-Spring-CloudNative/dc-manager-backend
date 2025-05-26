@@ -45,7 +45,11 @@ export async function getServiceById(req: Request, res: Response) {
 
     try {
         const service = await serviceService.getServiceById(serviceRepo, id)
-        res.status(200).json(service)
+        if (service) {
+            res.status(200).json(service)
+        }else {
+            res.status(404).json({ message: "Service not found." })
+        }
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -102,7 +106,7 @@ export async function createService(req: Request, res: Response) {
             dataCenter,
             cidrFromUser
         )
-        res.status(200).json({ id: createdServiceId })
+        res.status(201).json({ id: createdServiceId })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
