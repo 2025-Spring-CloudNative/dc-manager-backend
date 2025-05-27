@@ -30,7 +30,7 @@ const server = express()
 // Add a list of allowed origins.
 // If you have more origins you would like to add, you can add them to the array below.
 const allowedOrigins = [
-    "http://localhost:3000", 
+    "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://dc-manager-frontend-703684363125.asia-east1.run.app"
 ]
@@ -50,12 +50,12 @@ server.use(authorize)
 const swaggerUiOptions = {
     swaggerOptions: { supportedSubmitMethods: [] }
 }
-// server.use(
-//     "/docs",
-//     swaggerUi.serve,
-//     swaggerUi.setup(swaggerFile, swaggerUiOptions)
-// )
-server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile))
+server.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerFile, swaggerUiOptions)
+)
+// server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile))
 server.use("/auth", authRoute)
 server.use("/user", userRoute)
 
@@ -70,10 +70,11 @@ server.use("/ip-pool", ipPoolRoute)
 server.use("/ip-address", ipAddressRoute)
 
 server.get("/", (req, res) => {
-    console.log(process.env.DATABASE_URL, db)
     res.status(200).json("Hello from server!")
 })
 
 server.listen(PORT, () => {
+    console.log("NODE_ENV", process.env.NODE_ENV)
+    console.log("DATABASE_URL", process.env.DATABASE_URL, db)
     console.log(`🚀 Server running at http://localhost:${PORT}`)
 })
