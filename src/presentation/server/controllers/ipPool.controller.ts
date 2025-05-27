@@ -87,12 +87,14 @@ export async function updateIPPool(req: Request, res: Response) {
 export async function extendIPPool(req: Request, res: Response) {
     const ipPoolRepo = new IPPoolDrizzleRepository()
     const subnetRepo = new SubnetDrizzleRepository()
+    const ipAddressRepo = new IPAddressDrizzleRepository()
     const id = Number(req.params.id)
     const { cidr } = req.body
     try {
         const extendedIPPool = await ipPoolService.extendIPPool(
             ipPoolRepo,
             subnetRepo,
+            ipAddressRepo,
             id,
             cidr
         )
