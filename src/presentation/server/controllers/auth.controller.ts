@@ -16,24 +16,29 @@ export async function userRegister(req: Request, res: Response) {
     const refreshTokenRepo = new RefreshTokenDrizzleRepository()
     try {
         const user = req.body
-        const { accessToken, refreshToken, user: createdUser } = await authService.userRegister(
+        const {
+            accessToken,
+            refreshToken,
+            user: createdUser
+        } = await authService.userRegister(
             userRepo,
             passwordHasherRepo,
             JWTRepo,
             refreshTokenRepo,
             user
         )
-        res.cookie('refreshToken', refreshToken, {
+        res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'prod',
-            sameSite: process.env.NODE_ENV === 'prod' ? 'none' : 'strict'
+            secure: process.env.NODE_ENV === "prod",
+            sameSite: process.env.NODE_ENV === "prod" ? "none" : "strict",
+            partitioned: true
         })
 
         res.status(201).json({
             accessToken,
             user: createdUser
         })
-    } catch(error: any) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
 }
@@ -57,17 +62,18 @@ export async function userLogin(req: Request, res: Response) {
             refreshTokenRepo,
             userLoginInfo
         )
-        res.cookie('refreshToken', refreshToken, {
+        res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'prod',
-            sameSite: process.env.NODE_ENV === 'prod' ? 'none' : 'strict'
+            secure: process.env.NODE_ENV === "prod",
+            sameSite: process.env.NODE_ENV === "prod" ? "none" : "strict",
+            partitioned: true
         })
 
         res.status(200).json({
             accessToken,
-            user,
+            user
         })
-    } catch(error: any) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
 }
@@ -80,14 +86,10 @@ export async function userLogout(req: Request, res: Response) {
             res.status(401).json({ message: "No refresh token provided" })
             return
         }
-        await authService.userLogout(
-            refreshTokenRepo,
-            refreshToken
-        )
-        res.clearCookie('refreshToken')
+        await authService.userLogout(refreshTokenRepo, refreshToken)
+        res.clearCookie("refreshToken")
         res.status(200).json({ message: "Logged out successfully" })
-    }
-    catch(error: any) {
+    } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
 }
