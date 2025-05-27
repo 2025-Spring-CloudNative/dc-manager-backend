@@ -3,6 +3,8 @@ import { IIPAddressRepository } from "../../persistence/repositories/ipAddress.r
 import { IIPPoolRepository } from "../../persistence/repositories/ipPool.repository"
 import { ISubnetRepository } from "../../persistence/repositories/subnet.repository"
 import { SortOrder } from "../../types/common"
+import { NetUtils } from "../../domain/utils/net"
+import { IPAddressStatus, IPAddressEntity } from "../../domain/ipAddress"
 
 export type IPPoolSortBy = 
     'name' | 'type' | 'cidr' | 'createdAt' | 'updatedAt'
@@ -87,6 +89,7 @@ export async function updateIPPool(
 export async function extendIPPool(
     ipPoolRepo: IIPPoolRepository,
     subnetRepo: ISubnetRepository,
+    ipAddressRepo: IIPAddressRepository,
     id: number,
     newCidr: string
 ) {
@@ -99,6 +102,23 @@ export async function extendIPPool(
 
     const patch = IPPoolEntity.extend(ipPool.cidr, newCidr, subnetCidr, ipPoolCidrs)
     const extendedIPPool = await ipPoolRepo.updateIPPool(id, patch)
+
+    const ipAddresses: string[] = NetUtils.getIpAddressesFromCIDR(newCidr)
+    const existingIPAddresses = await ipAddressRepo.getIPAddresses({
+        poolId: ipPool.id
+    })
+
+    for (const ipAddress of ipAddresses) {
+        const exists = existingIPAddresses.some(existing => existing.address === ipAddress)
+        if (!exists) {
+            const ipAddressEntity = new IPAddressEntity({
+                address: ipAddress,
+                status: IPAddressStatus.Created,
+                poolId: ipPool.id!
+            })
+            await ipAddressRepo.createIPAddress(ipAddressEntity)
+        }
+    }
 
     return extendedIPPool
 }
